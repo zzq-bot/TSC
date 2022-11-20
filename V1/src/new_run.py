@@ -203,12 +203,17 @@ def run_sequential(args, logger):
     enc_params = list(traj_encoder.parameters()) + list(traj_decoder.parameters())
     enc_optimiser = th.optim.Adam(params=enc_params, lr=args.lr)
     crp_recorder.set_module(traj_encoder, traj_decoder)
+    if args.recorder_load_path != "":
+        logger.console_logger.info("Load CRP_Recorder from {}".format(args.recorder_load_path))
+        crp_recorder.load(load_path=args.recorder_load_path)
+    
     for i in range(args.iterations):
         if i % 2 ==0:
+            if args.test_function2:
+                continue
             recorder_save_path = os.path.join(args.recorder_path, f"{i//2}")
             logger.console_logger.info("This iter, CRP_Recorder will be saved in {}".format(recorder_save_path)) 
             for id in range(args.once_gen_num):
-                teammate_last_test_T = -args.test_interval - 1
                 # Default/Base scheme for controllable agents for teammates generator
                 teammate_buffer = ReplayBuffer(
                     scheme,
@@ -230,7 +235,7 @@ def run_sequential(args, logger):
 
                 if args.use_cuda:
                     teammate_learner.cuda()
-
+            
                 episode = 0
                 while teammate_runner.t_env <= args.teammate_t_max:
                     episode_batch = teammate_runner.run(test_mode=False)
@@ -250,14 +255,14 @@ def run_sequential(args, logger):
                     # Execute test runs once in a while
                     n_test_runs = max(1, args.test_nepisode // teammate_runner.batch_size)
 
-                    if (teammate_runner.t_env - teammate_last_test_T) / args.test_interval >= 1.0:
+                    if (teammate_runner.t_env - last_test_T) / args.test_interval >= 1.0:
 
                         logger.console_logger.info(
                             "t_env: {} / {}".format(teammate_runner.t_env, args.teammate_t_max)
                         )
                         logger.console_logger.info(
                             "Estimated time left: {}. Time passed: {}".format(
-                                time_left(last_time, teammate_last_test_T, teammate_runner.t_env, args.teammate_t_max),
+                                time_left(last_time, last_test_T, teammate_runner.t_env, args.teammate_t_max),
                                 time_str(time.time() - start_time),
                             )
                         )
@@ -272,6 +277,7 @@ def run_sequential(args, logger):
                 # TODO, cluster
                 # determine npc_index
                 maximum_npc_num = args.n_agents-args.n_control
+                assert maximum_npc_num == 2
                 this_npc_num = np.random.choice(range(1, maximum_npc_num+1), 1)
                 npc_idx = np.random.choice(range(args.n_agents), this_npc_num) # TODO
                 
@@ -303,6 +309,9 @@ def run_sequential(args, logger):
 
 
         else:
+            #assert 0
+            mac.set_schedule_recorder(crp_recorder)
+            mac.set_schedule_recorder(crp_recorder, mode='test')
             episode = 0
             while runner.t_env <= args.t_max * (i//2+1):
                 episode_batch = runner.run(test_mode=False)

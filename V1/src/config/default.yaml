@@ -70,5 +70,6 @@ enc_heads: 3
 enc_depth: 16
 dec_emb: 16
 
+test_function2: False
 run_type: "train"
 
