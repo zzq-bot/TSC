@@ -73,3 +73,5 @@ dec_emb: 16
 test_function2: False
 run_type: "train"
 
+pretrain_enc_path: ""
+pretrain_teammate_path: ""
