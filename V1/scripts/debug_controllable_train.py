@@ -10,7 +10,7 @@ if True:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
-    key = "Foraging-8x8-4p-6f-v1"
+    key = "Foraging-6x6-4p-6f-v1"
     learner = 'my_q_learner'
     use_encoder = True
     train_schedule = "debug"
@@ -18,10 +18,8 @@ if True:
     name = "debug_controllable_train_1"
     seeds = [0, 1, 2, 3]
     cuda_device = [0, 0, 1, 1]
-    recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-8x8-4p-4f-v1_2022-11-14_16:15:40.710435_test_crp_0/0"
-    #checkpoint_path = ""
-    #once_gen_num = 4
-    #teammate_t_max = 10000
+    recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-6f-v1_2022-11-15_11_31_56.339086_teammate_pretrain_0/0"
+    test_function2=True
     iterations = 2 # do not need train controllable agents
 
 
@@ -41,7 +39,7 @@ def one_train(remark, cuda_idx, seed):
                 --name={name}\
                 --seed={seed}\
                 --remark={remark}\
-                --test_function2=True\
+                --test_function2={test_function2}\
                 --recorder_load_path={recorder_load_path}\
                 --iterations={iterations} &\
                 sleep 2s"

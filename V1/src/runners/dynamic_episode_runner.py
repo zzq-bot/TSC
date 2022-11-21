@@ -59,7 +59,10 @@ class DynamicEpisodeRunner:
 
         while not terminated:
             #ic(self.t)
-            key = self.mac.recorder.add(sorted(self.mac.npc_types))
+            if isinstance(self.mac.npc_types, list):
+                key = self.mac.recorder.add(sorted(self.mac.npc_types))
+            else:
+                key = self.mac.recorder.add(self.mac.npc_types)
             pre_transition_data = {
                 "state": [self.env.get_state()],
                 "avail_actions": [self.env.get_avail_actions()],
