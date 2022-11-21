@@ -6,7 +6,7 @@ Debug the 2nd function: How to train controllable agents
 We first start with fixed teammates
 """
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
@@ -22,6 +22,21 @@ if True:
     test_function2=True
     iterations = 2 # do not need train controllable agents
 
+if True:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 50
+    key = "Foraging-6x6-4p-5f-v1"
+    learner = 'my_q_learner'
+    use_encoder = True
+    train_schedule = "debug"
+    test_schedule = "debug"
+    name = "debug_controllable_train_2"
+    seeds = [0, 1]
+    cuda_device = [0, 1]
+    recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
+    test_function2 = True
+    iterations = 2 # do not need train controllable agents
 
 program_info = __file__
 
