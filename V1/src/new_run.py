@@ -207,6 +207,15 @@ def run_sequential(args, logger):
         logger.console_logger.info("Load CRP_Recorder from {}".format(args.recorder_load_path))
         crp_recorder.load(load_path=args.recorder_load_path)
     
+    if args.pretrain_enc_path!="":
+        logger.console_logger.info("Load EncDec from {}".format(args.pretrain_enc_path))
+        traj_encoder.load_state_dict(th.load("{}/encoder.th".format(args.pretrain_enc_path), \
+            map_location=lambda storage, loc: storage))
+        traj_decoder.load_state_dict(th.load("{}/decoder.th".format(args.pretrain_enc_path), \
+            map_location=lambda storage, loc: storage))
+    else:
+        logger.console_logger.info("Train EncDec from scratch")
+
     for i in range(args.iterations):
         if i % 2 ==0:
             if args.test_function2:
@@ -230,6 +239,16 @@ def run_sequential(args, logger):
                 teammate_runner.setup(scheme=scheme, groups=groups, preprocess=preprocess, mac=teammate_mac)
 
                 teammate_learner = le_REGISTRY[args.teammate_learner](teammate_mac, teammate_buffer.scheme, logger, args)
+                
+                # Load pretrained teammate model (by default)
+                if args.pretrain_teammate_path!="":
+                    candidate_pretrain_teammate_path_list = os.listdir(args.pretrain_teammate_path)
+                    chosen_path = np.random.choice(candidate_pretrain_teammate_path_list, 1).item()
+                    logger.console_logger.info("Use Pretrained Teammate Agent Model from {}".format(chosen_path))
+                    teammate_learner.load_agent_models(path=chosen_path)
+                else:
+                    logger.console_logger.info("Train Teammate Agent Model from scratch")
+
                 teammate_learner.set_enc(traj_encoder, traj_decoder, enc_params, enc_optimiser)
                 teammate_learner.set_recorder(crp_recorder)
 
