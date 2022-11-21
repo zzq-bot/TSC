@@ -13,7 +13,7 @@ class MLPNSAgent(nn.Module):
             self.n_control = self.n_agents
         self.input_shape = input_shape
         self.agents = th.nn.ModuleList([MLPAgent(input_shape, args) for _ in range(self.n_control)])
-        ic("length of MLPNS Agent:", len(self.agents))
+        #ic("length of MLPNS Agent:", len(self.agents))
 
     def forward(self, inputs, proxy_z=None):
         qs = []

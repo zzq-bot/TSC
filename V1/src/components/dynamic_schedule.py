@@ -119,9 +119,9 @@ class TrainSchedule:
     
     def init_build(self):
         num_clusters = self.recorder.M
-        self.this_cluster_idx = np.random.chocie(range(num_clusters), 1)
+        self.this_cluster_idx = np.random.choice(range(num_clusters), 1).item()
         num_teammates_of_cluster = self.recorder.count_M[self.this_cluster_idx]
-        teammate_idx = np.random.chisquare(range(num_teammates_of_cluster), 1)
+        teammate_idx = np.random.choice(range(num_teammates_of_cluster), 1).item()
 
         self.this_chosen_teammate_checkpoint = self.recorder.record_checkpoint_path[self.this_cluster_idx][teammate_idx]
         self.this_chosen_npc_idx = self.recorder.record_npc_idx[self.this_cluster_idx][teammate_idx]
@@ -134,10 +134,91 @@ class TrainSchedule:
              self.this_chosen_teammate_checkpoint, self.this_chosen_npc_idx)
 
     def step(self):
+        return False, self.npc_bool_indices, self.this_epi_npc_types, (self.this_cluster_idx,\
+             self.this_chosen_teammate_checkpoint, self.this_chosen_npc_idx)
+
+
+class TestSchedule:
+    """Dynamic during one episode"""
+    def __init__(self, args) -> None:
+        self.args = args
+        self.maximum_npc_num = args.n_agents - args.n_control
+        self.this_epi_npc_types = "mlp_ns"
+
+    def set_recorder(self, recorder):
+        self.recorder = recorder
+    
+    def init_build(self):
+        num_clusters = self.recorder.M
+        self.this_cluster_idx = np.random.choice(range(num_clusters), 1).item()
+        num_teammates_of_cluster = self.recorder.count_M[self.this_cluster_idx]
+        teammate_idx = np.random.choice(range(num_teammates_of_cluster), 1).item()
+
+        self.this_chosen_teammate_checkpoint = self.recorder.record_checkpoint_path[self.this_cluster_idx][teammate_idx]
+        self.this_chosen_npc_idx = self.recorder.record_npc_idx[self.this_cluster_idx][teammate_idx]
+        
+        self.npc_bool_indices = np.zeros(self.maximum_npc_num)
+
+
+        self.waiting_time = np.random.choice(range(self.waiting_lower, self.waiting_upper), 1)[0]
+
+        for i in range(len(self.this_chosen_npc_idx)):
+            self.npc_bool_indices[i] = 1
         return self.npc_bool_indices, self.this_epi_npc_types, (self.this_cluster_idx,\
              self.this_chosen_teammate_checkpoint, self.this_chosen_npc_idx)
 
+    def step(self):
+        self.waiting_time -= 1
+        if self.waiting_time > 0:
+            return False, None, None, None
+        # reset
+        self.waiting_time = np.random.choice(range(self.waiting_lower, self.waiting_upper), 1)[0]
+        num_clusters = self.recorder.M
+        self.this_cluster_idx = np.random.choice(range(num_clusters), 1).item()
+        num_teammates_of_cluster = self.recorder.count_M[self.this_cluster_idx]
+        teammate_idx = np.random.choice(range(num_teammates_of_cluster), 1).item()
+
+        self.this_chosen_teammate_checkpoint = self.recorder.record_checkpoint_path[self.this_cluster_idx][teammate_idx]
+        self.this_chosen_npc_idx = self.recorder.record_npc_idx[self.this_cluster_idx][teammate_idx]
+        
+        self.npc_bool_indices = np.zeros(self.maximum_npc_num)
+        for i in range(len(self.this_chosen_npc_idx)):
+            self.npc_bool_indices[i] = 1
+        return True, self.npc_bool_indices, self.this_epi_npc_types, (self.this_cluster_idx,\
+             self.this_chosen_teammate_checkpoint, self.this_chosen_npc_idx)
+
+class DebugSchedule:
+    def __init__(self, args) -> None:
+        self.args = args
+        self.maximum_npc_num = args.n_agents - args.n_control
+        self.this_epi_npc_types = "mlp_ns"
+
+    def set_recorder(self, recorder):
+        self.recorder = recorder
+    
+    def init_build(self):
+        #num_clusters = self.recorder.M
+        self.this_cluster_idx = 0#np.random.choice(range(num_clusters), 1).item()
+        #num_teammates_of_cluster = self.recorder.count_M[self.this_cluster_idx]
+        teammate_idx = 0 #np.random.choice(range(num_teammates_of_cluster), 1).item()
+
+        self.this_chosen_teammate_checkpoint = self.recorder.record_checkpoint_path[self.this_cluster_idx][teammate_idx]
+        self.this_chosen_npc_idx = self.recorder.record_npc_idx[self.this_cluster_idx][teammate_idx]
+        #num_npc = len(chosen_npc_idx)
+        
+        self.npc_bool_indices = np.zeros(self.maximum_npc_num)
+        for i in range(len(self.this_chosen_npc_idx)):
+            self.npc_bool_indices[i] = 1
+        return self.npc_bool_indices, self.this_epi_npc_types, (self.this_cluster_idx,\
+             self.this_chosen_teammate_checkpoint, self.this_chosen_npc_idx)
+
+    def step(self):
+        return False, self.npc_bool_indices, self.this_epi_npc_types, (self.this_cluster_idx,\
+             self.this_chosen_teammate_checkpoint, self.this_chosen_npc_idx)
 
 REGISTRY["base"] = BaseSchedule
 REGISTRY["static"] = StaticSchedule
 REGISTRY["fixed_dynamic"] = FixedDynamicSchedule
+REGISTRY["train"] = TrainSchedule
+REGISTRY["test"] = TrainSchedule
+REGISTRY["debug"] = DebugSchedule

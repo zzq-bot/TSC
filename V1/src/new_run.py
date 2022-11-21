@@ -310,6 +310,8 @@ def run_sequential(args, logger):
 
         else:
             #assert 0
+            logger.console_logger.info("Start training controllabel agents")
+            
             mac.set_schedule_recorder(crp_recorder)
             mac.set_schedule_recorder(crp_recorder, mode='test')
             episode = 0
