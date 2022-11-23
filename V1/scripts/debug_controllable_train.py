@@ -21,8 +21,10 @@ if False:
     recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-6f-v1_2022-11-15_11_31_56.339086_teammate_pretrain_0/0"
     test_function2=True
     iterations = 2 # do not need train controllable agents
-
-if True:
+    z_gen_hyper = False
+    agent = "mlp_ns"
+    
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
@@ -37,6 +39,44 @@ if True:
     recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
     test_function2 = True
     iterations = 2 # do not need train controllable agents
+    z_gen_hyper = False
+    agent = "mlp_ns"
+
+if False:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 50
+    key = "Foraging-6x6-4p-5f-v1"
+    learner = 'my_q_learner'
+    use_encoder = True
+    train_schedule = "train"
+    test_schedule = "test"
+    name = "debug_controllable_train_3"
+    seeds = [0, 1, 2]
+    cuda_device = [0, 0, 0]
+    recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
+    test_function2 = True
+    iterations = 2 # do not need train controllable agents
+    z_gen_hyper = False
+    agent = "mlp_ns"
+
+if True:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 50
+    key = "Foraging-6x6-4p-5f-v1"
+    learner = 'my_q_learner'
+    use_encoder = True
+    train_schedule = "train"
+    test_schedule = "test"
+    name = "debug_controllable_train_4"
+    seeds = [0, 1, 2]
+    cuda_device = [1, 1, 1]
+    recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
+    test_function2 = True
+    iterations = 2 # do not need train controllable agents
+    z_gen_hyper = True
+    agent = "mlp_gen_ns"
 
 program_info = __file__
 

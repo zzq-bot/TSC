@@ -54,6 +54,7 @@ teammate_mac: "non_shared_mac"
 teammate_runner: "episode"
 teammate_learner: "teammate_q_learner"
 teammate_mixer: "qmix"
+teammate_agent: "mlp_ns"
 teammate_t_max: 550000
 teammate_target_update_interval: 200
 recorder_path: "recorder_checkpoint"
