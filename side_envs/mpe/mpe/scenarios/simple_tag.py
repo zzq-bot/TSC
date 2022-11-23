@@ -36,18 +36,31 @@ class Scenario(BaseScenario):
         return world
 
 
-    def reset_world(self, world):
+    def reset_world(self, world, active_agents_id):
+        # set activeness for agents
+        if active_agents_id is None:
+            active_agents_id = list(range(len(world.agents)))
+        for id in active_agents_id:
+            world.agents[id].active = True
         # random properties for agents
         for i, agent in enumerate(world.agents):
-            agent.color = np.array([0.35, 0.85, 0.35]) if not agent.adversary else np.array([0.85, 0.35, 0.35])
+            if not agent.active:
+                agent.color = np.array([0.35, 0., 0.]) # whatever
+            else:
+                agent.color = np.array([0.35, 0.85, 0.35]) if not agent.adversary else np.array([0.85, 0.35, 0.35])
             # random properties for landmarks
         for i, landmark in enumerate(world.landmarks):
             landmark.color = np.array([0.25, 0.25, 0.25])
         # set random initial states
         for agent in world.agents:
-            agent.state.p_pos = world.np_random.uniform(-1, +1, world.dim_p)
-            agent.state.p_vel = np.zeros(world.dim_p)
-            agent.state.c = np.zeros(world.dim_c)
+            if not agent.active:
+                agent.state.p_pos = world.np_random.uniform(-1, +1, world.dim_p)
+                agent.state.p_vel = np.zeros(world.dim_p)
+                agent.state.c = np.zeros(world.dim_c)
+            else:
+                agent.state.p_pos = -np.ones(world.dim_p) # physical pos
+                agent.state.p_vel = np.zeros(world.dim_p) # physical velocity
+                agent.state.c = np.zeros(world.dim_c)     # comm
         for i, landmark in enumerate(world.landmarks):
             if not landmark.boundary:
                 landmark.state.p_pos = world.np_random.uniform(-0.9, +0.9, world.dim_p)
@@ -67,6 +80,9 @@ class Scenario(BaseScenario):
 
 
     def is_collision(self, agent1, agent2):
+        # if any of them is not active, then no collision
+        if not agent1.active or not agent2.active:
+            return False
         delta_pos = agent1.state.p_pos - agent2.state.p_pos
         dist = np.sqrt(np.sum(np.square(delta_pos)))
         dist_min = agent1.size + agent2.size
@@ -82,6 +98,7 @@ class Scenario(BaseScenario):
 
 
     def reward(self, agent, world):
+        # TODO, maybe should save old reward?
         # Agents are rewarded based on minimum agent distance to each landmark
         main_reward = self.adversary_reward(agent, world) if agent.adversary else self.agent_reward(agent, world)
         return main_reward
@@ -138,10 +155,12 @@ class Scenario(BaseScenario):
         comm = []
         other_pos = []
         other_vel = []
+        other_active = []
         for other in world.agents:
             if other is agent: continue
             comm.append(other.state.c)
             other_pos.append(other.state.p_pos - agent.state.p_pos)
             if not other.adversary:
                 other_vel.append(other.state.p_vel)
-        return np.concatenate([agent.state.p_vel] + [agent.state.p_pos] + entity_pos + other_pos + other_vel)
+            other_active.append(1 if other.active else -1)
+        return np.concatenate([agent.state.p_vel] + [agent.state.p_pos] + entity_pos + other_pos + other_vel + other_active)

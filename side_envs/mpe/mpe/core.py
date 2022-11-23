@@ -77,6 +77,8 @@ class Agent(Entity):
         self.action = Action()
         # script behavior to execute
         self.action_callback = None
+        # activeness
+        self.active = False
 
 # multi-agent world
 class World(object):
@@ -118,6 +120,14 @@ class World(object):
     def scripted_agents(self):
         return [agent for agent in self.agents if agent.action_callback is not None]
 
+    @property
+    def active_agents(self):
+        return [agent for agent in self.agents if agent.active]
+    
+    @property
+    def active_policy_agents(self):
+        return [agent for agent in self.agents if agent.action_callback is None and agent.active]
+    
     # update state of the world
     def step(self):
         # set actions for scripted agents 

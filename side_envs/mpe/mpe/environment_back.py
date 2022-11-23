@@ -66,7 +66,7 @@ class MultiAgentEnv(gym.Env):
                 self.action_space.append(act_space)
             else:
                 self.action_space.append(total_action_space[0])
-            # observation space from scenario.observation(agent, world)
+            # observation space
             obs_dim = len(observation_callback(agent, self.world))
             self.observation_space.append(spaces.Box(low=-np.inf, high=+np.inf, shape=(obs_dim,), dtype=np.float32))
             agent.action.c = np.zeros(self.world.dim_c)
@@ -85,24 +85,6 @@ class MultiAgentEnv(gym.Env):
 
     def seed(self, seed):
         self.world.seed(seed)
-    
-    def add_agent(self, id):
-        agent = self.world.agents[id]
-        agent.active = True
-        # reset color
-        agent.color = np.array([0.35, 0.85, 0.35]) if not agent.adversary else np.array([0.85, 0.35, 0.35])
-        # reset random states
-        agent.state.p_pos = self.world.np_random.uniform(-1, +1, self.world.dim_p)
-        agent.state.p_vel = np.zeros(self.world.dim_p)
-        agent.state.c = np.zeros(self.world.dim_c)
-
-    def remove_agent(self, id):
-        agent = self.world.agents[id]
-        agent.active = False
-        agent.color = np.array([0.35, 0., 0.]) # whatever
-        agent.state.p_pos = self.world.np_random.uniform(-1, +1, self.world.dim_p)
-        agent.state.p_vel = np.zeros(self.world.dim_p)
-        agent.state.c = np.zeros(self.world.dim_c)
 
     def step(self, action_n):
 
@@ -138,9 +120,9 @@ class MultiAgentEnv(gym.Env):
 
         return tuple(obs_n), reward_n, done_n, info_n
 
-    def reset(self, active_agents_id=None):
+    def reset(self):
         # reset world
-        self.reset_callback(self.world, active_agents_id)
+        self.reset_callback(self.world)
         # reset renderer
         self._reset_render()
         # record observations for each agent
@@ -191,7 +173,7 @@ class MultiAgentEnv(gym.Env):
         else:
             action = [action]
 
-        if agent.movable and agent.alive: # if not alive, cannot move
+        if agent.movable:
             # physical action
             if self.discrete_action_input:
                 agent.action.u = np.zeros(self.world.dim_p)
@@ -224,8 +206,7 @@ class MultiAgentEnv(gym.Env):
                 agent.action.c = action[0]
             action = action[1:]
         # make sure we used all elements of action
-        if agent.alive:
-            assert len(action) == 0
+        assert len(action) == 0
 
     # reset rendering assets
     def _reset_render(self):
