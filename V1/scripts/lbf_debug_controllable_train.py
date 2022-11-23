@@ -23,7 +23,7 @@ if False:
     iterations = 2 # do not need train controllable agents
     z_gen_hyper = False
     agent = "mlp_ns"
-    
+
 if False:
     config = "my_qmix"
     env_config = "gymma"
@@ -96,6 +96,8 @@ def one_train(remark, cuda_idx, seed):
                 --remark={remark}\
                 --test_function2={test_function2}\
                 --recorder_load_path={recorder_load_path}\
+                --z_gen_hyper={z_gen_hyper}\
+                --agent={agent}\
                 --iterations={iterations} &\
                 sleep 2s"
     else:
