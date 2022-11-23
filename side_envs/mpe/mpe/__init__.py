@@ -11,7 +11,7 @@ _particles = {
     "simple_reference": "SimpleReference-v0",
     "simple_speaker_listener": "SimpleSpeakerListener-v0",
     "simple_spread": "SimpleSpread-v0",
-    "simple_tag": "SimpleTag-v0",
+    #"simple_tag": "SimpleTag-v0",
     "simple_world_comm": "SimpleWorldComm-v0",
     "climbing_spread": "ClimbingSpread-v0",
 }
@@ -22,6 +22,34 @@ for scenario_name, gymkey in _particles.items():
     world = scenario.make_world()
 
     # Registers multi-agent particle environments:
+    register(
+        gymkey,
+        entry_point="mpe.environment:MultiAgentEnv",
+        kwargs={
+            "world": world,
+            "reset_callback": scenario.reset_world,
+            "reward_callback": scenario.reward,
+            "observation_callback": scenario.observation,
+        },
+    )
+
+# Registers the custom simple tag environment:
+
+simple_tag_pairs = [
+    (1, 3), # default
+    (1, 4),
+    (2, 4),
+    (2, 5),
+    (3, 4),
+    (3, 5)
+]
+
+for num_good, num_adv in simple_tag_pairs:
+    scenario_name = "simple_tag"
+    gymkey = f"SimpleSpread-{num_good}good-{num_adv}adv-v0"
+    scenario = scenarios.load(scenario_name + ".py").Scenario()
+    world = scenario.make_world(num_good_agents=num_good, num_adversaries=num_adv)
+    
     register(
         gymkey,
         entry_point="mpe.environment:MultiAgentEnv",
