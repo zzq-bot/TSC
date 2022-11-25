@@ -101,7 +101,7 @@ if True:
     agent = "mlp_gen_ns"
     use_contrastive_loss = True
 
-if True:
+"""if True:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
@@ -110,15 +110,16 @@ if True:
     use_encoder = True
     train_schedule = "train"
     test_schedule = "test"
-    name = "just_test"
-    seeds = [0]
-    cuda_device = [1]
+    name = "debug_controllable_train_4"
+    seeds = [0, 1, 2]
+    cuda_device = [1, 1, 1]
     recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
     test_function2 = True
     iterations = 2 # do not need train controllable agents
     z_gen_hyper = True
     agent = "mlp_gen_ns"
-    use_contrastive_loss = True
+    use_contrastive_loss = True"""
+
 
 program_info = __file__
 

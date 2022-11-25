@@ -44,6 +44,7 @@ if True:
     agent = "mlp_gen_ns"
     use_contrastive_loss = False
 
+
 program_info = __file__
 
 def one_train(remark, cuda_idx, seed):
