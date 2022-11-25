@@ -24,6 +24,8 @@ if False:
     z_gen_hyper = False
     agent = "mlp_ns"
     use_contrastive_loss = True
+    proxy_z_dim = 32
+    team_z_dim = 64
 
 if False:
     config = "my_qmix"
@@ -43,6 +45,8 @@ if False:
     z_gen_hyper = False
     agent = "mlp_ns"
     use_contrastive_loss = True
+    proxy_z_dim = 32
+    team_z_dim = 64
 
 if False:
     config = "my_qmix"
@@ -62,6 +66,8 @@ if False:
     z_gen_hyper = False
     agent = "mlp_ns"
     use_contrastive_loss = True
+    proxy_z_dim = 32
+    team_z_dim = 64
 
 if False:
     config = "my_qmix"
@@ -81,8 +87,10 @@ if False:
     z_gen_hyper = True
     agent = "mlp_gen_ns"
     use_contrastive_loss = True
+    proxy_z_dim = 32
+    team_z_dim = 64
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
@@ -100,6 +108,52 @@ if True:
     z_gen_hyper = True
     agent = "mlp_gen_ns"
     use_contrastive_loss = True
+    proxy_z_dim = 32
+    team_z_dim = 64
+
+if False:
+    # TODO
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 50
+    key = "Foraging-6x6-4p-5f-v1"
+    learner = 'my_q_learner'
+    use_encoder = True
+    train_schedule = "train"
+    test_schedule = "test"
+    name = "debug_controllable_train_5_with_zdim_4_8"
+    seeds = [0, 1, 2]
+    cuda_device = [0, 0, 0]
+    recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
+    test_function2 = True
+    iterations = 2 # do not need train controllable agents
+    z_gen_hyper = True
+    agent = "mlp_gen_ns"
+    use_contrastive_loss = True
+    proxy_z_dim = 4
+    team_z_dim = 8
+
+if True:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 50
+    key = "Foraging-6x6-4p-5f-v1"
+    learner = 'my_q_learner'
+    use_encoder = True
+    train_schedule = "train"
+    test_schedule = "test"
+    name = "check_freeze_debug_controllable_train_3"
+    seeds = [0]
+    cuda_device = [0]
+    recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
+    test_function2 = True
+    iterations = 2 # do not need train controllable agents
+    z_gen_hyper = False
+    agent = "mlp_ns"
+    use_contrastive_loss = True
+    proxy_z_dim = 32
+    team_z_dim = 64
+
 
 """if True:
     config = "my_qmix"
@@ -142,6 +196,8 @@ def one_train(remark, cuda_idx, seed):
                 --z_gen_hyper={z_gen_hyper}\
                 --agent={agent}\
                 --use_contrastive_loss={use_contrastive_loss}\
+                --proxy_z_dim={proxy_z_dim}\
+                --team_z_dim={team_z_dim}\
                 --iterations={iterations} &\
                 sleep 2s"
     else:

@@ -56,3 +56,7 @@ class MLPNSAgent(nn.Module):
             device = self.args.device
         for a in self.agents:
             a.cuda(device=device)
+    
+    def freeze(self):
+        for param in self.parameters():
+            param.requires_grad = True

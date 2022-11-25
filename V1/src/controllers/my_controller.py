@@ -79,6 +79,7 @@ class MyMAC:
             # denotes npc idxes in this mlpnsagent module
             self.npc.load_state_dict(th.load(os.path.join(chosen_teammate_checkpoint, "agent.th"),\
                  map_location=lambda storage, loc: storage))                                    
+            self.npc.freeze()
 
     def schedule_npc(self, env, test_mode=False):
         #assert 0
@@ -114,6 +115,7 @@ class MyMAC:
                 # denotes npc idxes in this mlpnsagent module
                 self.npc.load_state_dict(th.load(os.path.join(chosen_teammate_checkpoint, "agent.th"),\
                     map_location=lambda storage, loc: storage))      
+                self.npc.freeze()
                 
             return add_indices+self.n_control, deleted_indices+self.n_control
 
