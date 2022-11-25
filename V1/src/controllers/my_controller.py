@@ -167,7 +167,6 @@ class MyMAC:
         avail_actions = ep_batch["avail_actions"][:, t]
         if self.proxy_encoder is not None:
             proxy_z, mu, logvar = self.proxy_encoder(inputs=agent_inputs)
-
             #ic(agent_inputs.shape, proxy_z.shape)
             #assert 0
             agent_outs = self.agent(agent_inputs, proxy_z)
@@ -194,7 +193,7 @@ class MyMAC:
     def parameters(self):
         if self.proxy_encoder is not None:
             return self.agent.parameters(), self.proxy_encoder.parameters()
-        return self.agent.parameters()
+        return self.agent.parameters(), None
 
     def load_state(self, other_mac):
         self.agent.load_state_dict(other_mac.agent.state_dict())

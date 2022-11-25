@@ -40,6 +40,7 @@ class QMixer(nn.Module):
                                 nn.ReLU(),
                                 nn.Linear(self.embed_dim, 1))
         else:
+            assert self.team_z_dim > 0, print("Dont use encoder but assign z_gen_hyper!")
             if getattr(args, "hypernet_layers", 1) == 1:
                 self.hyper_w_1 = nn.Linear(self.state_dim+self.team_z_dim, self.embed_dim * self.n_control)
                 self.hyper_w_final = nn.Linear(self.team_z_dim, self.embed_dim)
@@ -85,7 +86,7 @@ class QMixer(nn.Module):
             inputs = states
         w_final = th.abs(self.hyper_w_final(inputs))
         w_final = w_final.view(-1, self.embed_dim, 1)
-        # State-dependent bias
+        # State-dependent biass
         v = self.V(inputs).view(-1, 1, 1)
         # Compute final output
         y = th.bmm(hidden, w_final) + v

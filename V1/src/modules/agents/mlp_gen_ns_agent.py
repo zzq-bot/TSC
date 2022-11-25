@@ -3,8 +3,10 @@ from modules.agents.mlp_gen_agent import MLPGenAgent
 import torch as th
 
 class MLPGenNSAgent(nn.Module):
-    def __init__(self, input_shape, args) -> None:
+    def __init__(self, input_shape, args, train_teammate=False) -> None:
         super().__init__()
+        assert train_teammate is False # but should not be teammate trained
+        assert args.use_encoder is True # should use encoder 
         self.args = args
         self.n_agents = args.n_agents
         self.n_control = args.n_control
@@ -16,12 +18,13 @@ class MLPGenNSAgent(nn.Module):
         qs = []
         if inputs.size(0) == self.n_control:
             for i in range(self.n_control):
-                q = self.agents[i](inputs[i].unsqueeze(0), proxy_z[:, i])
+                q = self.agents[i](inputs[i].unsqueeze(0), proxy_z[i].unsqueeze(0))
                 qs.append(q)
             return th.cat(qs)
         else:
             for i in range(self.n_control):
-                inputs = inputs.view(-1, self.n_control, self.input_shape)
+                inputs = inputs.view(-1, self.n_control, self.input_shape-self.args.proxy_z_dim)
+                proxy_z = proxy_z.view(-1, self.n_control, self.args.proxy_z_dim)
                 q = self.agents[i](inputs[:, i], proxy_z[:, i])
                 qs.append(q.unsqueeze(1))
             return th.cat(qs, dim=-1).view(-1, q.size(-1))

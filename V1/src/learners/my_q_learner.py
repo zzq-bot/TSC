@@ -18,7 +18,11 @@ class MyQLearner:
         self.logger = logger
 
         agent_param, proxy_encoder_param = mac.parameters()
-        self.params = list(agent_param) + list(proxy_encoder_param)
+
+        self.params = list(agent_param)
+        if proxy_encoder_param is not None: # if not use encoder
+            self.params += list(proxy_encoder_param)
+            
         self.last_target_update_episode = 0
 
         self.mixer = None
@@ -33,14 +37,18 @@ class MyQLearner:
             self.target_mixer = copy.deepcopy(self.mixer)
 
         #TODO
-        team_input_dim = self.args.state_shape + (self.args.n_actions) * self.args.n_agents
-        self.team_encoder = encoder_REGISITRY[args.team_encoder](args, input_shape=team_input_dim, is_proxy=False)
-        self.params += list(self.team_encoder.parameters())
-        self.target_team_encoder = copy.deepcopy(self.team_encoder)
+        if args.use_encoder:
+            team_input_dim = self.args.state_shape + (self.args.n_actions) * self.args.n_agents
+            self.team_encoder = encoder_REGISITRY[args.team_encoder](args, input_shape=team_input_dim, is_proxy=False)
+            self.params += list(self.team_encoder.parameters())
+            self.target_team_encoder = copy.deepcopy(self.team_encoder)
 
-        self.vis = NSVI(args)
-        self.params += list(self.vis.parameters())
-        #self.target_vis = copy.deepcopy(self.vis)
+            self.vis = NSVI(args)
+            self.params += list(self.vis.parameters())
+        else:
+            self.team_encoder = None
+            self.target_team_encoder = None
+            self.vis = None
 
         self.optimiser = Adam(params=self.params, lr=args.lr)
 
@@ -73,9 +81,11 @@ class MyQLearner:
 
         # Calculate estimated Q-Values
         mac_out = []
-        team_z_out = []
-        mu_out, logvar_out = [], []
-        vi_losses = []
+        team_z_out, mu_out, logvar_out, vi_losses = None, None, None, None
+        if self.args.use_encoder:
+            team_z_out = []
+            mu_out, logvar_out = [], []
+            vi_losses = []
         #self.mac.init_hidden(batch.batch_size)
         for t in range(batch.max_seq_length):
             if t == 0:
@@ -87,26 +97,33 @@ class MyQLearner:
             #ic(batch["state"][:, t].shape)
             #ic(lst_ac_onehot.shape)
             lst_ac_onehot = lst_ac_onehot.view(batch.batch_size, -1)
-            team_z, _, _, _ = self.team_encoder.forward(th.cat((batch["state"][:, t], lst_ac_onehot), dim=-1))
+            if self.team_encoder is not None:
+                team_z, _, _, _ = self.team_encoder.forward(th.cat((batch["state"][:, t], lst_ac_onehot), dim=-1))
             #ic(batch["obs"].shape)
-            vi_loss = self.vis.forward(batch["obs"][:, t, :self.args.n_control], batch["actions_onehot"][:, t, :self.args.n_control],
-                team_z, proxy_z)
+                vi_loss = self.vis.forward(batch["obs"][:, t, :self.args.n_control], batch["actions_onehot"][:, t, :self.args.n_control],
+                    team_z, proxy_z)
+            else:
+                team_z = None
+                vi_loss = None
             mac_out.append(agent_outs)
-            mu_out.append(mu)
-            logvar_out.append(logvar)
-            team_z_out.append(team_z)
-            vi_losses.append(vi_loss)
+            if self.args.use_encoder:
+                mu_out.append(mu)
+                logvar_out.append(logvar)
+                team_z_out.append(team_z)
+                vi_losses.append(vi_loss)
         mac_out = th.stack(mac_out, dim=1)  # Concat over time
         # Pick the Q-Values for the actions taken by each agent
         chosen_action_qvals = th.gather(mac_out[:, :-1], dim=3, index=actions[:, :, :self.args.n_control]).squeeze(3)  # Remove the last dim
-
-        team_z_out = th.stack(team_z_out[:-1], dim=1)
-        mask_z = mask.expand_as(team_z_out)
-        team_z_out = team_z_out * mask_z # mask (batch_size, ep_len, z_dim)
+        if self.args.use_encoder:
+            team_z_out = th.stack(team_z_out[:-1], dim=1)
+            mask_z = mask.expand_as(team_z_out)
+            team_z_out = team_z_out * mask_z # mask (batch_size, ep_len, z_dim)
 
         # Calculate the Q-Values necessary for the target
         target_mac_out = []
-        target_team_z_out = []
+        target_team_z_out = None
+        if self.args.use_encoder:
+            target_team_z_out = []
         #self.target_mac.init_hidden(batch.batch_size)
         for t in range(batch.max_seq_length):
             if t == 0:
@@ -115,13 +132,16 @@ class MyQLearner:
                 lst_ac_onehot = batch["actions_onehot"][:, t-1]
             lst_ac_onehot = lst_ac_onehot.view(batch.batch_size, -1)
             target_agent_outs, _, _, _ = self.target_mac.forward(batch, t=t)
-            target_team_z, _, _, _ = self.target_team_encoder.forward(th.cat((batch["state"][:, t], lst_ac_onehot), dim=-1))
+            if self.args.use_encoder:
+                target_team_z, _, _, _ = self.target_team_encoder.forward(th.cat((batch["state"][:, t], lst_ac_onehot), dim=-1))
             target_mac_out.append(target_agent_outs)
-            target_team_z_out.append(target_team_z)
+            if self.args.use_encoder:
+                target_team_z_out.append(target_team_z)
 
         # We don't need the first timesteps Q-Value estimate for calculating targets
         target_mac_out = th.stack(target_mac_out[1:], dim=1)  # Concat across time
-        target_team_z_out = th.stack(target_team_z_out[1:], dim=1)
+        if self.args.use_encoder:
+            target_team_z_out = th.stack(target_team_z_out[1:], dim=1)
 
         # Mask out unavailable actions
         target_mac_out[avail_actions[:, 1:, :self.args.n_control] == 0] = -9999999
@@ -141,6 +161,8 @@ class MyQLearner:
         ######################################################################
         # Mix
         if self.mixer is not None:
+            if not self.args.use_encoder:
+                assert team_z_out is None and target_team_z_out is None
             chosen_action_qvals = self.mixer(chosen_action_qvals, batch["state"][:, :-1], team_z_out)
             target_max_qvals = self.target_mixer(target_max_qvals, batch["state"][:, 1:], target_team_z_out)
 
@@ -164,32 +186,45 @@ class MyQLearner:
 
         # Normal L2 loss, take mean over actual data
         td_loss = (masked_td_error ** 2).sum() / mask.sum()
+        if self.args.use_encoder:
+            ######################################################################
+            # 2. Contrastive loss
+            ######################################################################
+            batch_ep_len = mask.squeeze(-1).sum(-1).unsqueeze(-1)
+            team_z_out_mean = team_z_out.mean(dim=1) * batch_ep_len
+            self.mac.recorder.update(keys=keys, values=team_z_out_mean)
 
-        ######################################################################
-        # 2. Contrastive loss
-        ######################################################################
-        batch_ep_len = mask.squeeze(-1).sum(-1).unsqueeze(-1)
-        team_z_out_mean = team_z_out.mean(dim=1) * batch_ep_len
-        self.mac.recorder.update(keys=keys, values=team_z_out_mean)
+            dpp_loss = self.mac.recorder.get_dpp_loss(keys=keys)
+            bias_loss = self.mac.recorder.get_bias_loss(keys=keys, values=team_z_out_mean)
+            contrastive_loss = self.args.contrastive_lambda_2 * (self.args.contrastive_lambda_1 * dpp_loss + bias_loss) # weighted factor
 
-        dpp_loss = self.mac.recorder.get_dpp_loss(keys=keys)
-        bias_loss = self.mac.recorder.get_bias_loss(keys=keys, values=team_z_out_mean)
-        contrastive_loss = self.args.contrastive_lambda_2 * (self.args.contrastive_lambda_1 * dpp_loss + bias_loss) # weighted factor
+            ######################################################################
+            # 3、VI loss
+            ######################################################################
 
-        ######################################################################
-        # 3、VI loss
-        ######################################################################
-
-        mu_out = th.stack(mu_out, dim=1).reshape(-1, self.args.proxy_z_dim)
-        logvar_out = th.stack(logvar_out, dim=1).reshape(-1, self.args.proxy_z_dim) # (bs, ep_len, n_control, proxy_z_dim) 
-        vi_out = th.stack(vi_losses, dim=1) # (bs, ep_len, n_control,)
-        p_ = th.distributions.normal.Normal(mu_out, (0.5 * logvar_out).exp())
-        entropy = p_.entropy().clamp_(self.args.min_logvar, self.args.max_logvar).mean()
-        vi_loss = self.args.vi_lambda_1 * vi_out.mean() + self.args.vi_lambda_2 * entropy
+            mu_out = th.stack(mu_out, dim=1).reshape(-1, self.args.proxy_z_dim)
+            logvar_out = th.stack(logvar_out, dim=1).reshape(-1, self.args.proxy_z_dim) # (bs, ep_len, n_control, proxy_z_dim) 
+            vi_out = th.stack(vi_losses, dim=1) # (bs, ep_len, n_control,)
+            p_ = th.distributions.normal.Normal(mu_out, (0.5 * logvar_out).exp())
+            entropy = p_.entropy().clamp_(self.args.min_logvar, self.args.max_logvar).mean()
+            vi_loss = self.args.vi_lambda_1 * vi_out.mean() + self.args.vi_lambda_2 * entropy
+        else:
+            # for logging
+            dpp_loss = th.Tensor([0]).cuda()
+            bias_loss = th.Tensor([0]).cuda()
+            contrastive_loss = th.Tensor([0]).cuda()
+            vi_loss = th.Tensor([0]).cuda()
+            entropy = th.Tensor([0]).cuda()
 
         # Optimise
         self.optimiser.zero_grad()
-        (td_loss + contrastive_loss + vi_loss).backward()
+        if self.args.use_encoder:
+            if self.args.use_contrastive_loss:
+                (td_loss + contrastive_loss + vi_loss).backward()
+            else:
+                (td_loss + vi_loss).backward()
+        else:
+            td_loss.backward()
         grad_norm = th.nn.utils.clip_grad_norm_(self.params, self.args.grad_norm_clip)
         self.optimiser.step()
 
@@ -213,21 +248,25 @@ class MyQLearner:
             self.logger.log_stat("q_taken_mean", (chosen_action_qvals * mask).sum().item()/(mask_elems * self.args.n_agents), t_env)
             self.logger.log_stat("target_mean", (targets * mask).sum().item()/(mask_elems * self.args.n_agents), t_env)
             self.log_stats_t = t_env
+       
 
     def _update_targets_hard(self):
         self.target_mac.load_state(self.mac)
         if self.mixer is not None:
             self.target_mixer.load_state_dict(self.mixer.state_dict())
-        self.target_team_encoder.load_state_dict(self.team_encoder.state_dict())
+        if self.args.use_encoder:  
+            self.target_team_encoder.load_state_dict(self.team_encoder.state_dict())
 
     def _update_targets_soft(self, tau):
+        assert 0, print("sth should be corrected with soft target update")
         for target_param, param in zip(self.target_mac.parameters(), self.mac.parameters()):
             target_param.data.copy_(target_param.data * (1.0 - tau) + param.data * tau)
         if self.mixer is not None:
             for target_param, param in zip(self.target_mixer.parameters(), self.mixer.parameters()):
                 target_param.data.copy_(target_param.data * (1.0 - tau) + param.data * tau)
-        for target_param, param in zip(self.target_team_encoder.parameters(), self.team_encoder.parameters()):
-            target_param.data.copy_(target_param.data * (1.0 - tau) + param.data * tau)
+        if self.args.use_encoder:
+            for target_param, param in zip(self.target_team_encoder.parameters(), self.team_encoder.parameters()):
+                target_param.data.copy_(target_param.data * (1.0 - tau) + param.data * tau)
 
     def cuda(self):
         self.mac.cuda()
@@ -235,17 +274,19 @@ class MyQLearner:
         if self.mixer is not None:
             self.mixer.cuda()
             self.target_mixer.cuda()
-        self.team_encoder.cuda()
-        self.target_team_encoder.cuda()
-        self.vis.cuda()
+        if self.args.use_encoder:
+            self.team_encoder.cuda()
+            self.target_team_encoder.cuda()
+            self.vis.cuda()
 
     def save_models(self, path):
         self.mac.save_models(path)
         if self.mixer is not None:
             th.save(self.mixer.state_dict(), "{}/mixer.th".format(path))
-        th.save(self.team_encoder.state_dict(), "{}/team_encoder.th".format(path))
-        th.save(self.vis.state_dict(), "{}/vis.th".format(path))
-        th.save(self.optimiser.state_dict(), "{}/opt.th".format(path))
+        if self.args.use_encoder:
+            th.save(self.team_encoder.state_dict(), "{}/team_encoder.th".format(path))
+            th.save(self.vis.state_dict(), "{}/vis.th".format(path))
+            th.save(self.optimiser.state_dict(), "{}/opt.th".format(path))
 
     def load_models(self, path):
         self.mac.load_models(path)
@@ -253,6 +294,7 @@ class MyQLearner:
         self.target_mac.load_models(path)
         if self.mixer is not None:
             self.mixer.load_state_dict(th.load("{}/mixer.th".format(path), map_location=lambda storage, loc: storage))
-        self.team_encoder.load_state_dict(th.load("{}/team_encoder.th".format(path), map_location=lambda storage, loc: storage))
-        self.vis.load_state_dict(th.load("{}/vis.th".format(path), map_location=lambda storage, loc: storage))
-        self.optimiser.load_state_dict(th.load("{}/opt.th".format(path), map_location=lambda storage, loc: storage))
+        if self.args.use_encoder:
+            self.team_encoder.load_state_dict(th.load("{}/team_encoder.th".format(path), map_location=lambda storage, loc: storage))
+            self.vis.load_state_dict(th.load("{}/vis.th".format(path), map_location=lambda storage, loc: storage))
+            self.optimiser.load_state_dict(th.load("{}/opt.th".format(path), map_location=lambda storage, loc: storage))

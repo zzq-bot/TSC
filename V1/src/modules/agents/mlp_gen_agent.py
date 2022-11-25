@@ -18,9 +18,13 @@ class MLPGenAgent(nn.Module):
     
     def forward(self, inputs, proxy_z):
         bs = inputs.shape[0]
-        assert inputs.shape[:-1] == proxy_z.shape[:-1]
+        assert inputs.shape[:-1] == proxy_z.shape[:-1], print(inputs.shape, proxy_z.shape)
         inputs = th.cat((inputs, proxy_z), dim=-1)
-        x = F.relu(self.fc1(inputs)).unsqueeze(1)
+        try:
+            x = F.relu(self.fc1(inputs)).unsqueeze(1)
+        except:
+            print(inputs.shape, proxy_z.shape)
+            assert 0
         assert tuple(x.shape) == (bs, 1, self.args.hidden_dim)
         w2 = self.hyper_w2(proxy_z).reshape(bs, self.args.hidden_dim, -1)
         b2 = self.hyper_b2(proxy_z).unsqueeze(1)

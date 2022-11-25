@@ -18,7 +18,7 @@ class MLPNSAgent(nn.Module):
     def forward(self, inputs, proxy_z=None):
         qs = []
         if proxy_z is not None:
-            assert inputs.shape[:-1] == proxy_z.shape[:-1]
+            assert inputs.shape[:-1] == proxy_z.shape[:-1], print(inputs.shape, proxy_z.shape)
             if inputs.size(0) == self.n_control:
                 for i in range(self.n_control):
                     #ic(self.input_shape)
