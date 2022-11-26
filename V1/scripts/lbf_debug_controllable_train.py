@@ -111,7 +111,7 @@ if False:
     proxy_z_dim = 32
     team_z_dim = 64
 
-if False:
+if True:
     # TODO
     config = "my_qmix"
     env_config = "gymma"
@@ -133,7 +133,7 @@ if False:
     proxy_z_dim = 4
     team_z_dim = 8
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50

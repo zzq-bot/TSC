@@ -245,7 +245,7 @@ def run_sequential(args, logger):
                     candidate_pretrain_teammate_path_list = os.listdir(args.pretrain_teammate_path)
                     chosen_path = np.random.choice(candidate_pretrain_teammate_path_list, 1).item()
                     logger.console_logger.info("Use Pretrained Teammate Agent Model from {}".format(chosen_path))
-                    teammate_learner.load_agent_models(path=chosen_path)
+                    teammate_learner.load_agent_models(path=os.path.join(args.pretrain_teammate_path, chosen_path))
                 else:
                     logger.console_logger.info("Train Teammate Agent Model from scratch")
 
