@@ -57,6 +57,7 @@ teammate_mixer: "qmix"
 teammate_agent: "mlp_ns"
 teammate_t_max: 550000
 teammate_target_update_interval: 200
+teammate_traj_diversity_coef: 1.0
 recorder_path: "recorder_checkpoint"
 update_traj_encoder_interval: 1
 

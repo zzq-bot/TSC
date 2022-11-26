@@ -154,6 +154,7 @@ class TeammateQLearner:
             # diversity_reg = - ((cur_prototype-v_l) ** 2).sum() / cur_prototype.size(0)
             diversity_reg = - th.min(((cur_prototype - v_l) ** 2).sum(dim=-1))
 
+            diversity_reg *= self.args.teammate_traj_diversity_coef
         # Optimise
         self.optimiser.zero_grad()
         (td_loss + diversity_reg).backward()
