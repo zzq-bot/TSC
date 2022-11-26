@@ -45,6 +45,7 @@ def run(_run, _config, _log):
     except:
         map_name = _config["env_args"]["key"]   
     unique_token = f"{_config['name']}_seed{_config['seed']}_{map_name}_{datetime.datetime.now()}_{_config['remark']}".replace(" ", "_")
+    unique_token=  unique_token.replace(':', '_')
 
     args.unique_token = unique_token
     if args.use_tensorboard:
@@ -203,10 +204,17 @@ def run_sequential(args, logger):
     enc_params = list(traj_encoder.parameters()) + list(traj_decoder.parameters())
     enc_optimiser = th.optim.Adam(params=enc_params, lr=args.lr)
     crp_recorder.set_module(traj_encoder, traj_decoder)
+    
     if args.recorder_load_path != "":
         logger.console_logger.info("Load CRP_Recorder from {}".format(args.recorder_load_path))
         crp_recorder.load(load_path=args.recorder_load_path)
-    
+
+    test_crp_recorder = None
+    if args.test_recorder_load_path != "":
+        test_crp_recorder = CRPRecorder(args)
+        logger.console_logger.info("Load Test CRP_Recorder from {}".format(args.test_recorder_load_path))
+        test_crp_recorder.load(load_path=args.test_recorder_load_path)
+        
     if args.pretrain_enc_path!="":
         logger.console_logger.info("Load EncDec from {}".format(args.pretrain_enc_path))
         traj_encoder.load_state_dict(th.load("{}/encoder.th".format(args.pretrain_enc_path), \
@@ -223,6 +231,7 @@ def run_sequential(args, logger):
             recorder_save_path = os.path.join(args.recorder_path, f"{i//2}")
             logger.console_logger.info("This iter, CRP_Recorder will be saved in {}".format(recorder_save_path)) 
             for id in range(args.once_gen_num):
+                logger.console_logger.info("Now, generate {}/{} teammates".format(id+1, args.once_gen_num)) 
                 # Default/Base scheme for controllable agents for teammates generator
                 teammate_buffer = ReplayBuffer(
                     scheme,
@@ -329,10 +338,14 @@ def run_sequential(args, logger):
 
         else:
             #assert 0
+            logger.console_logger.info("##################################")
             logger.console_logger.info("Start training controllabel agents")
             
             mac.set_schedule_recorder(crp_recorder)
-            mac.set_schedule_recorder(crp_recorder, mode='test')
+            if test_crp_recorder is not None:
+                mac.set_schedule_recorder(test_crp_recorder, mode='test')
+            else:
+                mac.set_schedule_recorder(crp_recorder, mode='test')
             episode = 0
             while runner.t_env <= args.t_max * (i//2+1):
                 episode_batch = runner.run(test_mode=False)

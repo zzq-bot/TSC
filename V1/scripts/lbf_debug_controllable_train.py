@@ -4,6 +4,7 @@ import threading
 """
 Debug the 2nd function: How to train controllable agents
 We first start with fixed teammates
+Then test with changeble crp recorder
 """
 
 if False:
