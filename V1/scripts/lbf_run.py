@@ -66,7 +66,7 @@ if False:
     pretrain_enc_path = "pretrain_checkpoint/lbf_6x6_4p5f/pretrain_enc_path"
     test_recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
@@ -95,6 +95,33 @@ if True:
     pretrain_enc_path = "pretrain_checkpoint/lbf_6x6_4p5f/pretrain_enc_path"
     test_recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
 
+
+if True:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 50
+    key = "Foraging-6x6-4p-5f-v1"
+    learner = 'my_q_learner'
+    use_encoder = False
+    train_schedule = "train"
+    test_schedule = "test"
+    name = "run_vanilla_qmix_iter_10_ogn_5_ttmax_550000_tmax_1050000_xi_1"
+    seeds = [0, 1, 2]
+    cuda_device = [0, 0, 0]
+    recorder_load_path = ""
+    iterations = 2 # do not need train controllable agents
+    z_gen_hyper = False
+    agent = "mlp_ns"
+    use_contrastive_loss = False
+    proxy_z_dim = 0
+    team_z_dim = 0
+    xi =  1
+    teammate_t_max = 550000
+    t_max = 1050000
+    once_gen_num = 5
+    pretrain_teammate_path =  "pretrain_checkpoint/lbf_6x6_4p5f/pretrain_teammate_path"
+    pretrain_enc_path = "pretrain_checkpoint/lbf_6x6_4p5f/pretrain_enc_path"
+    test_recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
 
 program_info = __file__
 
