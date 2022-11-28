@@ -46,7 +46,7 @@ simple_tag_pairs = [
 
 for num_good, num_adv in simple_tag_pairs:
     scenario_name = "simple_tag"
-    gymkey = f"SimpleSpread-{num_good}good-{num_adv}adv-v0"
+    gymkey = f"SimpleTag-{num_good}good-{num_adv}adv-v0"
     scenario = scenarios.load(scenario_name + ".py").Scenario()
     world = scenario.make_world(num_good_agents=num_good, num_adversaries=num_adv)
     

@@ -191,7 +191,7 @@ class MultiAgentEnv(gym.Env):
         else:
             action = [action]
 
-        if agent.movable and agent.alive: # if not alive, cannot move
+        if agent.movable and agent.active: # if not alive, cannot move
             # physical action
             if self.discrete_action_input:
                 agent.action.u = np.zeros(self.world.dim_p)
@@ -224,9 +224,11 @@ class MultiAgentEnv(gym.Env):
                 agent.action.c = action[0]
             action = action[1:]
         # make sure we used all elements of action
-        if agent.alive:
+        if agent.active:
             assert len(action) == 0
-
+        else:
+            pass
+            #whatever, cause we really dont care about its action
     # reset rendering assets
     def _reset_render(self):
         self.render_geoms = None

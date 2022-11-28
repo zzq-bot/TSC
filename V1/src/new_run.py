@@ -305,7 +305,7 @@ def run_sequential(args, logger):
                 # TODO, cluster
                 # determine npc_index
                 maximum_npc_num = args.n_agents-args.n_control
-                assert maximum_npc_num == 2
+                # assert maximum_npc_num == 2
                 this_npc_num = np.random.choice(range(1, maximum_npc_num+1), 1)
                 npc_idx = np.random.choice(range(args.n_agents), this_npc_num) # TODO
                 
