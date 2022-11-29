@@ -115,7 +115,28 @@ if False:
     team_z_dim = 64
 
 if True:
-    # TODO
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 50
+    key = "Foraging-6x6-4p-5f-v1"
+    learner = 'my_q_learner'
+    use_encoder = True
+    train_schedule = "train"
+    test_schedule = "test"
+    name = "debug_mlp_ns_zdim_4_8"
+    # change to "debug_mlp_ns_zdim_32_64"
+    seeds = [0, 1, 2]
+    cuda_device = [0, 1, 0]
+    recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
+    test_function2 = True
+    iterations = 2 # do not need train controllable agents
+    z_gen_hyper = False
+    agent = "mlp_ns"
+    use_contrastive_loss = True
+    proxy_z_dim = 4
+    team_z_dim = 8
+
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
