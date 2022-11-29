@@ -25,6 +25,7 @@ class EpisodeRunner:
 
         # Log the first run
         self.log_train_stats_t = -1000000
+        self.id = ""
 
     def set_id(self, i, id):
         self.id = f"teammate_iter_{i}_id_{id}"

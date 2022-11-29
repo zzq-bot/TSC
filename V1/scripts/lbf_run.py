@@ -125,7 +125,7 @@ if False:
     test_recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
 
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
