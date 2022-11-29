@@ -25,15 +25,15 @@ if True:
     test_schedule = "debug"
     name = "test_env_generate"
     seeds = [0, 1, 2]
-    cuda_device = [0, 1, 0]
+    cuda_device = [0, 0, 0]
     recorder_load_path = ""
     test_function2 = False
     iterations = 1
     z_gen_hyper = False
     agent = "mlp_ns"
     once_gen_num = 5
-    xi=2
-    teammate_t_max = 2050000
+    xi=1
+    teammate_t_max = 2550000
     
 program_info = __file__
 
