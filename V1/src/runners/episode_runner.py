@@ -26,6 +26,9 @@ class EpisodeRunner:
         # Log the first run
         self.log_train_stats_t = -1000000
 
+    def set_id(self, i, id):
+        self.id = f"teammate_iter_{i}_id_{id}"
+    
     def setup(self, scheme, groups, preprocess, mac):
         self.new_batch = partial(EpisodeBatch, scheme, groups, self.batch_size, self.episode_limit + 1,
                                  preprocess=preprocess, device=self.args.device)
@@ -92,7 +95,7 @@ class EpisodeRunner:
 
         cur_stats = self.test_stats if test_mode else self.train_stats
         cur_returns = self.test_returns if test_mode else self.train_returns
-        log_prefix = "test_" if test_mode else ""
+        log_prefix = f"{self.id}_test_" if test_mode else f"{self.id}_"
         cur_stats.update({k: cur_stats.get(k, 0) + env_info.get(k, 0) for k in set(cur_stats) | set(env_info)})
         cur_stats["n_episodes"] = 1 + cur_stats.get("n_episodes", 0)
         cur_stats["ep_length"] = self.t + cur_stats.get("ep_length", 0)

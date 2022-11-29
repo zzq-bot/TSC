@@ -59,6 +59,7 @@ if False:
     train_schedule = "train"
     test_schedule = "test"
     name = "debug_controllable_train_3"
+    # change to "debug_mlp_ns_zdim_32_64"
     seeds = [0, 1, 2]
     cuda_device = [0, 0, 0]
     recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
@@ -80,6 +81,7 @@ if False:
     train_schedule = "train"
     test_schedule = "test"
     name = "debug_controllable_train_4"
+    # change to "debug_mlp_gen_ns_mixer_gen_zdim_32_64"
     seeds = [0, 1, 2]
     cuda_device = [1, 1, 1]
     recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
@@ -122,7 +124,8 @@ if True:
     use_encoder = True
     train_schedule = "train"
     test_schedule = "test"
-    name = "debug_controllable_train_5_with_zdim_4_8"
+    name = "debug_controllable_with_zdim_4_8"
+    # change to debug_mlp_gen_ns_mixer_gen_zdim_4_8
     seeds = [0, 1, 2]
     cuda_device = [0, 0, 0]
     recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"

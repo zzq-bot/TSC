@@ -246,7 +246,7 @@ def run_sequential(args, logger):
                 
                 teammate_runner = r_REGISTRY[args.teammate_runner](args=args, logger=logger)
                 teammate_runner.setup(scheme=scheme, groups=groups, preprocess=preprocess, mac=teammate_mac)
-
+                teammate_runner.set_id(i, id)
                 teammate_learner = le_REGISTRY[args.teammate_learner](teammate_mac, teammate_buffer.scheme, logger, args)
                 
                 # Load pretrained teammate model (by default)

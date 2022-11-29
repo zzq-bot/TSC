@@ -4,3 +4,5 @@ V1/recorder_checkpoint/
 V1/results/
 *__pycache__
 test.ipynb
+ref/
+V1/scripts/figure*
