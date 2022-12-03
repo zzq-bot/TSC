@@ -60,13 +60,13 @@ if False:
     team_z_dim = 64
     xi = .5
     teammate_t_max = 550000
-    t_max = 1050000
+    t_max = 1250000
     once_gen_num = 5
     pretrain_teammate_path =  "pretrain_checkpoint/lbf_6x6_4p5f/pretrain_teammate_path"
     pretrain_enc_path = "pretrain_checkpoint/lbf_6x6_4p5f/pretrain_enc_path"
     test_recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
 
-if False:
+if True:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
@@ -89,7 +89,7 @@ if False:
     team_z_dim = 8
     xi =  0.5
     teammate_t_max = 550000
-    t_max = 1050000
+    t_max = 1250000
     once_gen_num = 5
     pretrain_teammate_path =  "pretrain_checkpoint/lbf_6x6_4p5f/pretrain_teammate_path"
     pretrain_enc_path = "pretrain_checkpoint/lbf_6x6_4p5f/pretrain_enc_path"
@@ -118,7 +118,7 @@ if False:
     team_z_dim = 0
     xi = 0.5
     teammate_t_max = 550000
-    t_max = 1050000
+    t_max = 1250000
     once_gen_num = 5
     pretrain_teammate_path =  "pretrain_checkpoint/lbf_6x6_4p5f/pretrain_teammate_path"
     pretrain_enc_path = "pretrain_checkpoint/lbf_6x6_4p5f/pretrain_enc_path"
@@ -148,13 +148,13 @@ if False:
     team_z_dim = 64
     xi =  0.5
     teammate_t_max = 550000
-    t_max = 1050000
+    t_max = 1250000
     once_gen_num = 5
     pretrain_teammate_path =  "pretrain_checkpoint/lbf_6x6_4p5f/pretrain_teammate_path"
     pretrain_enc_path = "pretrain_checkpoint/lbf_6x6_4p5f/pretrain_enc_path"
     test_recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
@@ -166,7 +166,7 @@ if True:
     # ogn:once_gen_num; ttmax: teammate_t_max; z_dim_x_y: proxy_z-x, team_z-y
     name = "run_iter_10_ogn_5_mlp_ns_ttmax_550000_tmax_1050000_zdim_4_8_xi_0.5"
     seeds = [0, 1, 2]
-    cuda_device = [6, 6, 6]
+    cuda_device = [2, 2, 2]
     recorder_load_path = ""
     test_function2 = False
     iterations = 10
@@ -177,13 +177,13 @@ if True:
     team_z_dim = 8
     xi = .5
     teammate_t_max = 550000
-    t_max = 1050000
+    t_max = 1250000
     once_gen_num = 5
     pretrain_teammate_path =  "pretrain_checkpoint/lbf_6x6_4p5f/pretrain_teammate_path"
     pretrain_enc_path = "pretrain_checkpoint/lbf_6x6_4p5f/pretrain_enc_path"
     test_recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
 
-if False:
+if True:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
