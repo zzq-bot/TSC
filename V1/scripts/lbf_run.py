@@ -183,6 +183,34 @@ if True:
     pretrain_enc_path = "pretrain_checkpoint/lbf_6x6_4p5f/pretrain_enc_path"
     test_recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
 
+if False:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 50
+    key = "Foraging-6x6-4p-5f-v1"
+    learner = 'my_q_learner'
+    use_encoder = True
+    train_schedule = "train"
+    test_schedule = "test"
+    # ogn:once_gen_num; ttmax: teammate_t_max; z_dim_x_y: proxy_z-x, team_z-y
+    name = "just_test.5"
+    seeds = [0]
+    cuda_device = [6]
+    recorder_load_path = ""
+    test_function2 = False
+    iterations = 10
+    z_gen_hyper = False
+    agent = "mlp_ns"
+    use_contrastive_loss = True
+    proxy_z_dim = 4
+    team_z_dim = 8
+    xi = .5
+    teammate_t_max = 1000
+    t_max = 5000
+    once_gen_num = 3
+    pretrain_teammate_path =  "pretrain_checkpoint/lbf_6x6_4p5f/pretrain_teammate_path"
+    pretrain_enc_path = "pretrain_checkpoint/lbf_6x6_4p5f/pretrain_enc_path"
+    test_recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
 
 program_info = __file__
 

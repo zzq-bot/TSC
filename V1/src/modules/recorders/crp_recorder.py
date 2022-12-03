@@ -67,7 +67,7 @@ class CRPRecorder:
             self.M += 1
             self.record_npc_idx.append([npc_idx])
         else:           # add to old clusters
-            self.prototype[m] = (self.count_M * self.count_M[m] + v_l) / (self.count_M[m] + 1)
+            self.prototype[m] = (self.prototype[m] * self.count_M[m] + v_l) / (self.count_M[m] + 1)
             self.count_M[m] += 1
             self.record_npc_idx[m].append([npc_idx])
 

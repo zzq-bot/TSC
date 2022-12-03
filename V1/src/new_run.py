@@ -225,7 +225,7 @@ def run_sequential(args, logger):
         logger.console_logger.info("Train EncDec from scratch")
 
     for i in range(args.iterations):
-        if i % 2 ==0:
+        if i % 2 == 0:
             if args.test_function2:
                 continue
             recorder_save_path = os.path.join(args.recorder_path, f"{i//2}")
@@ -382,11 +382,11 @@ def run_sequential(args, logger):
                         for _ in range(n_test_runs):
                             runner.run(test_mode=True)
                     else:
-                        for _ in range(n_test_runs//2):
+                        for _ in range(n_test_runs):
                             runner.run(test_mode=True)
                         runner.set_prefix("train2test")
                         mac.set_schedule_recorder(crp_recorder, mode='test')
-                        for _ in range(n_test_runs-n_test_runs//2):
+                        for _ in range(n_test_runs-n_test_runs):
                             runner.run(test_mode=True)
                         runner.set_prefix("")
                 if args.save_model and (
