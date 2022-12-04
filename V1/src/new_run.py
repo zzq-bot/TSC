@@ -306,9 +306,9 @@ def run_sequential(args, logger):
                 # determine npc_index
                 maximum_npc_num = args.n_agents-args.n_control
                 # assert maximum_npc_num == 2
-                this_npc_num = np.random.choice(range(1, maximum_npc_num+1), 1)
-                npc_idx = np.random.choice(range(args.n_agents), this_npc_num) # TODO
-                
+                this_npc_num = np.random.choice(range(1, maximum_npc_num+1), 1).item()
+                npc_idx = np.sort(np.random.choice(range(args.n_agents), this_npc_num)) # TODO ?
+                print("cur chosen npc_idx is:", npc_idx)
                 cluster_buffer = ReplayBuffer(
                     scheme,
                     groups,

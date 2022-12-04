@@ -13,7 +13,7 @@ Allowance for predator and prey:
     f"SimpleTag-{num_good}good-{num_adv}adv-v0"
 """
 
-if False:
+if True:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
@@ -25,7 +25,7 @@ if False:
     test_schedule = "debug"
     name = "test_env_generate"
     seeds = [0]
-    cuda_device = [6]
+    cuda_device = [0]
     recorder_load_path = ""
     test_function2 = False
     iterations = 1
@@ -36,7 +36,7 @@ if False:
     t_max = 100000
 
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50

@@ -4,11 +4,11 @@ from mpe.scenario import BaseScenario
 
 
 class Scenario(BaseScenario):
-    def make_world(self):
+    def make_world(self, num_agents=3):
         world = World()
         # set any world properties first
         world.dim_c = 2
-        num_agents = 3
+        #num_agents = 3
         num_landmarks = 3
         world.collaborative = True
         # add agents
@@ -25,21 +25,36 @@ class Scenario(BaseScenario):
             landmark.collide = False
             landmark.movable = False
         # make initial conditions
-        self.reset_world(world)
+        self.reset_world(world, active_agents_id=None)
         return world
 
-    def reset_world(self, world):
+    def reset_world(self, world, active_agents_id):
         # random properties for agents
+        if active_agents_id is None:
+            active_agents_id = list(range(len(world.agents)))
+        for agent in world.agents:
+            agent.active = False
+        for id in active_agents_id:
+            world.agents[id].active = True
+        
         for i, agent in enumerate(world.agents):
-            agent.color = np.array([0.35, 0.35, 0.85])
+            if not agent.active:
+                agent.color = np.array([0.35, 0., 0.]) # whatever
+            else:
+                agent.color = np.array([0.35, 0.35, 0.85])
         # random properties for landmarks
         for i, landmark in enumerate(world.landmarks):
             landmark.color = np.array([0.25, 0.25, 0.25])
         # set random initial states
         for agent in world.agents:
-            agent.state.p_pos = world.np_random.uniform(-1, +1, world.dim_p)
-            agent.state.p_vel = np.zeros(world.dim_p)
-            agent.state.c = np.zeros(world.dim_c)
+            if agent.active:
+                agent.state.p_pos = world.np_random.uniform(-1, +1, world.dim_p)
+                agent.state.p_vel = np.zeros(world.dim_p)
+                agent.state.c = np.zeros(world.dim_c)
+            else:
+                agent.state.p_pos = world.np_random.uniform(-1, +1, world.dim_p)
+                agent.state.p_vel = np.zeros(world.dim_p)
+                agent.state.c = np.zeros(world.dim_c)
         for i, landmark in enumerate(world.landmarks):
             landmark.state.p_pos = world.np_random.uniform(-1, +1, world.dim_p)
             landmark.state.p_vel = np.zeros(world.dim_p)
@@ -64,6 +79,8 @@ class Scenario(BaseScenario):
 
 
     def is_collision(self, agent1, agent2):
+        if not agent1.active or not agent2.active:
+            return False
         delta_pos = agent1.state.p_pos - agent2.state.p_pos
         dist = np.sqrt(np.sum(np.square(delta_pos)))
         dist_min = agent1.size + agent2.size

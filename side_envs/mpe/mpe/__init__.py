@@ -10,7 +10,7 @@ _particles = {
     "simple_push": "SimplePush-v0",
     "simple_reference": "SimpleReference-v0",
     "simple_speaker_listener": "SimpleSpeakerListener-v0",
-    "simple_spread": "SimpleSpread-v0",
+    #"simple_spread": "SimpleSpread-v0",
     #"simple_tag": "SimpleTag-v0",
     "simple_world_comm": "SimpleWorldComm-v0",
     "climbing_spread": "ClimbingSpread-v0",
@@ -61,6 +61,28 @@ for num_good, num_adv in simple_tag_pairs:
         },
     )
 
+
+simple_spread_n = [
+    3,
+    4,
+    5,
+    6
+]
+for n in simple_spread_n:
+    scenario_name = "simple_spread"
+    gymkey = f"SimpleSpread-{n}-v0"
+    scenario = scenarios.load(scenario_name+'.py').Scenario()
+    world = scenario.make_world(n)
+    register(
+        gymkey,
+        entry_point="mpe.environment:MultiAgentEnv",
+        kwargs={
+            "world": world,
+            "reset_callback": scenario.reset_world,
+            "reward_callback": scenario.reward,
+            "observation_callback": scenario.observation,
+        },
+    )
 # Registers the custom double spread environment:
 
 for N in range(2, 11, 2):

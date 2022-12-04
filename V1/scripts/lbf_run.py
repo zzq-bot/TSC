@@ -38,6 +38,7 @@ if False:
 
 
 if False:
+    # DONT USE THIS
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
@@ -47,9 +48,9 @@ if False:
     train_schedule = "train"
     test_schedule = "test"
     # ogn:once_gen_num; ttmax: teammate_t_max; z_dim_x_y: proxy_z-x, team_z-y
-    name = "run_iter_10_ogn_5_ttmax_550000_tmax_1050000_zdim_32_64_xi_0.5"
+    name = "run_iter_10_ogn_5_ttmax_550000_tmax_1250000_zdim_32_64_xi_0.5"
     seeds = [0, 1, 2]
-    cuda_device = [2, 2, 2]
+    cuda_device = [0, 0, 0]
     recorder_load_path = ""
     test_function2 = False
     iterations = 10
@@ -66,7 +67,8 @@ if False:
     pretrain_enc_path = "pretrain_checkpoint/lbf_6x6_4p5f/pretrain_enc_path"
     test_recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
 
-if True:
+if False:
+    # DONT USE THIS
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
@@ -76,7 +78,7 @@ if True:
     train_schedule = "train"
     test_schedule = "test"
     # ogn:once_gen_num; ttmax: teammate_t_max; z_dim_x_y: proxy_z-x, team_z-y
-    name = "run_iter_10_ogn_5_ttmax_550000_tmax_1050000_zdim_4_8_xi_0.5"
+    name = "run_iter_10_ogn_5_ttmax_550000_tmax_1250000_zdim_4_8_xi_0.5"
     seeds = [0, 1, 2]
     cuda_device = [3, 3, 3]
     recorder_load_path = ""
@@ -105,7 +107,7 @@ if False:
     use_encoder = False
     train_schedule = "train"
     test_schedule = "test"
-    name = "vanilla_qmix_iter_10_ogn_5_ttmax_550000_tmax_1050000_xi_0.5"
+    name = "vanilla_qmix_iter_10_ogn_5_ttmax_550000_tmax_1250000_xi_0.5"
     seeds = [0, 1, 2]
     cuda_device = [0, 0, 0]
     recorder_load_path = ""
@@ -135,7 +137,7 @@ if False:
     train_schedule = "train"
     test_schedule = "test"
     # cl for contrastive loss
-    name = "ablation_wo_cl_iter_10_ogn_5_ttmax_550000_tmax_1050000_zdim_32_64_xi_0.5"
+    name = "ablation_wo_cl_iter_10_ogn_5_ttmax_550000_tmax_1250000_zdim_32_64_xi_0.5"
     seeds = [0, 1, 2]
     cuda_device = [1, 1, 1]
     recorder_load_path = ""
@@ -164,7 +166,7 @@ if False:
     train_schedule = "train"
     test_schedule = "test"
     # ogn:once_gen_num; ttmax: teammate_t_max; z_dim_x_y: proxy_z-x, team_z-y
-    name = "run_iter_10_ogn_5_mlp_ns_ttmax_550000_tmax_1050000_zdim_4_8_xi_0.5"
+    name = "run_iter_10_ogn_5_mlp_ns_ttmax_550000_tmax_1250000_zdim_4_8_xi_0.5"
     seeds = [0, 1, 2]
     cuda_device = [2, 2, 2]
     recorder_load_path = ""
@@ -184,6 +186,35 @@ if False:
     test_recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
 
 if True:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 50
+    key = "Foraging-6x6-4p-5f-v1"
+    learner = 'my_q_learner'
+    use_encoder = True
+    train_schedule = "train"
+    test_schedule = "test"
+    # ogn:once_gen_num; ttmax: teammate_t_max; z_dim_x_y: proxy_z-x, team_z-y
+    name = "run_iter_10_ogn_5_mlp_ns_ttmax_550000_tmax_1250000_zdim_32_64_xi_0.5"
+    seeds = [0, 1, 2]
+    cuda_device = [3, 3, 3]
+    recorder_load_path = ""
+    test_function2 = False
+    iterations = 10
+    z_gen_hyper = False
+    agent = "mlp_ns"
+    use_contrastive_loss = True
+    proxy_z_dim = 32
+    team_z_dim = 64
+    xi = .5
+    teammate_t_max = 550000
+    t_max = 1250000
+    once_gen_num = 5
+    pretrain_teammate_path =  "pretrain_checkpoint/lbf_6x6_4p5f/pretrain_teammate_path"
+    pretrain_enc_path = "pretrain_checkpoint/lbf_6x6_4p5f/pretrain_enc_path"
+    test_recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
+
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50

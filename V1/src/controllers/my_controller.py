@@ -75,6 +75,12 @@ class MyMAC:
             self.npc_bool_indices = npc_bool_indices
             self.npc = MLPNSAgent(input_shape=self.npc_input_shape, args=self.args).to(self.args.device)
             self.npc_mlp_ns_idx = chosen_npc_idx 
+            if not isinstance(self.npc_mlp_ns_idx[0], int):
+                self.npc_mlp_ns_idx = self.npc_mlp_ns_idx[0]
+            if not isinstance(self.npc_mlp_ns_idx[0], int):
+                print("Sth wrong!!")
+                print(self.npc_mlp_ns_idx)
+                assert 0 
             # different from npc_idx above: 
             # denotes npc idxes in this mlpnsagent module
             self.npc.load_state_dict(th.load(os.path.join(chosen_teammate_checkpoint, "agent.th"),\
@@ -111,6 +117,12 @@ class MyMAC:
                 self.npc_types = cluster_idx
                 self.npc = MLPNSAgent(input_shape=self.npc_input_shape, args=self.args).to(self.args.device)
                 self.npc_mlp_ns_idx = chosen_npc_idx 
+                if not isinstance(self.npc_mlp_ns_idx[0], int):
+                    self.npc_mlp_ns_idx = self.npc_mlp_ns_idx[0]
+                if not isinstance(self.npc_mlp_ns_idx[0], int):
+                    print("Sth wrong!!")
+                    print(self.npc_mlp_ns_idx)
+                    assert 0 
                 # different from npc_idx above: 
                 # denotes npc idxes in this mlpnsagent module
                 self.npc.load_state_dict(th.load(os.path.join(chosen_teammate_checkpoint, "agent.th"),\
@@ -157,7 +169,14 @@ class MyMAC:
                         inputs = inputs.unsqueeze(0)
                     idx_of_npc_mac = self.npc_mlp_ns_idx[i]
                     #ic(idx_of_npc_mac, len(self.npc.agents))
-                    q_val = self.npc.agents[idx_of_npc_mac](inputs)
+                    try:
+                        q_val = self.npc.agents[idx_of_npc_mac](inputs)
+                    except:
+                        print("now npc_mlp_ns_idx:", self.npc_mlp_ns_idx)
+                        print("idx of npc_mac:", idx_of_npc_mac)
+                        
+                        raise Exception(f"sth wrong with idx")
+                        
                     action = th.argmax(q_val, dim=-1)
                     #action = self.npc.agents[idx_of_npc_mac](inputs)
                     chosen_actions.append(action)
