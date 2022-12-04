@@ -75,12 +75,20 @@ class MyMAC:
             self.npc_bool_indices = npc_bool_indices
             self.npc = MLPNSAgent(input_shape=self.npc_input_shape, args=self.args).to(self.args.device)
             self.npc_mlp_ns_idx = chosen_npc_idx 
-            if not isinstance(self.npc_mlp_ns_idx[0], int):
+            #print(self.npc_mlp_ns_idx)
+            if isinstance(self.npc_mlp_ns_idx[0], np.ndarray) or isinstance(self.npc_mlp_ns_idx[0], list):
                 self.npc_mlp_ns_idx = self.npc_mlp_ns_idx[0]
-            if not isinstance(self.npc_mlp_ns_idx[0], int):
-                print("Sth wrong!!")
+                if isinstance(self.npc_mlp_ns_idx[0], np.ndarray) or isinstance(self.npc_mlp_ns_idx[0], list):
+                    print("Sth wrong!!")
+                    print(self.npc_mlp_ns_idx)
+                    print(type(self.npc_mlp_ns_idx))
+                    assert 0 
+            if (not isinstance(self.npc_mlp_ns_idx, np.ndarray)) and (not isinstance(self.npc_mlp_ns_idx, list)):
+                
+                print("noooo!!!!!")
                 print(self.npc_mlp_ns_idx)
-                assert 0 
+                print(type(self.npc_mlp_ns_idx))
+                assert 0
             # different from npc_idx above: 
             # denotes npc idxes in this mlpnsagent module
             self.npc.load_state_dict(th.load(os.path.join(chosen_teammate_checkpoint, "agent.th"),\
