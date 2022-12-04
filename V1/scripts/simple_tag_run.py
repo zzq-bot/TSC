@@ -13,7 +13,7 @@ if False:
     test_schedule = "test"
     name = "simple_tag_run_iter_10_ogn_5_mlp_ns_ttmax_550000_tmax_1050000_zdim_32_64_xi_0.5"
     seeds = [0, 1, 2]
-    cuda_device = [4, 4, 4]
+    cuda_device = [0, 0, 0]
     recorder_load_path = ""
     test_function2 = False
     #recorder_load_path = "recorder_checkpoint/test_env_generate_seed0_mpe_SimpleTag-1good-3adv-v0_2022-11-27_21_12_27.191572_test_crp_6/0"
@@ -73,7 +73,7 @@ if False:
     test_schedule = "test"
     name = "simple_tag_vanilla_qmix_iter_10_ogn_5_ttmax_550000_tmax_1050000_xi_0.5"
     seeds = [0, 1, 2]
-    cuda_device = [0, 0, 0]
+    cuda_device = [1, 1, 1]
     recorder_load_path = ""
     test_function2 = False
     iterations = 10
@@ -100,10 +100,10 @@ if True:
     use_encoder = True
     train_schedule = "train"
     test_schedule = "test"
-    name = "debug_for_sth_wrong"
-    #name = "simple_tag_ablation_wo_cl_iter_10_ogn_5_ttmax_550000_tmax_1050000_zdim_32_64_xi_0.5"
-    seeds = [2]
-    cuda_device = [0]
+    #name = "debug_for_sth_wrong"
+    name = "simple_tag_ablation_wo_cl_iter_10_ogn_5_ttmax_550000_tmax_1050000_zdim_32_64_xi_0.5"
+    seeds = [0, 1, 2]
+    cuda_device = [2, 2, 2]
     recorder_load_path = ""
     test_function2 = False
     iterations = 10
