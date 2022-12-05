@@ -220,5 +220,5 @@ REGISTRY["base"] = BaseSchedule
 REGISTRY["static"] = StaticSchedule
 REGISTRY["fixed_dynamic"] = FixedDynamicSchedule
 REGISTRY["train"] = TrainSchedule
-REGISTRY["test"] = TrainSchedule
+REGISTRY["test"] = TestSchedule
 REGISTRY["debug"] = DebugSchedule
