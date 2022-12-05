@@ -17,7 +17,7 @@ if True:
     test_schedule = "test"
     name = "debug_baseline_vanilla_qmix"
     seeds = [0, 1, 2]
-    cuda_device = [4, 5, 5]
+    cuda_device = [1, 1, 1]
     recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
     test_function2 = True
     iterations = 2 # do not need train controllable agents
@@ -25,7 +25,7 @@ if True:
     agent = "mlp_ns"
     use_contrastive_loss = False
 
-if False:
+if True:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
@@ -35,7 +35,7 @@ if False:
     test_schedule = "test"
     name = "debug_ablation_wo_contrastive_loss"
     seeds = [0, 1, 2]
-    cuda_device = [4, 5, 5]
+    cuda_device = [0, 1, 1]
     recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
     test_function2 = True
     iterations = 2 # do not need train controllable agents currently

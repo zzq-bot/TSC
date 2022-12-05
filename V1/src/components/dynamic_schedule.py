@@ -144,7 +144,9 @@ class TestSchedule:
         self.args = args
         self.maximum_npc_num = args.n_agents - args.n_control
         self.this_epi_npc_types = "mlp_ns"
-
+        self.waiting_lower = args.waiting_lower
+        self.waiting_upper = args.waiting_upper
+        
     def set_recorder(self, recorder):
         self.recorder = recorder
     
