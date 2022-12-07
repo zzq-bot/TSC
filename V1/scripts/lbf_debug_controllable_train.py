@@ -58,7 +58,7 @@ if False:
     use_encoder = True
     train_schedule = "train"
     test_schedule = "test"
-    name = "debug_controllable_train_3"
+    name = "debug_mlp_ns_zdim_32_64"
     # change to "debug_mlp_ns_zdim_32_64"
     seeds = [0, 1, 2]
     cuda_device = [0, 0, 0]
@@ -71,7 +71,7 @@ if False:
     proxy_z_dim = 32
     team_z_dim = 64
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
@@ -81,7 +81,6 @@ if True:
     train_schedule = "train"
     test_schedule = "test"
     name = "debug_mlp_ns_zdim_4_8"
-    # change to "debug_mlp_ns_zdim_32_64"
     seeds = [0, 1, 2]
     cuda_device = [0, 0, 0]
     recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
@@ -93,7 +92,7 @@ if True:
     proxy_z_dim = 4
     team_z_dim = 8
 
-if False:
+if True:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
@@ -102,7 +101,7 @@ if False:
     use_encoder = True
     train_schedule = "train"
     test_schedule = "test"
-    name = "debug_controllable_train_4"
+    name = "debug_mlp_gen_ns_mixer_gen_zdim_32_64"
     # change to "debug_mlp_gen_ns_mixer_gen_zdim_32_64"
     seeds = [0, 1, 2]
     cuda_device = [1, 1, 1]

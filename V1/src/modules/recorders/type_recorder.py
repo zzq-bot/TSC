@@ -63,8 +63,10 @@ class TypeRecorder:
     
     @staticmethod
     def get_rbf_matrix(data, centers, alpha, element_wise_exp=False):
-        """this method comes from
-        https://github.com/FanmingL/ESCP/blob/3ab4f44ab2770192f529828dc5face15f12a0f1d/algorithms/RMDM.py"""
+        """
+        see
+        https://github.com/FanmingL/ESCP/blob/3ab4f44ab2770192f529828dc5face15f12a0f1d/algorithms/RMDM.py
+        """
         out_shape = th.Size([data.shape[0], centers.shape[0], data.shape[-1]])
         data = data.unsqueeze(1).expand(out_shape)
         centers = centers.unsqueeze(0).expand(out_shape)
@@ -78,7 +80,6 @@ class TypeRecorder:
         key_sort_indice = keys.argsort()
         sorted_keys = keys[key_sort_indice]
         reduced_key, _, _ = np.unique(sorted_keys, return_counts=True, return_index=True)
-        #print(len(keys), len(reduced_key))
         z = self.get_values(reduced_key)
         rbf_radius = self.rbf_radius if rbf_radius is None else rbf_radius
         if self.kernel == 'rbf':
@@ -100,7 +101,6 @@ class TypeRecorder:
         splited_values_list = th.split(sorted_values, list(split_indice))
         reduced_values = []
         for x in splited_values_list:
-            #print(x.shape)
             reduced_values.append(x.mean(dim=0))
         reduced_values = th.stack(reduced_values, dim=0)
         with th.no_grad():
@@ -108,7 +108,6 @@ class TypeRecorder:
             for key in reduced_key:
                 target_values.append(self.recorder[key])
             target_values = th.stack(target_values, dim=0)
-        #print(reduced_values.shape, target_values.shape)
         assert reduced_values.shape==target_values.shape, print(reduced_values.shape, target_values.shape)
         loss = F.mse_loss(reduced_values, target_values.detach())
         return loss
