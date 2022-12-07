@@ -365,7 +365,7 @@ def run_sequential(args, logger):
                 # Execute test runs once in a while
                 n_test_runs = max(1, args.test_nepisode // runner.batch_size)
                 if (runner.t_env - last_test_T) / args.test_interval >= 1.0:
-
+                        
                     logger.console_logger.info(
                         "t_env: {} / {}".format(runner.t_env, args.t_max)
                     )
@@ -382,6 +382,7 @@ def run_sequential(args, logger):
                         for _ in range(n_test_runs):
                             runner.run(test_mode=True)
                     else:
+                        mac.set_schedule_recorder(crp_recorder, mode='test')
                         for _ in range(n_test_runs):
                             runner.run(test_mode=True)
                         runner.set_prefix("train2test")

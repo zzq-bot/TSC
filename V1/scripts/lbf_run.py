@@ -214,7 +214,7 @@ if False:
     pretrain_enc_path = "pretrain_checkpoint/lbf_6x6_4p5f/pretrain_enc_path"
     test_recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
 
-if False:
+if True:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
@@ -226,7 +226,7 @@ if False:
     # ogn:once_gen_num; ttmax: teammate_t_max; z_dim_x_y: proxy_z-x, team_z-y
     name = "just_test"
     seeds = [0]
-    cuda_device = [4]
+    cuda_device = [1]
     recorder_load_path = ""
     test_function2 = False
     iterations = 10

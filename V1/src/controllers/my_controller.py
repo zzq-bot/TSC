@@ -224,9 +224,23 @@ class MyMAC:
         else:
             return agent_outs.view(ep_batch.batch_size, self.n_control, -1), None, None, None
     
-    def init_hidden(self, batch_size):
-        self.hidden_states = self.agent.init_hidden().unsqueeze(0).expand(batch_size, self.n_control, -1)  # bav
     
+    def init_hidden(self, batch_size):
+        self.hidden_states = None
+        self.npc_hidden_states = None
+        self.encoder_hidden_states = None
+        if "rnn" in self.args.agent:
+            self.hidden_states = self.agent.init_hidden().unsqueeze(0).expand(batch_size, self.n_control, -1)  # bav
+        if "rnn" in self.args.teammate_agent:
+            self.npc_hidden_states = self.npc.init_hidden().unsqueeze(0).expand(batch_size, self.n_agents, -1) # bav
+        if "rnn" in self.args.proxy_encoder or "lstm" in self.args.proxy_encoder:
+            tmp_hidden_states = self.proxy_encoder.init_hidden()
+            if isinstance(tmp_hidden_states, tuple):
+                self.encoder_hidden_states = (tmp_hidden_states[0].unsqueeze(0).expand(batch_size, self.n_control, -1), \
+                                        tmp_hidden_states[0].unsqueeze(0).expand(batch_size, self.n_control, -1))
+            else:
+                self.encoder_hidden_states = tmp_hidden_states.unsqueeze(0).expand(batch_size, self.n_control, -1)
+
     def parameters(self):
         if self.proxy_encoder is not None:
             return self.agent.parameters(), self.proxy_encoder.parameters()
