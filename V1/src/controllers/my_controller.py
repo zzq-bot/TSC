@@ -225,8 +225,7 @@ class MyMAC:
             return agent_outs.view(ep_batch.batch_size, self.n_control, -1), None, None, None
     
     def init_hidden(self, batch_size):
-        return
-        self.hidden_states = self.agent.init_hidden().unsqueeze(0).expand(batch_size, self.n_agents, -1)  # bav
+        self.hidden_states = self.agent.init_hidden().unsqueeze(0).expand(batch_size, self.n_control, -1)  # bav
     
     def parameters(self):
         if self.proxy_encoder is not None:

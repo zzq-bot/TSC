@@ -27,7 +27,7 @@ if True:
     seeds = [0, 1, 2]
     cuda_device = [0, 0, 0]
     recorder_load_path = ""
-    test_function2 = False
+    test_function2 = False  
     iterations = 1
     z_gen_hyper = False
     agent = "mlp_ns"

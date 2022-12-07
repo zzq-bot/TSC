@@ -28,7 +28,8 @@ class NonSharedMAC:
         agent_inputs = self._build_inputs(ep_batch, t)
         avail_actions = ep_batch["avail_actions"][:, t]
         agent_outs = self.agent(agent_inputs)
-
+        if isinstance(agent_outs, tuple):
+            pass
         # Softmax the agent outputs if they're policy logits
         if self.agent_output_type == "pi_logits":
 
@@ -41,8 +42,11 @@ class NonSharedMAC:
         return agent_outs.view(ep_batch.batch_size, self.n_agents, -1)
 
     def init_hidden(self, batch_size):
-        return
-        self.hidden_states = self.agent.init_hidden().unsqueeze(0).expand(batch_size, -1, -1)  # bav
+        agent_type = self.args.teammate_agent if self.is_teammate else self.args.agent
+        if "rnn" in agent_type:
+            self.hidden_states = self.agent.init_hidden().unsqueeze(0).expand(batch_size, self.n_agents, -1)  # bav
+        else:
+            self.hidden_states = None
 
     def parameters(self):
         return self.agent.parameters()
