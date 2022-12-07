@@ -1,7 +1,7 @@
 import os
 import threading
 
-if False:
+if True:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
@@ -11,9 +11,9 @@ if False:
     use_encoder = True
     train_schedule = "train"
     test_schedule = "test"
-    name = "simple_tag_run_iter_10_ogn_5_mlp_ns_ttmax_750000_tmax_1250000_zdim_32_64_xi_0.5"
+    name = "simple_tag_run_iter_10_ogn_5_mlp_ns_ttmax_750000_tmax_1250000_zdim_32_64_xi_2"
     seeds = [0, 1, 2]
-    cuda_device = [0, 0, 0]
+    cuda_device = [5, 6, 7]
     recorder_load_path = ""
     test_function2 = False
     #recorder_load_path = "recorder_checkpoint/test_env_generate_seed0_mpe_SimpleTag-1good-3adv-v0_2022-11-27_21_12_27.191572_test_crp_6/0"
@@ -23,7 +23,7 @@ if False:
     use_contrastive_loss = True
     proxy_z_dim = 32
     team_z_dim = 64
-    xi = .5
+    xi = 2
     teammate_t_max = 750000
     t_max = 1250000
     once_gen_num = 5
@@ -41,7 +41,7 @@ if False:
     use_encoder = True
     train_schedule = "train"
     test_schedule = "test"
-    name = "simple_tag_run_iter_10_ogn_5_mlp_ns_ttmax_750000_tmax_1250000_zdim_4_8_xi_0.5"
+    name = "simple_tag_run_iter_10_ogn_5_mlp_ns_ttmax_750000_tmax_1250000_zdim_4_8_xi_2"
     seeds = [0, 1, 2]
     cuda_device = [1, 1, 1]
     recorder_load_path = ""
@@ -53,7 +53,7 @@ if False:
     use_contrastive_loss = True
     proxy_z_dim = 4
     team_z_dim = 8
-    xi = .5
+    xi = 2
     teammate_t_max = 750000
     t_max = 1250000
     once_gen_num = 5
@@ -71,7 +71,7 @@ if False:
     use_encoder = False
     train_schedule = "train"
     test_schedule = "test"
-    name = "simple_tag_vanilla_qmix_iter_10_ogn_5_ttmax_750000_tmax_1250000_xi_0.5"
+    name = "simple_tag_vanilla_qmix_iter_10_ogn_5_ttmax_750000_tmax_1250000_xi_2"
     seeds = [0, 1, 2]
     cuda_device = [3, 3, 3]
     recorder_load_path = ""
@@ -82,7 +82,7 @@ if False:
     use_contrastive_loss = True
     proxy_z_dim = 0
     team_z_dim = 0
-    xi = .5
+    xi = 2
     teammate_t_max = 750000
     t_max = 1250000
     once_gen_num = 5
@@ -101,7 +101,7 @@ if False:
     train_schedule = "train"
     test_schedule = "test"
     #name = "debug_for_sth_wrong"
-    name = "simple_tag_ablation_wo_cl_iter_10_ogn_5_ttmax_750000_tmax_1250000_zdim_32_64_xi_0.5"
+    name = "simple_tag_ablation_wo_cl_iter_10_ogn_5_ttmax_750000_tmax_1250000_zdim_32_64_xi_2"
     seeds = [0, 1, 2]
     cuda_device = [4, 4, 4]
     recorder_load_path = ""
@@ -112,7 +112,7 @@ if False:
     use_contrastive_loss = True
     proxy_z_dim = 32
     team_z_dim = 64
-    xi = .5
+    xi = 2
     teammate_t_max = 750000
     t_max = 1250000
     once_gen_num = 5
