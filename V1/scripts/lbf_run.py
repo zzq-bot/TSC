@@ -197,7 +197,7 @@ if False:
     # ogn:once_gen_num; ttmax: teammate_t_max; z_dim_x_y: proxy_z-x, team_z-y
     name = "run_iter_10_ogn_5_mlp_ns_ttmax_550000_tmax_1250000_zdim_32_64_xi_0.5"
     seeds = [0, 1, 2]
-    cuda_device = [3, 3, 3]
+    cuda_device = [5, 6, 7]
     recorder_load_path = ""
     test_function2 = False
     iterations = 10
@@ -214,7 +214,7 @@ if False:
     pretrain_enc_path = "pretrain_checkpoint/lbf_6x6_4p5f/pretrain_enc_path"
     test_recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
