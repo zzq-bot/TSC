@@ -1,7 +1,7 @@
 import os
 import threading
 
-if False:
+if True:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
@@ -31,7 +31,7 @@ if False:
     pretrain_enc_path = "pretrain_checkpoint/SimpleTag-1good-3adv/pretrain_enc_path"
     test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-11-29_19_27_31.386069_test_crp_0/0"
 
-if False:
+if True:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
@@ -61,7 +61,7 @@ if False:
     pretrain_enc_path = "pretrain_checkpoint/SimpleTag-1good-3adv/pretrain_enc_path"
     test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-11-29_19_27_31.386069_test_crp_0/0"
 
-if False:
+if True:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
@@ -73,7 +73,7 @@ if False:
     test_schedule = "test"
     name = "simple_tag_vanilla_qmix_iter_10_ogn_5_ttmax_750000_tmax_1250000_xi_0.5"
     seeds = [0, 1, 2]
-    cuda_device = [2, 2, 2]
+    cuda_device = [3, 3, 3]
     recorder_load_path = ""
     test_function2 = False
     iterations = 10
@@ -103,7 +103,7 @@ if True:
     #name = "debug_for_sth_wrong"
     name = "simple_tag_ablation_wo_cl_iter_10_ogn_5_ttmax_750000_tmax_1250000_zdim_32_64_xi_0.5"
     seeds = [0, 1, 2]
-    cuda_device = [3, 3, 3]
+    cuda_device = [4, 4, 4]
     recorder_load_path = ""
     test_function2 = False
     iterations = 10
