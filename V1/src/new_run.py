@@ -382,12 +382,12 @@ def run_sequential(args, logger):
                         for _ in range(n_test_runs):
                             runner.run(test_mode=True)
                     else:
-                        mac.set_schedule_recorder(crp_recorder, mode='test')
+                        mac.set_schedule_recorder(test_crp_recorder, mode='test')
                         for _ in range(n_test_runs):
                             runner.run(test_mode=True)
                         runner.set_prefix("train2test")
                         mac.set_schedule_recorder(crp_recorder, mode='test')
-                        for _ in range(n_test_runs-n_test_runs):
+                        for _ in range(n_test_runs):
                             runner.run(test_mode=True)
                         runner.set_prefix("")
                 if args.save_model and (
