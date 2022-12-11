@@ -27,7 +27,8 @@ if False:
     use_contrastive_loss = True
     proxy_z_dim = 32
     team_z_dim = 64
-
+    t_max = 5050000
+    
 if False:
     config = "my_qmix"
     env_config = "gymma"
@@ -48,8 +49,9 @@ if False:
     use_contrastive_loss = True
     proxy_z_dim = 32
     team_z_dim = 64
+    t_max = 5050000
 
-if False:
+if True:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
@@ -70,6 +72,7 @@ if False:
     use_contrastive_loss = True
     proxy_z_dim = 32
     team_z_dim = 64
+    t_max = 5050000
 
 if False:
     config = "my_qmix"
@@ -91,8 +94,9 @@ if False:
     use_contrastive_loss = True
     proxy_z_dim = 4
     team_z_dim = 8
+    t_max = 5050000
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
@@ -113,6 +117,7 @@ if True:
     use_contrastive_loss = True
     proxy_z_dim = 32
     team_z_dim = 64
+    t_max = 5050000
 
 if False:
     config = "my_qmix"
@@ -134,6 +139,7 @@ if False:
     use_contrastive_loss = True
     proxy_z_dim = 32
     team_z_dim = 64
+    t_max = 5050000
 
 if False:
     config = "my_qmix"
@@ -156,6 +162,7 @@ if False:
     use_contrastive_loss = True
     proxy_z_dim = 4
     team_z_dim = 8
+    t_max = 5050000
 
 if False:
     config = "my_qmix"
@@ -178,6 +185,7 @@ if False:
     use_contrastive_loss = True
     proxy_z_dim = 4
     team_z_dim = 8
+    t_max = 5050000
 
 if False:
     config = "my_qmix"
@@ -199,6 +207,7 @@ if False:
     use_contrastive_loss = True
     proxy_z_dim = 32
     team_z_dim = 64
+    t_max = 5050000
 
 
 """if True:
@@ -244,6 +253,7 @@ def one_train(remark, cuda_idx, seed):
                 --use_contrastive_loss={use_contrastive_loss}\
                 --proxy_z_dim={proxy_z_dim}\
                 --team_z_dim={team_z_dim}\
+                --t_max={t_max}\
                 --iterations={iterations} &\
                 sleep 2s"
     else:

@@ -24,6 +24,7 @@ if False:
     z_gen_hyper = False
     agent = "mlp_ns"
     use_contrastive_loss = False
+    t_max = 5050000
 
 if False:
     config = "my_qmix"
@@ -43,6 +44,7 @@ if False:
     z_gen_hyper = True
     agent = "mlp_gen_ns"
     use_contrastive_loss = False
+    t_max = 5050000
 
 if True:
     config = "my_qmix"
@@ -62,6 +64,7 @@ if True:
     z_gen_hyper = False
     agent = "mlp_ns"
     use_contrastive_loss = False
+    t_max = 5050000
 
 
 program_info = __file__
@@ -85,6 +88,7 @@ def one_train(remark, cuda_idx, seed):
                 --z_gen_hyper={z_gen_hyper}\
                 --agent={agent}\
                 --use_contrastive_loss={use_contrastive_loss}\
+                --t_max={t_max}\
                 --iterations={iterations} &\
                 sleep 2s"
     else:
