@@ -79,3 +79,6 @@ pretrain_enc_path: ""
 pretrain_teammate_path: ""
 use_contrastive_loss: True
 test_recorder_load_path: ""
+debug_model_path: ""
+
+render_save_path: "render_save_path"

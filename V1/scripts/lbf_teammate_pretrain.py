@@ -8,7 +8,7 @@ Pretrain and generate some diverse teammates
 # env_args.time_limit=50 env_args.key="lbforaging:Foraging-8x8-5p-4f-v1" 
 # learner='q_learner' use_encoder=False train_schedule="base"
 #  test_schedule="fixed_dynamic" name="tr_s-te_fd" seed=$SEED
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
@@ -44,6 +44,25 @@ if False:
     teammate_t_max = 2050000
     iterations = 1 # do not need train controllable agents
     xi=5
+
+
+if True:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 50
+    key = "Foraging-8x8-4p-5f-v1"
+    learner = 'my_q_learner'
+    use_encoder = True
+    train_schedule = "base"
+    test_schedule = "fixed_dynamic"
+    name = "teammate_pretrain"
+    seeds = [0, 1, 2, 3, 4, 5]
+    cuda_device = [0, 0, 0, 1, 1, 1]
+    #checkpoint_path = ""
+    once_gen_num = 6
+    teammate_t_max = 4050000
+    iterations = 1 # do not need train controllable agents
+    xi = 3
 
 program_info = __file__
 

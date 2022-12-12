@@ -62,7 +62,10 @@ class NonSharedMAC:
         th.save(self.agent.state_dict(), "{}/agent.th".format(path))
 
     def load_models(self, path):
-        self.agent.load_state_dict(th.load("{}/agent.th".format(path), map_location=lambda storage, loc: storage))
+        if path[-3:] != ".th":
+            self.agent.load_state_dict(th.load("{}/agent.th".format(path), map_location=lambda storage, loc: storage))
+        else:
+            self.agent.load_state_dict(th.load(path, map_location=lambda storage, loc: storage))
 
     def _build_agents(self, input_shape):
         if self.is_teammate:

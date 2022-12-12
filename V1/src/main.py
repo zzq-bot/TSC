@@ -14,7 +14,6 @@ import yaml
 
 #from run import run
 #from my_run import run
-from new_run import run
 from test import test_run
 
 SETTINGS['CAPTURE_MODE'] = "fd" # set to "no" if you want to see stdout/stderr in console
@@ -37,9 +36,14 @@ def my_main(_run, _config, _log):
     config['env_args']['seed'] = config["seed"]
 
     # run the framework
+    print(config["run_type"])
     if config["run_type"]=="test":
         test_run(_run, config, _log)
     else:
+        if config["run_type"] == "debug_1":
+            from debug_run_1 import run
+        else:
+            from new_run import run
         run(_run, config, _log)
 
 

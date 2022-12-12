@@ -22,7 +22,6 @@ from modules.decoder.rnn_decoder import RNNDecoder
 
 
 def run(_run, _config, _log):
-
     # check args sanity
     _config = args_sanity_check(_config, _log)
     if "n_control" not in _config:

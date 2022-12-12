@@ -5,6 +5,7 @@
 import math
 import os
 import sys
+from icecream import ic
 
 import numpy as np
 import math
@@ -189,8 +190,10 @@ class Viewer(object):
     def _draw_players(self, env):
         players = []
         batch = pyglet.graphics.Batch()
-
+    
         for player in env.players:
+            if not player.active:
+                continue
             row, col = player.position
             players.append(
                 pyglet.sprite.Sprite(
@@ -204,6 +207,9 @@ class Viewer(object):
             p.update(scale=self.grid_size / p.width)
         batch.draw()
         for p in env.players:
+            if not p.active:
+                continue
+            
             self._draw_badge(*p.position, p.level)
 
     def _draw_badge(self, row, col, level):

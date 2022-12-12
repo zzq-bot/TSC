@@ -2,7 +2,8 @@ from envs import REGISTRY as env_REGISTRY
 from functools import partial
 from components.episode_buffer import EpisodeBatch
 import numpy as np
-
+import cv2
+import os
 
 class EpisodeRunner:
 
@@ -38,8 +39,11 @@ class EpisodeRunner:
     def get_env_info(self):
         return self.env.get_env_info()
 
-    def save_replay(self):
+    def save_replay(self, render_save_path=""):
         self.env.save_replay()
+        self.is_save_replay = True
+        self.render_save_path = render_save_path
+        os.makedirs(render_save_path, exist_ok=True)
 
     def close_env(self):
         self.env.close()
@@ -49,7 +53,7 @@ class EpisodeRunner:
         self.env.reset()
         self.t = 0
 
-    def run(self, test_mode=False):
+    def run(self, test_mode=False, get_return=False):
         self.reset()
 
         terminated = False
@@ -70,6 +74,9 @@ class EpisodeRunner:
             # Receive the actions for each agent at this timestep in a batch of size 1
             actions = self.mac.select_actions(self.batch, t_ep=self.t, t_env=self.t_env, test_mode=test_mode)
 
+            if self.is_save_replay and "Foraging" in self.args.env_args["key"]:
+                frame = self.env.render(mode='rgb_array')
+                cv2.imwrite("{}/{}.jpg".format(self.render_save_path, self.t), frame)
             reward, terminated, env_info = self.env.step(actions[0])
             episode_return += reward
 
@@ -113,7 +120,10 @@ class EpisodeRunner:
             if hasattr(self.mac.action_selector, "epsilon"):
                 self.logger.log_stat("epsilon", self.mac.action_selector.epsilon, self.t_env)
             self.log_train_stats_t = self.t_env
-
+        self.is_save_replay = False
+        if get_return:
+            return self.batch, episode_return
+        
         return self.batch
 
     def _log(self, returns, stats, prefix):

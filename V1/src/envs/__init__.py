@@ -178,8 +178,8 @@ class _GymmaWrapper(MultiAgentEnv):
         ]
         return self.get_obs(), self.get_state()
 
-    def render(self):
-        self._env.render()
+    def render(self, mode="human"):
+        return self._env.render(mode=mode)
 
     def close(self):
         self._env.close()

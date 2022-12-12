@@ -51,6 +51,13 @@ class Player:
         else:
             return "Player"
 
+    def info(self):
+        print("my activeness:", self.active)
+        print("my position:", self.position)
+        print("my score", self.score)
+        print("my reward", self.reward)
+        print("my level", self.level)
+        
 
 class ForagingEnv(Env):
     """
@@ -298,6 +305,14 @@ class ForagingEnv(Env):
 
         for player in self.players:
             if not player.active:
+                player.reward = 0
+                row = -1
+                col = -1
+                player.setup(
+                    (row, col),
+                    -1,
+                    self.field_size
+                )
                 continue
             attempts = 0
             player.reward = 0
@@ -428,7 +443,13 @@ class ForagingEnv(Env):
             return obs
 
         def get_player_reward(observation, idx):
-            if not self.pre_rew_storage is None:
+            if observation is None:
+                return 0.0
+            for p in observation.players:
+                if p and p.is_self:
+                    return p.reward
+            return 0.0
+            """if not self.pre_rew_storage is None:
                 if observation is None and self.pre_rew_storage[idx] == 0.0:
                     return 0.0
                 if observation is None and self.pre_rew_storage[idx] != 0.0:
@@ -441,7 +462,7 @@ class ForagingEnv(Env):
                     return 0.0
                 for p in observation.players:
                     if p and p.is_self:
-                        return p.reward
+                        return p.reward"""
 
         nobs = tuple([make_obs_array(obs) for obs in observations])
         nreward = [get_player_reward(obs, idx) for idx, obs in enumerate(observations)]
@@ -454,17 +475,18 @@ class ForagingEnv(Env):
     def reset(self, active_agents_id):
         #print("hhhhhhhhhhhhh")
         #ic(active_agents_id)
-        #assert 0
         if active_agents_id is None:
             active_agents_id = list(range(self.n_agents))
         #ic(active_agents_id)
         for player in self.players:
             player.active = False
+
         for id in active_agents_id:
             self.players[id].active = True
 
         self.field = np.zeros(self.field_size, np.int32)
         self.spawn_players(self.max_player_level)
+        
         player_levels = sorted([player.level for player in self.players if player.active])
 
         self.spawn_food(
@@ -484,6 +506,7 @@ class ForagingEnv(Env):
             if self.heuristic_obs is None:
                 if self.players[idx].active is False:
                     assert 0, ic("sth wrong with observation/add/remove")
+        
         return nobs
 
     def step(self, actions):
@@ -602,14 +625,12 @@ class ForagingEnv(Env):
 
     def _init_render(self):
         from .rendering import Viewer
-
         self.viewer = Viewer((self.rows, self.cols))
         self._rendering_initialized = True
 
     def render(self, mode="human"):
         if not self._rendering_initialized:
             self._init_render()
-
         return self.viewer.render(self, return_rgb_array=mode == "rgb_array")
 
     def close(self):

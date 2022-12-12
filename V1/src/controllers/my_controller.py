@@ -262,7 +262,11 @@ class MyMAC:
             th.save(self.proxy_encoder.state_dict(), "{}/proxy_encoder.th".format(path))
 
     def load_models(self, path):
-        self.agent.load_state_dict(th.load("{}/agent.th".format(path), map_location=lambda storage, loc: storage))
+        if path[-3:] != ".th":
+            self.agent.load_state_dict(th.load("{}/agent.th".format(path), map_location=lambda storage, loc: storage))
+        else:
+            self.agent.load_state_dict(th.load(path, map_location=lambda storage, loc: storage))
+        
         if self.proxy_encoder is not None:
             self.proxy_encoder.load_state_dict(th.load("{}/proxy_encoder.th".format(path), map_location=lambda storage, loc: storage))
 
