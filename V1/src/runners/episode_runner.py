@@ -28,6 +28,9 @@ class EpisodeRunner:
         self.log_train_stats_t = -1000000
         self.id = ""
 
+        self.is_save_replay = False
+        self.render_save_path = ""
+        
     def set_id(self, i, id):
         self.id = f"teammate_iter_{i}_id_{id}"
     

@@ -55,9 +55,9 @@ if True:
     use_encoder = True
     train_schedule = "base"
     test_schedule = "fixed_dynamic"
-    name = "teammate_pretrain"
+    name = "lbf_8845_teammate_pretrain"
     seeds = [0, 1, 2, 3, 4, 5]
-    cuda_device = [0, 0, 0, 1, 1, 1]
+    cuda_device = [0, 0, 1, 1, 1, 1]
     #checkpoint_path = ""
     once_gen_num = 6
     teammate_t_max = 4050000

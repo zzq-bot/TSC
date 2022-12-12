@@ -78,6 +78,7 @@ run_type: "train"
 pretrain_enc_path: ""
 pretrain_teammate_path: ""
 use_contrastive_loss: True
+recorder_load_path: ""
 test_recorder_load_path: ""
 debug_model_path: ""
 
