@@ -100,6 +100,25 @@ if True:
     iterations = 1 # do not need train controllable agents
     xi = 3
 
+
+if True:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 50
+    key = "Foraging-6x6-3p-3f-v1"
+    learner = 'my_q_learner'
+    use_encoder = True
+    train_schedule = "base"
+    test_schedule = "fixed_dynamic"
+    name = "lbf_8845_teammate_pretrain"
+    seeds = [0, 1, 2, 3, 4, 5]
+    cuda_device = [4, 5, 6, 7, 4, 5]
+    #checkpoint_path = ""
+    once_gen_num = 6
+    teammate_t_max = 4050000
+    iterations = 1 # do not need train controllable agents
+    xi = 3
+
 program_info = __file__
 
 def one_train(remark, cuda_idx, seed):
