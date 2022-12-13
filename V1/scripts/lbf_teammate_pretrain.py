@@ -85,7 +85,7 @@ if False:
 if True:
     config = "my_qmix"
     env_config = "gymma"
-    time_limit = 50
+    time_limit = 30
     key = "Foraging-6x6-4p-3f-v1"
     learner = 'my_q_learner'
     use_encoder = True
