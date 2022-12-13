@@ -184,7 +184,7 @@ def run_sequential(args, logger):
 
     teammate_return_list = []
     teammate_runner.save_replay(render_save_path="{}/normal".format(args.render_save_path))
-    for _ in tqdm(range(10)):
+    for i in tqdm(range(10)):
         _, episode_return = teammate_runner.run(test_mode=True, get_return=True)
         if i==0:
             print("episode_return:", episode_return)
