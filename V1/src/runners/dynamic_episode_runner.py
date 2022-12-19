@@ -90,7 +90,7 @@ class DynamicEpisodeRunner:
             actions = self.mac.select_actions(self.batch, t_ep=self.t, t_env=self.t_env, test_mode=test_mode, env=self.env)
             #print(self.args.env_args["key"])
             #assert 0
-            if self.is_save_replay and "Foraging" in self.args.env_args["key"]:
+            if self.is_save_replay and ("Foraging" in self.args.env_args["key"] or "mpe" in self.args.env_args["key"]):
                 frame = self.env.render(mode='rgb_array')
                 cv2.imwrite("{}/{}.jpg".format(self.render_save_path, self.t), frame)
             reward, terminated, env_info = self.env.step(actions[0])
@@ -115,7 +115,11 @@ class DynamicEpisodeRunner:
                 self.env.remove_agent(id)
             if len(add_indices) > 0 or len(deleted_indices) > 0:
                 self.env._env.update_obs_after_schedule()
-
+        
+        if self.is_save_replay and ("Foraging" in self.args.env_args["key"] or "mpe" in self.args.env_args["key"]):
+            frame = self.env.render(mode='rgb_array')
+            cv2.imwrite("{}/{}.jpg".format(self.render_save_path, self.t), frame)
+        
         last_data = {
             "state": [self.env.get_state()],
             "avail_actions": [self.env.get_avail_actions()],

@@ -77,7 +77,7 @@ class EpisodeRunner:
             # Receive the actions for each agent at this timestep in a batch of size 1
             actions = self.mac.select_actions(self.batch, t_ep=self.t, t_env=self.t_env, test_mode=test_mode)
 
-            if self.is_save_replay and "Foraging" in self.args.env_args["key"]:
+            if self.is_save_replay and ("Foraging" in self.args.env_args["key"] or "mpe" in self.args.env_args["key"]):
                 frame = self.env.render(mode='rgb_array')
                 cv2.imwrite("{}/{}.jpg".format(self.render_save_path, self.t), frame)
             reward, terminated, env_info = self.env.step(actions[0])
@@ -92,7 +92,7 @@ class EpisodeRunner:
             self.batch.update(post_transition_data, ts=self.t)
 
             self.t += 1
-        if self.is_save_replay and "Foraging" in self.args.env_args["key"]:
+        if self.is_save_replay and ("Foraging" in self.args.env_args["key"] or "mpe" in self.args.env_args["key"]):
             frame = self.env.render(mode='rgb_array')
             cv2.imwrite("{}/{}.jpg".format(self.render_save_path, self.t), frame)
         last_data = {

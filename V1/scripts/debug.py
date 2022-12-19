@@ -4,7 +4,7 @@ import threading
 """
 Debug
 """
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
@@ -27,7 +27,7 @@ if True:
     waiting_upper = 8
     render_save_path = "render_save_path/lbf"
 
-if False:
+if True:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
@@ -47,11 +47,11 @@ if False:
     use_contrastive_loss = False
     recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-11-29_19_27_31.386069_test_crp_0/0"
     debug_model_path = "debug/performance_drop/mpe_stag"
-    waiting_lower = 1
-    waiting_upper = 2
+    waiting_lower = 5
+    waiting_upper = 8
     render_save_path = "render_save_path/mpe_simple_tag"
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 30

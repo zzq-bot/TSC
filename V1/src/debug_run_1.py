@@ -174,26 +174,26 @@ def run_sequential(args, logger):
     tsc_return_list = []
     mac.set_schedule_recorder(crp_recorder, mode='test')
     #runner.save_replay(render_save_path="{}/tsc".format(args.render_save_path))
-    for i in tqdm(range(2)):
-        if i == 1:
+    for i in tqdm(range(10)):
+        if i == 0:
             runner.save_replay(render_save_path="{}/tsc".format(args.render_save_path))
         _, episode_return = runner.run(test_mode=True, get_return=True)
-        if i==1:
+        if i == 0:
             print("episode_return:", episode_return)
         tsc_return_list.append(episode_return)
     print("Teammate Sudden Change, mean of return:", np.mean(tsc_return_list), 
         "std of return", np.std(tsc_return_list))
 
-    """teammate_return_list = []
+    teammate_return_list = []
     for i in tqdm(range(10)):
-        if i == 1:
+        if i == 0:
             teammate_runner.save_replay(render_save_path="{}/normal".format(args.render_save_path))
         _, episode_return = teammate_runner.run(test_mode=True, get_return=True)
-        if i==1:
+        if i == 0:
             print("episode_return:", episode_return)
         teammate_return_list.append(episode_return)
     print("Original info, mean of teammate return:", np.mean(teammate_return_list), 
-        "std of teammmate return", np.std(teammate_return_list))"""
+        "std of teammmate return", np.std(teammate_return_list))
     
 
 
