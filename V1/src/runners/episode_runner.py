@@ -92,7 +92,9 @@ class EpisodeRunner:
             self.batch.update(post_transition_data, ts=self.t)
 
             self.t += 1
-
+        if self.is_save_replay and "Foraging" in self.args.env_args["key"]:
+            frame = self.env.render(mode='rgb_array')
+            cv2.imwrite("{}/{}.jpg".format(self.render_save_path, self.t), frame)
         last_data = {
             "state": [self.env.get_state()],
             "avail_actions": [self.env.get_avail_actions()],
