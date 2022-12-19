@@ -1,5 +1,6 @@
 import numpy as np
 from icecream import ic
+import os
 
 REGISTRY = {}
 
@@ -216,6 +217,61 @@ class DebugSchedule:
 
     def step(self):
         return False, self.npc_bool_indices, self.this_epi_npc_types, (self.this_cluster_idx,\
+             self.this_chosen_teammate_checkpoint, self.this_chosen_npc_idx)
+
+class DebugTestSchedule:
+    def __init__(self, args) -> None:
+        self.args = args
+        self.maximum_npc_num = args.n_agents - args.n_control
+        self.this_epi_npc_types = "mlp_ns"
+        self.waiting_lower = args.waiting_lower
+        self.waiting_upper = args.waiting_upper
+        
+    def set_recorder(self, recorder):
+        
+        self.recorder = recorder # not actually recorder, but for unification
+        self.teammate_checkpoint_list = os.listdir(self.recorder)
+
+    def init_build(self):
+        self.waiting_time = np.random.choice(range(self.waiting_lower, self.waiting_upper), 1)[0]
+        self.this_chosen_teammate_checkpoint = np.random.choice(self.teammate_checkpoint_list, size=1).item()
+        self.this_chosen_teammate_checkpoint = os.path.join(self.recorder, self.this_chosen_teammate_checkpoint)
+        
+        """num_clusters = self.recorder.M
+        self.this_cluster_idx = np.random.choice(range(num_clusters), 1).item()
+        num_teammates_of_cluster = self.recorder.count_M[self.this_cluster_idx]
+        teammate_idx = np.random.choice(range(num_teammates_of_cluster), 1).item()
+
+        self.this_chosen_teammate_checkpoint = self.recorder.record_checkpoint_path[self.this_cluster_idx][teammate_idx]
+        self.this_chosen_npc_idx = self.recorder.record_npc_idx[self.this_cluster_idx][teammate_idx]
+        
+        self.npc_bool_indices = np.zeros(self.maximum_npc_num)
+
+
+        self.waiting_time = np.random.choice(range(self.waiting_lower, self.waiting_upper), 1)[0]
+
+        for i in range(len(self.this_chosen_npc_idx)):
+            self.npc_bool_indices[i] = 1
+        return self.npc_bool_indices, self.this_epi_npc_types, (self.this_cluster_idx,\
+             self.this_chosen_teammate_checkpoint, self.this_chosen_npc_idx)"""
+    def step(self):
+        self.waiting_time -= 1
+        if self.waiting_time > 0:
+            return False, None, None, None
+        # reset
+        self.waiting_time = np.random.choice(range(self.waiting_lower, self.waiting_upper), 1)[0]
+        num_clusters = self.recorder.M
+        self.this_cluster_idx = np.random.choice(range(num_clusters), 1).item()
+        num_teammates_of_cluster = self.recorder.count_M[self.this_cluster_idx]
+        teammate_idx = np.random.choice(range(num_teammates_of_cluster), 1).item()
+
+        self.this_chosen_teammate_checkpoint = self.recorder.record_checkpoint_path[self.this_cluster_idx][teammate_idx]
+        self.this_chosen_npc_idx = self.recorder.record_npc_idx[self.this_cluster_idx][teammate_idx]
+        
+        self.npc_bool_indices = np.zeros(self.maximum_npc_num)
+        for i in range(len(self.this_chosen_npc_idx)):
+            self.npc_bool_indices[i] = 1
+        return True, self.npc_bool_indices, self.this_epi_npc_types, (self.this_cluster_idx,\
              self.this_chosen_teammate_checkpoint, self.this_chosen_npc_idx)
 
 REGISTRY["base"] = BaseSchedule
