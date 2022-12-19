@@ -14,14 +14,11 @@ class Scenario(BaseScenario):
         num_landmarks = 2
         # add agents
         world.agents = [Agent() for i in range(num_agents)]
-        # Notice!!!!!
-        # Here, [adv, adv, adv, good, good]
         for i, agent in enumerate(world.agents):
             agent.name = 'agent %d' % i
             agent.collide = True
             agent.silent = True
             agent.adversary = True if i < num_adversaries else False
-            agent.active = False if i < num_adversaries else True # Good agents should be always active by default
             agent.size = 0.075 if agent.adversary else 0.05
             agent.accel = 3.0 if agent.adversary else 4.0
             #agent.accel = 20.0 if agent.adversary else 25.0
@@ -35,17 +32,14 @@ class Scenario(BaseScenario):
             landmark.size = 0.2
             landmark.boundary = False
         # make initial conditions
-        self.reset_world(world, active_agents_id=None)
+        self.reset_world(world)
         return world
 
 
     def reset_world(self, world, active_agents_id):
-        # set activeness for agents
+        # set activeness for agents 
         if active_agents_id is None:
             active_agents_id = list(range(len(world.agents)))
-        for agent in world.agents:
-            if agent.adversary:
-                agent.active = False
         for id in active_agents_id:
             world.agents[id].active = True
         # random properties for agents
@@ -59,14 +53,14 @@ class Scenario(BaseScenario):
             landmark.color = np.array([0.25, 0.25, 0.25])
         # set random initial states
         for agent in world.agents:
-            if agent.active:
+            if not agent.active:
                 agent.state.p_pos = world.np_random.uniform(-1, +1, world.dim_p)
                 agent.state.p_vel = np.zeros(world.dim_p)
                 agent.state.c = np.zeros(world.dim_c)
             else:
                 agent.state.p_pos = -np.ones(world.dim_p) # physical pos
                 agent.state.p_vel = np.zeros(world.dim_p) # physical velocity
-                agent.state.c = np.zeros(world.dim_c)     # communicate
+                agent.state.c = np.zeros(world.dim_c)     # comm
         for i, landmark in enumerate(world.landmarks):
             if not landmark.boundary:
                 landmark.state.p_pos = world.np_random.uniform(-0.9, +0.9, world.dim_p)
@@ -169,6 +163,4 @@ class Scenario(BaseScenario):
             if not other.adversary:
                 other_vel.append(other.state.p_vel)
             other_active.append(1 if other.active else -1)
-
-        #return np.concatenate([agent.state.p_vel] + [agent.state.p_pos] + entity_pos + other_pos + other_vel + other_active)
-        return np.concatenate([agent.state.p_vel] + [agent.state.p_pos] + entity_pos + other_pos + other_vel)
+        return np.concatenate([agent.state.p_vel] + [agent.state.p_pos] + entity_pos + other_pos + other_vel + other_active)

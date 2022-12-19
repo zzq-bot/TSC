@@ -93,7 +93,7 @@ class ForagingEnv(Env):
         self.players = [Player() for _ in range(players)]
         self.cur_player_num = players
         self.field = np.zeros(field_size, np.int32)
-
+        self.n_control = 2 # Assigned here
         self.max_food = max_food
         self._food_spawned = 0.0
         self.max_player_level = max_player_level
@@ -235,7 +235,7 @@ class ForagingEnv(Env):
         ]
 
     def spawn_food(self, max_food, max_level):
-
+        print("max_food:", max_food)
         food_count = 0
         attempts = 0
         min_level = max_level if self.force_coop else 1
@@ -258,8 +258,10 @@ class ForagingEnv(Env):
                 if min_level == max_level
                 else self.np_random.randint(min_level, max_level)
             )
+            print("this apple level:", self.field[row, col])
             food_count += 1
         self._food_spawned = self.field.sum()
+        print("food_spawn:", self._food_spawned)
 
     def _is_empty_location(self, row, col):
 
@@ -492,6 +494,7 @@ class ForagingEnv(Env):
         self.spawn_food(
             self.max_food, max_level=sum(player_levels[:3])
         )
+        # max_level = player0.level + player1.level + player2.level
         self.current_step = 0
         self._game_over = False
         self._gen_valid_moves()
@@ -510,6 +513,11 @@ class ForagingEnv(Env):
         return nobs
 
     def step(self, actions):
+        """print("###########")
+        for player in self.players:
+            print(player.position)"""
+        print("########")
+        print(self.field.sum())
         self.current_step += 1
 
         for p in self.players:
