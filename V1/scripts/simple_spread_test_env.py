@@ -14,26 +14,28 @@ Allowance for agents:
 if True:
     config = "my_qmix"
     env_config = "gymma"
-    time_limit = 50
+    time_limit = 25
     key = "mpe:SimpleSpread-4-v0"
     learner = 'my_q_learner'
     use_encoder = True
     train_schedule = "debug"
     test_schedule = "debug"
     name = "test_env_generate"
-    seeds = [1]
-    cuda_device = [1]
+    seeds = [0, 1, 2, 3, 4]
+    cuda_device = [4, 5, 6, 7, 7]
     recorder_load_path = ""
     test_function2 = False
     iterations = 1
     z_gen_hyper = False
-    agent = "mlp_ns"
-    once_gen_num = 4
+    agent = "rnn_ns"
+    teammate_agent = "rnn_ns"
+    once_gen_num = 6
+    xi = 2
     teammate_t_max = 10000
-    t_max = 100000
+    t_max = 1450000
 
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50

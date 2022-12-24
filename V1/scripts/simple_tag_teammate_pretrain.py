@@ -24,8 +24,8 @@ if True:
     train_schedule = "debug"
     test_schedule = "debug"
     name = "test_env_generate"
-    seeds = [0, 1, 2]
-    cuda_device = [1, 1, 1]
+    seeds = [3, 4, 5]
+    cuda_device = [4, 5, 6]
     recorder_load_path = ""
     test_function2 = False  
     iterations = 1
