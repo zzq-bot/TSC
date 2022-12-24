@@ -16,24 +16,25 @@ Allowance for predator and prey:
 if True:
     config = "my_qmix"
     env_config = "gymma"
-    time_limit = 50
+    time_limit = 25
     key = "mpe:SimpleTag-1good-3adv-v0"
     pretrained_wrapper = "PretrainedTag"
     learner = 'my_q_learner'
-    use_encoder = True
+    use_encoder = False
     train_schedule = "debug"
     test_schedule = "debug"
     name = "test_env_generate"
     seeds = [0, 1, 2]
-    cuda_device = [0, 0, 0]
+    cuda_device = [1, 1, 1]
     recorder_load_path = ""
     test_function2 = False  
     iterations = 1
     z_gen_hyper = False
-    agent = "mlp_ns"
-    once_gen_num = 5
-    xi=1
-    teammate_t_max = 2550000
+    agent = "rnn_ns"
+    teammate_agent = "rnn_ns"
+    once_gen_num = 6
+    xi = 1
+    teammate_t_max = 1550000
     
 program_info = __file__
 
@@ -56,6 +57,7 @@ def one_train(remark, cuda_idx, seed):
             --iterations={iterations}\
             --z_gen_hyper={z_gen_hyper}\
             --agent={agent}\
+            --teammate_agent={teammate_agent}\
             --once_gen_num={once_gen_num}\
             --xi={xi}\
             --teammate_t_max={teammate_t_max}&\
