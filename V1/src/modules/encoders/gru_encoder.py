@@ -3,7 +3,7 @@ import torch.nn.functional as F
 from torch import nn
 
 
-class RNNEncoder(nn.Module):
+class GRUEncoder(nn.Module):
     def __init__(self, args, input_shape, is_proxy=True) -> None:
         super().__init__()
         self.input_shape = input_shape

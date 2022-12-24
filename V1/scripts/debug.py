@@ -47,8 +47,8 @@ if True:
     use_contrastive_loss = False
     recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-11-29_19_27_31.386069_test_crp_0/0"
     debug_model_path = "debug/performance_drop/mpe_stag"
-    waiting_lower = 5
-    waiting_upper = 8
+    waiting_lower = 3
+    waiting_upper = 6
     render_save_path = "render_save_path/mpe_simple_tag"
 
 if False:
@@ -73,6 +73,30 @@ if False:
     waiting_lower = 2
     waiting_upper = 4
     render_save_path = "render_save_path/lbf6643"
+
+if False:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 50
+    run_type = "evaluate_pretrain"
+    key = "mpe:SimpleTag-1good-3adv-v0"
+    pretrained_wrapper = "PretrainedTag"
+    learner = 'my_q_learner'
+    use_encoder = False
+    train_schedule = "train"
+    test_schedule = "test"
+    name = "debug_performance_drop"
+    seeds = [0]
+    cuda_device = [0]
+    test_function2 = False
+    z_gen_hyper = False
+    agent = "mlp_ns"
+    use_contrastive_loss = False
+    recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-11-29_19_27_31.386069_test_crp_0/0"
+    debug_model_path = "pretrain_checkpoint/SimpleTag-1good-3adv/pretrain_teammate_path"
+    waiting_lower = 5
+    waiting_upper = 8
+    render_save_path = "render_save_path/mpe_simple_tag"
 
 program_info = __file__
 

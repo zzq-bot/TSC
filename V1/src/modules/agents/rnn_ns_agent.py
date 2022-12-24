@@ -3,11 +3,13 @@ from modules.agents.rnn_agent import RNNAgent
 import torch as th
 
 class RNNNSAgent(nn.Module):
-    def __init__(self, input_shape, args):
+    def __init__(self, input_shape, args, train_teammate=True):
         super(RNNNSAgent, self).__init__()
         self.args = args
         self.n_agents = args.n_agents
         self.n_control = args.n_control
+        if train_teammate:
+            self.n_control = self.n_agents
         self.input_shape = input_shape
         self.agents = th.nn.ModuleList([RNNAgent(input_shape, args) for _ in range(self.n_control)])
 
@@ -20,7 +22,7 @@ class RNNNSAgent(nn.Module):
         qs = []
         if proxy_z is not None:
             assert inputs.shape[:-1] == proxy_z.shape[:-1], print(inputs.shape, proxy_z.shape)
-            if inputs.size(0) == self.n_control:
+            if inputs.size(0) == self.n_control: # no ep_batch dim
                 for i in range(self.n_control):
                     q, h = self.agents[i](inputs[i].unsqueeze(0), hidden_state[:, i], proxy_z[i].unsqueeze(0))
                     hiddens.append(h)

@@ -1,6 +1,8 @@
 from modules.agents import REGISTRY as agent_REGISTRY
 from components.action_selectors import REGISTRY as action_REGISTRY
 import torch as th
+from icecream import ic 
+
 
 class NonSharedMAC:
     def __init__(self, scheme, groups, args, is_teammate=True):
@@ -14,8 +16,8 @@ class NonSharedMAC:
         self.agent_output_type = args.agent_output_type
 
         self.action_selector = action_REGISTRY[args.action_selector](args)
-
-        #self.hidden_states = None
+        self.agent_type = self.args.teammate_agent if self.is_teammate else self.args.agent 
+        self.hidden_states = None
 
     def select_actions(self, ep_batch, t_ep, t_env, bs=slice(None), test_mode=False):
         # Only select actions for the selected batch elements in bs
@@ -28,8 +30,10 @@ class NonSharedMAC:
         agent_inputs = self._build_inputs(ep_batch, t)
         avail_actions = ep_batch["avail_actions"][:, t]
         if self.hidden_states is None:
-           agent_outs = self.agent(agent_inputs)
+            assert "rnn" not in self.agent_type
+            agent_outs = self.agent(agent_inputs)
         else:
+            assert "rnn" in self.agent_type
             agent_outs, self.hidden_states = self.agent(agent_inputs, self.hidden_states)
         # Softmax the agent outputs if they're policy logits
         if self.agent_output_type == "pi_logits":
@@ -43,8 +47,7 @@ class NonSharedMAC:
         return agent_outs.view(ep_batch.batch_size, self.n_agents, -1)
 
     def init_hidden(self, batch_size):
-        agent_type = self.args.teammate_agent if self.is_teammate else self.args.agent
-        if "rnn" in agent_type:
+        if "rnn" in self.agent_type:
             self.hidden_states = self.agent.init_hidden().unsqueeze(0).expand(batch_size, self.n_agents, -1)  # bav
         else:
             self.hidden_states = None
@@ -68,6 +71,10 @@ class NonSharedMAC:
             self.agent.load_state_dict(th.load(path, map_location=lambda storage, loc: storage))
 
     def _build_agents(self, input_shape):
+        if self.args.teammate_agent == "rnn_ns":
+            ic("use rnn ns teammate npc training")
+        else:
+            ic("do not use rnn ns teammate npc training")
         if self.is_teammate:
             self.agent = agent_REGISTRY[self.args.teammate_agent](input_shape, self.args)
         else:

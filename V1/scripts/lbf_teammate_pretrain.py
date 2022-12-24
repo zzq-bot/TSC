@@ -82,7 +82,7 @@ if False:
     iterations = 1 # do not need train controllable agents
     xi = 3
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 30
@@ -101,7 +101,7 @@ if True:
     xi = 3
 
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
@@ -118,6 +118,44 @@ if True:
     teammate_t_max = 4050000
     iterations = 1 # do not need train controllable agents
     xi = 3
+
+if False:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 50
+    key = "Foraging-6x6-4p-3f-coop-v1"
+    learner = 'my_q_learner'
+    use_encoder = False
+    train_schedule = "base"
+    test_schedule = "fixed_dynamic"
+    name = "debug"
+    seeds = [0]
+    cuda_device = [0]
+    #checkpoint_path = ""
+    once_gen_num = 1
+    teammate_t_max = 50000
+    iterations = 1 # do not need train controllable agents
+    teammate_agent = "rnn_ns"
+    xi = 2
+
+if True:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 50
+    key = "Foraging-6x6-4p-3f-coop-v1"
+    learner = 'my_q_learner'
+    use_encoder = False
+    train_schedule = "base"
+    test_schedule = "fixed_dynamic"
+    name = "lbf_6643c_teammate_pretrain"
+    seeds = [0, 1, 2, 3, 4, 5]
+    cuda_device = [0, 0, 0, 1, 1, 1]
+    #checkpoint_path = ""
+    once_gen_num = 6
+    teammate_t_max = 2050000
+    iterations = 1 # do not need train controllable agents
+    teammate_agent = "rnn_ns"
+    xi = 2
 
 program_info = __file__
 
@@ -137,6 +175,7 @@ def one_train(remark, cuda_idx, seed):
                 --remark={remark}\
                 --once_gen_num={once_gen_num}\
                 --teammate_t_max={teammate_t_max}\
+                --teammate_agent={teammate_agent}\
                 --xi={xi}\
                 --iterations={iterations} &\
                 sleep 2s"

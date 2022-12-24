@@ -16,12 +16,12 @@ class LSTMNSEncoder(nn.Module):
 
     def init_hidden(self):
         tmp = [e.init_hidden() for e in self.encoders]
-        h = [hidden[0] for hidden in tmp]
-        c = [hidden[1] for hidden in tmp]
+        h = th.cat([hidden[0] for hidden in tmp])
+        c = th.cat([hidden[1] for hidden in tmp])
         return h, c
 
-    def forward(self, inputs, h=None):
-        assert h is not None and isinstance(h, tuple)
+    def forward(self, inputs, h):
+        assert isinstance(h, tuple)
         h, c = h
         zs, mus, logvars = [], [], []
         ret_h, ret_c = [], []
@@ -38,14 +38,16 @@ class LSTMNSEncoder(nn.Module):
             for i in range(self.n_control):
                 inputs = inputs.view(-1, self.n_control, self.input_shape)
                 z, mu, logvar, hidden = self.encoders[i](inputs[:, i], (h[:, i], c[:, i]))
-                zs.append(z)
-                mus.append(mu)
-                logvars.append(logvar)
-                ret_h.append(hidden[0])
-                ret_c.append(hidden[1])
+                zs.append(z.unsqueeze(1))
+                mus.append(mu.unsqueeze(1))
+                logvars.append(logvar.unsqueeze(1))
+                ret_h.append(hidden[0].unsqueeze(1))
+                ret_c.append(hidden[1].unsqueeze(1))
             # [(bs, z_dim), ...]-> (bs, n_control, z_dim) -> (bs*n_control, z_dim)
-            return th.cat(zs, dim=-1).view(-1, z.size(-1)), th.cat(mus, dim=-1), th.cat(logvars, dim=-1), \
-                (th.cat(ret_h, dim=-1), th.cat(ret_c, dim=-1))
+            return th.cat(zs, dim=-1).view(-1, z.size(-1)),\
+                th.cat(mus, dim=-1).view(-1, mu.size(-1)),\
+                th.cat(logvars, dim=-1).view(-1, logvar.size(-1)),\
+                (th.cat(ret_h, dim=1), th.cat(ret_c, dim=1))
     
     def cuda(self, device=None):
         if not device:

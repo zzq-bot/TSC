@@ -52,7 +52,7 @@ class MyMAC:
         else:
             schedule = self.test_dynamic_schedule
         npc_bool_indices, npc_types, info = schedule.init_build()
-        if npc_types != "mlp_ns":
+        if npc_types != "mlp_ns" and npc_types != "rnn_ns":
             #ic("build npc, self.npc_bool_indices", npc_bool_indices)
             self.npc = [npc_REGISTRY['null'](self.args.n_actions)] * (self.n_agents-self.n_control)
             self.npc_types = copy.copy(npc_types)
@@ -115,7 +115,7 @@ class MyMAC:
             add_indices = np.argwhere((npc_bool_indices==1) & (self.npc_bool_indices==0)).flatten()
             deleted_indices = np.argwhere((npc_bool_indices==0) & (self.npc_bool_indices==1)).flatten()
             self.npc_bool_indices = copy.copy(npc_bool_indices)
-            if npc_types != "mlp_ns":
+            if npc_types != "mlp_ns" and npc_types != "rnn_ns":
                 npc_indices = np.argwhere(npc_bool_indices==1).flatten()
                 self.npc_types = copy.copy(npc_types)
                 self.npc = [npc_REGISTRY['null'](self.args.n_actions)] * (self.n_agents-self.n_control)
@@ -145,7 +145,11 @@ class MyMAC:
                 self.npc.load_state_dict(th.load(os.path.join(chosen_teammate_checkpoint, "agent.th"),\
                     map_location=lambda storage, loc: storage))      
                 self.npc.freeze()
-                
+                if self.args.reset_teammate_hidden:
+                    # reset hidden state
+                    self.npc_hidden_states = None
+                    if "rnn" in self.args.teammate_agent:
+                        self.npc_hidden_states = self.npc.init_hidden().unsqueeze(0).expand(self.tmp_batch_size, self.n_agents-self.n_control, -1) # bav
             return add_indices+self.n_control, deleted_indices+self.n_control
 
         return [], []
@@ -187,7 +191,10 @@ class MyMAC:
                     idx_of_npc_mac = self.npc_mlp_ns_idx[i]
                     #ic(idx_of_npc_mac, len(self.npc.agents))
                     try:
-                        q_val = self.npc.agents[idx_of_npc_mac](inputs)
+                        if "rnn" in self.args.teammate_agent:
+                            q_val, self.npc_hidden_states[:, i] = self.npc.agents[idx_of_npc_mac](inputs, self.npc_hidden_states[:, i])
+                        else:
+                            q_val = self.npc.agents[idx_of_npc_mac](inputs)
                     except:
                         print("now npc_mlp_ns_idx:", self.npc_mlp_ns_idx)
                         print("idx of npc_mac:", idx_of_npc_mac)
@@ -204,12 +211,19 @@ class MyMAC:
         agent_inputs = self._build_inputs(ep_batch, t)
         avail_actions = ep_batch["avail_actions"][:, t]
         if self.proxy_encoder is not None:
-            proxy_z, mu, logvar = self.proxy_encoder(inputs=agent_inputs)
-            #ic(agent_inputs.shape, proxy_z.shape)
-            #assert 0
-            agent_outs = self.agent(agent_inputs, proxy_z)
+            if self.encoder_hidden_states is not None:
+                proxy_z, mu, logvar, self.encoder_hidden_states = self.proxy_encoder(inputs=agent_inputs, h=self.encoder_hidden_states)
+            else:
+                proxy_z, mu, logvar = self.proxy_encoder(inputs=agent_inputs)
+            if self.hidden_states is not None:
+                agent_outs, self.hidden_states  = self.agent(agent_inputs, self.hidden_states, proxy_z)
+            else:
+                agent_outs = self.agent(agent_inputs, proxy_z)
         else:
-            agent_outs = self.agent(agent_inputs, None)
+            if self.hidden_states is not None:
+                agent_outs, self.hidden_states = self.agent(agent_inputs, self.hidden_states, None)
+            else:
+                agent_outs = self.agent(agent_inputs, None)
         # Softmax the agent outputs if they're policy logits
         if self.agent_output_type == "pi_logits":
             assert 0
@@ -226,18 +240,21 @@ class MyMAC:
     
     
     def init_hidden(self, batch_size):
+        self.tmp_batch_size = batch_size
         self.hidden_states = None
         self.npc_hidden_states = None
         self.encoder_hidden_states = None
         if "rnn" in self.args.agent:
             self.hidden_states = self.agent.init_hidden().unsqueeze(0).expand(batch_size, self.n_control, -1)  # bav
         if "rnn" in self.args.teammate_agent:
-            self.npc_hidden_states = self.npc.init_hidden().unsqueeze(0).expand(batch_size, self.n_agents, -1) # bav
-        if "rnn" in self.args.proxy_encoder or "lstm" in self.args.proxy_encoder:
+            self.npc_hidden_states = self.npc.init_hidden().unsqueeze(0).expand(batch_size, self.n_agents-self.n_control, -1) # bav
+            # when we use, pass self.npc_hidden_states[:, i] into ...., as it always be 3 dim
+        if "gru" in self.args.proxy_encoder or "lstm" in self.args.proxy_encoder:
             tmp_hidden_states = self.proxy_encoder.init_hidden()
             if isinstance(tmp_hidden_states, tuple):
+                assert "lstm" in self.args.proxy_encoder
                 self.encoder_hidden_states = (tmp_hidden_states[0].unsqueeze(0).expand(batch_size, self.n_control, -1), \
-                                        tmp_hidden_states[0].unsqueeze(0).expand(batch_size, self.n_control, -1))
+                                        tmp_hidden_states[1].unsqueeze(0).expand(batch_size, self.n_control, -1))
             else:
                 self.encoder_hidden_states = tmp_hidden_states.unsqueeze(0).expand(batch_size, self.n_control, -1)
 

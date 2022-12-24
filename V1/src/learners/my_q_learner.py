@@ -82,11 +82,24 @@ class MyQLearner:
         # Calculate estimated Q-Values
         mac_out = []
         team_z_out, mu_out, logvar_out, vi_losses = None, None, None, None
+        # TODO initialize team_encoder_hidden
         if self.args.use_encoder:
             team_z_out = []
             mu_out, logvar_out = [], []
             vi_losses = []
         #self.mac.init_hidden(batch.batch_size)
+        self.mac.init_hidden(batch.batch_size)
+        team_encoder_hidden_states = None
+        if "gru" in self.args.team_encoder or "lstm" in self.args.team_encoder:
+            tmp = self.team_encoder.init_hidden()
+            if isinstance(team_encoder_hidden_states, tuple):
+                team_encoder_hidden_states = (
+                    tmp[0].expand(batch.batch_size, -1),
+                    tmp[1].expand(batch.batch_size, -1)
+                )
+            else:
+                team_encoder_hidden_states = tmp.expand(batch.batch_size, -1)
+
         for t in range(batch.max_seq_length):
             if t == 0:
                 lst_ac_onehot = th.zeros_like(batch["actions_onehot"][:, 0])
@@ -98,7 +111,10 @@ class MyQLearner:
             #ic(lst_ac_onehot.shape)
             lst_ac_onehot = lst_ac_onehot.view(batch.batch_size, -1)
             if self.team_encoder is not None:
-                team_z, _, _, _ = self.team_encoder.forward(th.cat((batch["state"][:, t], lst_ac_onehot), dim=-1))
+                if team_encoder_hidden_states is not None:
+                    team_z, _, _, _, team_encoder_hidden_states = self.team_encoder.forward(th.cat((batch["state"][:, t], lst_ac_onehot), dim=-1), team_encoder_hidden_states)
+                else:
+                    team_z, _, _, _ = self.team_encoder.forward(th.cat((batch["state"][:, t], lst_ac_onehot), dim=-1))
             #ic(batch["obs"].shape)
                 vi_loss = self.vis.forward(batch["obs"][:, t, :self.args.n_control], batch["actions_onehot"][:, t, :self.args.n_control],
                     team_z, proxy_z)
@@ -107,7 +123,7 @@ class MyQLearner:
                 vi_loss = None
             mac_out.append(agent_outs)
             if self.args.use_encoder:
-                mu_out.append(mu)
+                mu_out.append(mu) # (bs* n_control, z_dim)
                 logvar_out.append(logvar)
                 team_z_out.append(team_z)
                 vi_losses.append(vi_loss)
@@ -125,6 +141,18 @@ class MyQLearner:
         if self.args.use_encoder:
             target_team_z_out = []
         #self.target_mac.init_hidden(batch.batch_size)
+        self.target_mac.init_hidden(batch.batch_size)
+        target_team_encoder_hidden_states = None
+        if "gru" in self.args.team_encoder or "lstm" in self.args.team_encoder:
+            tmp = self.target_team_encoder.init_hidden()
+            if isinstance(team_encoder_hidden_states, tuple):
+                target_team_encoder_hidden_states = (
+                    tmp[0].expand(batch.batch_size, -1),
+                    tmp[1].expand(batch.batch_size, -1)
+                )
+            else:
+                target_team_encoder_hidden_states = tmp.expand(batch.batch_size, -1)
+
         for t in range(batch.max_seq_length):
             if t == 0:
                 lst_ac_onehot = th.zeros_like(batch["actions_onehot"][:, 0])
@@ -133,7 +161,11 @@ class MyQLearner:
             lst_ac_onehot = lst_ac_onehot.view(batch.batch_size, -1)
             target_agent_outs, _, _, _ = self.target_mac.forward(batch, t=t)
             if self.args.use_encoder:
-                target_team_z, _, _, _ = self.target_team_encoder.forward(th.cat((batch["state"][:, t], lst_ac_onehot), dim=-1))
+                if target_team_encoder_hidden_states is not None:
+                    target_team_z, _, _, _ = self.target_team_encoder.forward(th.cat((batch["state"][:, t], lst_ac_onehot), dim=-1), target_team_encoder_hidden_states)
+                else:
+                    target_team_z, _, _, _ = self.target_team_encoder.forward(th.cat((batch["state"][:, t], lst_ac_onehot), dim=-1))
+           
             target_mac_out.append(target_agent_outs)
             if self.args.use_encoder:
                 target_team_z_out.append(target_team_z)

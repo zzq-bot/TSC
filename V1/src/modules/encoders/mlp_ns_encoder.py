@@ -28,11 +28,13 @@ class MLPNSEncoder(nn.Module):
             for i in range(self.n_control):
                 inputs = inputs.view(-1, self.n_control, self.input_shape)
                 z, mu, logvar, _ = self.encoders[i](inputs[:, i])
-                zs.append(z)
-                mus.append(mu)
-                logvars.append(logvar)
+                zs.append(z.unsqueeze(1))
+                mus.append(mu.unsqueeze(1))
+                logvars.append(logvar.unsqueeze(1))
             # [(bs, z_dim), ...]-> (bs, n_control, z_dim) -> (bs*n_control, z_dim)
-            return th.cat(zs, dim=-1).view(-1, z.size(-1)), th.cat(mus, dim=-1), th.cat(logvars, dim=-1)
+            return th.cat(zs, dim=-1).view(-1, z.size(-1)),\
+                th.cat(mus, dim=-1).view(-1, mu.size(-1)), \
+                th.cat(logvars, dim=-1).view(-1, logvar.size(-1))
     
     def cuda(self, device=None):
         if not device:

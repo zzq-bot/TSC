@@ -42,6 +42,8 @@ def my_main(_run, _config, _log):
     else:
         if config["run_type"] == "debug_1":
             from debug_run_1 import run
+        elif config["run_type"] == "evaluate_pretrain":
+            from evaluate_pretrain import run
         else:
             from new_run import run
         run(_run, config, _log)

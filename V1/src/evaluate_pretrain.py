@@ -141,19 +141,6 @@ def run_sequential(args, logger):
     if args.use_cuda:
         learner.cuda()
         
-    model_path = args.debug_model_path
-    mac.load_models(os.path.join(model_path, "controllable_agent.th"))
-    mac.cuda()
-    crp_recorder = CRPRecorder(args)
-    traj_encoder = TransformerEncoder(args)
-    traj_decoder = RNNDecoder(args)
-    #enc_params = list(traj_encoder.parameters()) + list(traj_decoder.parameters())
-    #enc_optimiser = th.optim.Adam(params=enc_params, lr=args.lr)
-    crp_recorder.set_module(traj_encoder, traj_decoder)
-
-    if args.recorder_load_path != "":
-        logger.console_logger.info("Load CRP_Recorder from {}".format(args.recorder_load_path))
-        crp_recorder.load(load_path=args.recorder_load_path)
     
     teammate_buffer = ReplayBuffer(
         scheme,
@@ -163,39 +150,19 @@ def run_sequential(args, logger):
         preprocess=preprocess,
         device="cpu" if args.buffer_cpu_only else args.device,
     )
+    for model_dir in os.listdir(args.debug_model_path):
+        teammate_mac = mac_REGISTRY[args.teammate_mac](teammate_buffer.scheme, groups, args)
+        teammate_mac.load_models(os.path.join(args.debug_model_path, model_dir))
+        teammate_mac.cuda()
+        teammate_runner = r_REGISTRY[args.teammate_runner](args=args, logger=logger)
+        teammate_runner.setup(scheme=scheme, groups=groups, preprocess=preprocess, mac=teammate_mac)
 
-    teammate_mac = mac_REGISTRY[args.teammate_mac](teammate_buffer.scheme, groups, args)
-    teammate_mac.load_models(os.path.join(model_path, "team.th"))
-    teammate_mac.cuda()
-    teammate_runner = r_REGISTRY[args.teammate_runner](args=args, logger=logger)
-    teammate_runner.setup(scheme=scheme, groups=groups, preprocess=preprocess, mac=teammate_mac)
-
-
-    tsc_return_list = []
-    mac.set_schedule_recorder(crp_recorder, mode='test')
-    #runner.save_replay(render_save_path="{}/tsc".format(args.render_save_path))
-    for i in tqdm(range(50)):
-        if i == 5:
-            runner.save_replay(render_save_path="{}/tsc".format(args.render_save_path))
-        _, episode_return = runner.run(test_mode=True, get_return=True)
-        if i == 5:
-            print("episode_return:", episode_return)
-        tsc_return_list.append(episode_return)
-    print(np.argmax(tsc_return_list))
-    print("Teammate Sudden Change, mean of return:", np.mean(tsc_return_list), 
-        "std of return", np.std(tsc_return_list))
-
-    teammate_return_list = []
-    for i in tqdm(range(50)):
-        if i == 30:
-            teammate_runner.save_replay(render_save_path="{}/normal".format(args.render_save_path))
-        _, episode_return = teammate_runner.run(test_mode=True, get_return=True)
-        if i == 30:
-            print("episode_return:", episode_return)
-        teammate_return_list.append(episode_return)
-    print(np.argmax(teammate_return_list))
-    print("Original info, mean of teammate return:", np.mean(teammate_return_list), 
-        "std of teammmate return", np.std(teammate_return_list))
+        teammate_return_list = []
+        for i in tqdm(range(50)):
+            _, episode_return = teammate_runner.run(test_mode=True, get_return=True)
+            teammate_return_list.append(episode_return)
+        print("Original info, mean of teammate return:", np.mean(teammate_return_list), 
+            "std of teammmate return", np.std(teammate_return_list))
     
 
 

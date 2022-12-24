@@ -83,3 +83,4 @@ test_recorder_load_path: ""
 debug_model_path: ""
 
 render_save_path: "render_save_path"
+reset_teammate_hidden: True

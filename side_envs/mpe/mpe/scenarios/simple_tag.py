@@ -50,10 +50,19 @@ class Scenario(BaseScenario):
             world.agents[id].active = True
         # random properties for agents
         for i, agent in enumerate(world.agents):
+            if agent.adversary:
+                i += 1
             if not agent.active:
                 agent.color = np.array([0.35, 0., 0.]) # whatever
             else:
-                agent.color = np.array([0.35, 0.85, 0.35]) if not agent.adversary else np.array([0.85, 0.35, 0.35])
+                if agent.adversary:
+                    if i <= 2:
+                        agent.color = np.array([0.85, 0.35, 0.35])
+                    else:
+                        agent.color = np.array([0.35, 0., 0.]) # whatever
+                else:
+                    agent.color = np.array([0.35, 0.85, 0.35])
+                #agent.color = np.array([0.35, 0.85, 0.35]) if not agent.adversary else np.array([0.85, 0.35, 0.35])
             # random properties for landmarks
         for i, landmark in enumerate(world.landmarks):
             landmark.color = np.array([0.25, 0.25, 0.25])
