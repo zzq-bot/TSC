@@ -32,10 +32,10 @@ if True:
     once_gen_num = 6
     xi = 2
     teammate_t_max = 10000
-    t_max = 1450000
+    t_max = 1250000
 
 
-if False:
+if True:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
