@@ -32,7 +32,7 @@ class LSTMEncoder(nn.Module):
     def forward(self, inputs, h=None):
         assert h is not None and isinstance(h, tuple)
         x = F.leaky_relu(self.fc(inputs))
-        hidden_h, hidden_c = self.lstm(self.fc2(x))
+        hidden_h, hidden_c = self.lstm(self.fc2(x), h)
         mu, logvar = self.mean(hidden_h), self.logvar(hidden_h)
         logvar = logvar.clamp_(self.min_logvar, self.max_logvar)
         z = self.strategy(mu, logvar)
