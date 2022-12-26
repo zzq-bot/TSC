@@ -92,7 +92,7 @@ class MyQLearner:
         team_encoder_hidden_states = None
         if "gru" in self.args.team_encoder or "lstm" in self.args.team_encoder:
             tmp = self.team_encoder.init_hidden()
-            if isinstance(team_encoder_hidden_states, tuple):
+            if isinstance(tmp, tuple):
                 team_encoder_hidden_states = (
                     tmp[0].expand(batch.batch_size, -1),
                     tmp[1].expand(batch.batch_size, -1)
@@ -112,7 +112,7 @@ class MyQLearner:
             lst_ac_onehot = lst_ac_onehot.view(batch.batch_size, -1)
             if self.team_encoder is not None:
                 if team_encoder_hidden_states is not None:
-                    team_z, _, _, _, team_encoder_hidden_states = self.team_encoder.forward(th.cat((batch["state"][:, t], lst_ac_onehot), dim=-1), team_encoder_hidden_states)
+                    team_z, _, _, team_encoder_hidden_states = self.team_encoder.forward(th.cat((batch["state"][:, t], lst_ac_onehot), dim=-1), team_encoder_hidden_states)
                 else:
                     team_z, _, _, _ = self.team_encoder.forward(th.cat((batch["state"][:, t], lst_ac_onehot), dim=-1))
             #ic(batch["obs"].shape)
@@ -145,7 +145,7 @@ class MyQLearner:
         target_team_encoder_hidden_states = None
         if "gru" in self.args.team_encoder or "lstm" in self.args.team_encoder:
             tmp = self.target_team_encoder.init_hidden()
-            if isinstance(team_encoder_hidden_states, tuple):
+            if isinstance(tmp, tuple):
                 target_team_encoder_hidden_states = (
                     tmp[0].expand(batch.batch_size, -1),
                     tmp[1].expand(batch.batch_size, -1)
@@ -162,7 +162,7 @@ class MyQLearner:
             target_agent_outs, _, _, _ = self.target_mac.forward(batch, t=t)
             if self.args.use_encoder:
                 if target_team_encoder_hidden_states is not None:
-                    target_team_z, _, _, _ = self.target_team_encoder.forward(th.cat((batch["state"][:, t], lst_ac_onehot), dim=-1), target_team_encoder_hidden_states)
+                    target_team_z, _, _, target_team_encoder_hidden_states = self.target_team_encoder.forward(th.cat((batch["state"][:, t], lst_ac_onehot), dim=-1), target_team_encoder_hidden_states)
                 else:
                     target_team_z, _, _, _ = self.target_team_encoder.forward(th.cat((batch["state"][:, t], lst_ac_onehot), dim=-1))
            

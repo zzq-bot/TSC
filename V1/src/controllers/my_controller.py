@@ -8,6 +8,7 @@ from components.dynamic_schedule import REGISTRY as dynamic_schedule_REGISTRY
 from icecream import ic
 from modules.agents import REGISTRY as agent_REGISTRY
 from modules.agents.mlp_ns_agent import MLPNSAgent
+from modules.agents.rnn_ns_agent import RNNNSAgent
 from modules.encoders import REGISTRY as encoder_REGISTRY
 from modules.recorders import REGISTRY as recorder_REGISTRY
 from npcs import REGISTRY as npc_REGISTRY
@@ -21,6 +22,7 @@ class MyMAC:
         self.n_agents = args.n_agents
         self.n_control = args.n_control
         self.args = args
+        self.npc = None
         self.input_shape = self._get_input_shape(scheme)
         self.npc_input_shape = self._get_npc_input_shape(scheme)
         self._build_agents(self.input_shape)
@@ -74,7 +76,10 @@ class MyMAC:
             #ic(chosen_npc_idx)
             self.npc_types = cluster_idx
             self.npc_bool_indices = npc_bool_indices
-            self.npc = MLPNSAgent(input_shape=self.npc_input_shape, args=self.args).to(self.args.device)
+            if "rnn" in self.args.teammate_agent:
+                self.npc = RNNNSAgent(input_shape=self.npc_input_shape, args=self.args).to(self.args.device)
+            else:
+                self.npc = MLPNSAgent(input_shape=self.npc_input_shape, args=self.args).to(self.args.device)
             self.npc_mlp_ns_idx = chosen_npc_idx 
             #ic(self.npc_mlp_ns_idx)
             #print(self.npc_mlp_ns_idx)
@@ -128,7 +133,10 @@ class MyMAC:
             else:
                 cluster_idx, chosen_teammate_checkpoint, chosen_npc_idx = info
                 self.npc_types = cluster_idx
-                self.npc = MLPNSAgent(input_shape=self.npc_input_shape, args=self.args).to(self.args.device)
+                if "rnn" in self.args.teammate_agent:
+                    self.npc = RNNNSAgent(input_shape=self.npc_input_shape, args=self.args).to(self.args.device)
+                else:
+                    self.npc = MLPNSAgent(input_shape=self.npc_input_shape, args=self.args).to(self.args.device)
                 self.npc_mlp_ns_idx = chosen_npc_idx 
                 if (not isinstance(self.npc_mlp_ns_idx, np.ndarray)) and (not isinstance(self.npc_mlp_ns_idx, list)):
                     self.npc_mlp_ns_idx = [self.npc_mlp_ns_idx]
@@ -149,7 +157,8 @@ class MyMAC:
                     # reset hidden state
                     self.npc_hidden_states = None
                     if "rnn" in self.args.teammate_agent:
-                        self.npc_hidden_states = self.npc.init_hidden().unsqueeze(0).expand(self.tmp_batch_size, self.n_agents-self.n_control, -1) # bav
+                        tmp = self.npc.init_hidden()[:self.n_agents-self.n_control]
+                        self.npc_hidden_states = tmp.unsqueeze(0).expand(self.tmp_batch_size, self.n_agents-self.n_control, -1) # bav
             return add_indices+self.n_control, deleted_indices+self.n_control
 
         return [], []
@@ -212,10 +221,12 @@ class MyMAC:
         avail_actions = ep_batch["avail_actions"][:, t]
         if self.proxy_encoder is not None:
             if self.encoder_hidden_states is not None:
+                #ic(self.encoder_hidden_states.shape)
                 proxy_z, mu, logvar, self.encoder_hidden_states = self.proxy_encoder(inputs=agent_inputs, h=self.encoder_hidden_states)
             else:
                 proxy_z, mu, logvar = self.proxy_encoder(inputs=agent_inputs)
             if self.hidden_states is not None:
+                #ic(agent_inputs.shape)
                 agent_outs, self.hidden_states  = self.agent(agent_inputs, self.hidden_states, proxy_z)
             else:
                 agent_outs = self.agent(agent_inputs, proxy_z)
@@ -246,8 +257,9 @@ class MyMAC:
         self.encoder_hidden_states = None
         if "rnn" in self.args.agent:
             self.hidden_states = self.agent.init_hidden().unsqueeze(0).expand(batch_size, self.n_control, -1)  # bav
-        if "rnn" in self.args.teammate_agent:
-            self.npc_hidden_states = self.npc.init_hidden().unsqueeze(0).expand(batch_size, self.n_agents-self.n_control, -1) # bav
+        if "rnn" in self.args.teammate_agent and self.npc is not None:
+            tmp = self.npc.init_hidden()[:self.n_agents-self.n_control]
+            self.npc_hidden_states = tmp.unsqueeze(0).expand(batch_size, self.n_agents-self.n_control, -1) # bav
             # when we use, pass self.npc_hidden_states[:, i] into ...., as it always be 3 dim
         if "gru" in self.args.proxy_encoder or "lstm" in self.args.proxy_encoder:
             tmp_hidden_states = self.proxy_encoder.init_hidden()

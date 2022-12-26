@@ -1,5 +1,6 @@
 import torch as th
 from torch import nn
+from icecream import ic
 
 from modules.encoders.gru_encoder import GRUEncoder
 
@@ -19,20 +20,22 @@ class GRUNSEncoder(nn.Module):
         return th.cat([e.init_hidden() for e in self.encoders])
 
     def forward(self, inputs, h):
-        assert isinstance(h, tuple)
+        #assert isinstance(h, tuple)
         zs, mus, logvars = [], [], []
         ret_h = []
         if inputs.size(0) == self.n_control:
+            # now h : [bs, n_control, h_dim]
             for i in range(self.n_control):
-                z, mu, logvar, hidden = self.encoders[i](inputs[i].unsqueeze(0), h[i].unsqueeze(0))
+                z, mu, logvar, hidden = self.encoders[i](inputs[i].unsqueeze(0), h[:, i])
                 zs.append(z)
                 mus.append(mu)
                 logvars.append(logvar)
                 ret_h.append(hidden)
-            return th.cat(zs), th.cat(mus), th.cat(logvars), th.cat(ret_h)
+            return th.cat(zs), th.cat(mus), th.cat(logvars), th.cat(ret_h).unsqueeze(0)
         else:
             for i in range(self.n_control):
                 inputs = inputs.view(-1, self.n_control, self.input_shape)
+                #ic(h[:, i].shape)
                 z, mu, logvar, hidden = self.encoders[i](inputs[:, i], h[:, i])
                 zs.append(z.unsqueeze(1))
                 mus.append(mu.unsqueeze(1))

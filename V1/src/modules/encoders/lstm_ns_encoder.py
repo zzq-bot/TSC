@@ -27,13 +27,14 @@ class LSTMNSEncoder(nn.Module):
         ret_h, ret_c = [], []
         if inputs.size(0) == self.n_control:
             for i in range(self.n_control):
-                z, mu, logvar, hidden = self.encoders[i](inputs[i].unsqueeze(0), (h[i].unsqueeze(0), c[i].unsqueeze(0)))
+                # now h : [bs, n_control, h_dim]
+                z, mu, logvar, hidden = self.encoders[i](inputs[i].unsqueeze(0), (h[:, i], c[:, i]))
                 zs.append(z)
                 mus.append(mu)
                 logvars.append(logvar)
                 ret_h.append(hidden[0])
                 ret_c.append(hidden[1])
-            return th.cat(zs), th.cat(mus), th.cat(logvars), (th.cat(ret_h), th.cat(ret_c))
+            return th.cat(zs), th.cat(mus), th.cat(logvars), (th.cat(ret_h).unsqueeze(0), th.cat(ret_c).unsqueeze(0))
         else:
             for i in range(self.n_control):
                 inputs = inputs.view(-1, self.n_control, self.input_shape)

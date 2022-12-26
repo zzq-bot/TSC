@@ -1,6 +1,7 @@
 import torch as th
 import torch.nn.functional as F
 from torch import nn
+from icecream import ic
 
 
 class GRUEncoder(nn.Module):
@@ -29,7 +30,7 @@ class GRUEncoder(nn.Module):
     def forward(self, inputs, h=None):
         assert h is not None
         x = F.leaky_relu(self.fc(inputs))
-        hidden_h = self.rnn(self.fc2(x), h)
+        hidden_h = self.rnn(x, h)
         mu, logvar = self.mean(hidden_h), self.logvar(hidden_h)
         logvar = logvar.clamp_(self.min_logvar, self.max_logvar)
         z = self.strategy(mu, logvar)

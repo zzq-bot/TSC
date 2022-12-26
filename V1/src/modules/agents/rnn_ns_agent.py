@@ -2,6 +2,8 @@ import torch.nn as nn
 from modules.agents.rnn_agent import RNNAgent
 import torch as th
 
+from icecream import ic
+
 class RNNNSAgent(nn.Module):
     def __init__(self, input_shape, args, train_teammate=True):
         super(RNNNSAgent, self).__init__()
@@ -30,7 +32,7 @@ class RNNNSAgent(nn.Module):
                 return th.cat(qs), th.cat(hiddens).unsqueeze(0)
             else:
                 for i in range(self.n_control):
-                    inputs = inputs.view(-1, self.n_control, self.input_shape)
+                    inputs = inputs.view(-1, self.n_control, self.args.obs_shape)
                     proxy_z = proxy_z.view(-1, self.n_control, self.args.proxy_z_dim)
                     q, h = self.agents[i](inputs[:, i], hidden_state[:, i], proxy_z[:, i])
                     hiddens.append(h.unsqueeze(1))
@@ -56,3 +58,7 @@ class RNNNSAgent(nn.Module):
             device = self.args.device
         for a in self.agents:
             a.cuda(device=device)
+
+    def freeze(self):
+        for param in self.parameters():
+            param.requires_grad = True
