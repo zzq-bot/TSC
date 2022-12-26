@@ -138,7 +138,7 @@ if False:
     teammate_agent = "rnn_ns"
     xi = 2
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
@@ -152,6 +152,25 @@ if True:
     cuda_device = [0, 0, 0, 1, 1, 1]
     #checkpoint_path = ""
     once_gen_num = 6
+    teammate_t_max = 2050000
+    iterations = 1 # do not need train controllable agents
+    teammate_agent = "rnn_ns"
+    xi = 2
+
+if True:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 25
+    key = "Foraging-6x6-4p-3f-coop-v1"
+    learner = 'my_q_learner'
+    use_encoder = False
+    train_schedule = "base"
+    test_schedule = "fixed_dynamic"
+    name = "debug_lbf_6643c_teammate_pretrain"
+    seeds = [0]
+    cuda_device = [0]
+    #checkpoint_path = ""
+    once_gen_num = 1
     teammate_t_max = 2050000
     iterations = 1 # do not need train controllable agents
     teammate_agent = "rnn_ns"
