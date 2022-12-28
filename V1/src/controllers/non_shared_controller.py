@@ -65,6 +65,8 @@ class NonSharedMAC:
         th.save(self.agent.state_dict(), "{}/agent.th".format(path))
 
     def load_models(self, path):
+        #print(path)
+        #print(len(self.agent.agents))
         if path[-3:] != ".th":
             self.agent.load_state_dict(th.load("{}/agent.th".format(path), map_location=lambda storage, loc: storage))
         else:

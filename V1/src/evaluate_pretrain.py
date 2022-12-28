@@ -150,8 +150,10 @@ def run_sequential(args, logger):
         preprocess=preprocess,
         device="cpu" if args.buffer_cpu_only else args.device,
     )
-    for model_dir in os.listdir(args.debug_model_path):
+    for model_dir in sorted(os.listdir(args.debug_model_path)):
+        
         teammate_mac = mac_REGISTRY[args.teammate_mac](teammate_buffer.scheme, groups, args)
+        #print(teammate_mac.agents)
         teammate_mac.load_models(os.path.join(args.debug_model_path, model_dir))
         teammate_mac.cuda()
         teammate_runner = r_REGISTRY[args.teammate_runner](args=args, logger=logger)

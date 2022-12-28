@@ -4,12 +4,12 @@ import threading
 """
 Debug
 """
-if False:
+if True:
     config = "my_qmix"
     env_config = "gymma"
-    time_limit = 50
+    time_limit = 25
     run_type = "debug_1"
-    key = "Foraging-8x8-4p-5f-v1"
+    key = "Foraging-6x6-4p-3f-coop-v1"
     learner = 'my_q_learner'
     use_encoder = False
     train_schedule = "train"
@@ -19,15 +19,40 @@ if False:
     cuda_device = [0]
     test_function2 = False
     z_gen_hyper = False
-    agent = "mlp_ns"
     use_contrastive_loss = False
-    recorder_load_path = "recorder_checkpoint/teammate_pretrain_seed0_Foraging-6x6-4p-5f-v1_2022-11-15_11_32_02.636204_teammate_pretrain_4/0"
-    debug_model_path = "debug/performance_drop/lbf"
+    recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed2_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.578214_teammate_pretrain_6/0"
+    debug_model_path = "debug/performance_drop/lbf6643_coop"
+    waiting_lower = 3
+    waiting_upper = 6
+    render_save_path = "render_save_path/lbf"
+    agent = "rnn_ns"
+    teammate_agent = "rnn_ns"
+
+if False:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 25
+    run_type = "evaluate_pretrain"
+    key = "Foraging-6x6-4p-3f-coop-v1"
+    learner = 'my_q_learner'
+    use_encoder = False
+    train_schedule = "train"
+    test_schedule = "test"
+    name = "debug_performance_drop"
+    seeds = [0]
+    cuda_device = [0]
+    test_function2 = False
+    z_gen_hyper = False
+    agent = "rnn_ns"
+    teammate_agent = "rnn_ns"
+    use_contrastive_loss = False
+    recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed3_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.581723_teammate_pretrain_7/0"
+    debug_model_path = "pretrain_checkpoint/lbf_6x6_4p3f_coop/pretrain_teammate_path"
     waiting_lower = 5
     waiting_upper = 8
-    render_save_path = "render_save_path/lbf"
+    render_save_path = "render_save_path/lbf_6643_coop"
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 50
@@ -119,6 +144,7 @@ def one_train(remark, cuda_idx, seed):
                 --recorder_load_path={recorder_load_path}\
                 --z_gen_hyper={z_gen_hyper}\
                 --agent={agent}\
+                --teammate_agent={teammate_agent}\
                 --run_type={run_type}\
                 --debug_model_path={debug_model_path}\
                 --waiting_lower={waiting_lower}\

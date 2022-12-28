@@ -174,11 +174,11 @@ def run_sequential(args, logger):
     tsc_return_list = []
     mac.set_schedule_recorder(crp_recorder, mode='test')
     #runner.save_replay(render_save_path="{}/tsc".format(args.render_save_path))
-    for i in tqdm(range(50)):
-        if i == 5:
+    for i in tqdm(range(100)):
+        if i == 0:
             runner.save_replay(render_save_path="{}/tsc".format(args.render_save_path))
         _, episode_return = runner.run(test_mode=True, get_return=True)
-        if i == 5:
+        if i == 0:
             print("episode_return:", episode_return)
         tsc_return_list.append(episode_return)
     print(np.argmax(tsc_return_list))
@@ -186,11 +186,11 @@ def run_sequential(args, logger):
         "std of return", np.std(tsc_return_list))
 
     teammate_return_list = []
-    for i in tqdm(range(50)):
-        if i == 30:
+    for i in tqdm(range(100)):
+        if i == 0:
             teammate_runner.save_replay(render_save_path="{}/normal".format(args.render_save_path))
         _, episode_return = teammate_runner.run(test_mode=True, get_return=True)
-        if i == 30:
+        if i == 0:
             print("episode_return:", episode_return)
         teammate_return_list.append(episode_return)
     print(np.argmax(teammate_return_list))
