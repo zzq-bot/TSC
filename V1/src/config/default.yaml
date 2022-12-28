@@ -66,7 +66,7 @@ cluster_itself: True
 xi: 5
 
 traj_action: True
-traj_reward: true
+traj_reward: True
 enc_emb: 16
 enc_heads: 3
 enc_depth: 16
