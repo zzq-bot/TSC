@@ -76,8 +76,8 @@ if True:
     once_gen_num = 3
     pretrain_teammate_path = ""
     pretrain_enc_path = ""
-    test_recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed0_Foraging-6x6-4p-3f-coop-v1_2022-12-24_18_26_38.875653_teammate_pretrain_0/0"
-    recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed0_Foraging-6x6-4p-3f-coop-v1_2022-12-24_18_26_38.875653_teammate_pretrain_0/0"
+    test_recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed2_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.578214_teammate_pretrain_6/0"
+    recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed2_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.578214_teammate_pretrain_6/0"
     agent = "rnn_ns"
     proxy_encoder = "lstm_ns"
     team_encoder = "lstm"

@@ -102,7 +102,7 @@ if False:
 if False:
     config = "my_qmix"
     env_config = "gymma"
-    time_limit = 50
+    time_limit = 25
     run_type = "evaluate_pretrain"
     key = "mpe:SimpleTag-1good-3adv-v0"
     pretrained_wrapper = "PretrainedTag"
@@ -115,13 +115,39 @@ if False:
     cuda_device = [0]
     test_function2 = False
     z_gen_hyper = False
-    agent = "mlp_ns"
+    agent = "rnn_ns"
+    teammate_agent = "rnn_ns"
     use_contrastive_loss = False
-    recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-11-29_19_27_31.386069_test_crp_0/0"
-    debug_model_path = "pretrain_checkpoint/SimpleTag-1good-3adv/pretrain_teammate_path"
-    waiting_lower = 5
-    waiting_upper = 8
+    recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.376907_test_crp_0/0"
+    debug_model_path = "pretrain_checkpoint/simple_tag_3adv/pretrain_teammate_path"
+    waiting_lower = 3
+    waiting_upper = 6
     render_save_path = "render_save_path/mpe_simple_tag"
+
+if True:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 25
+    run_type = "debug_1"
+    key = "mpe:SimpleTag-1good-3adv-v0"
+    pretrained_wrapper = "PretrainedTag"
+    learner = 'my_q_learner'
+    use_encoder = False
+    train_schedule = "train"
+    test_schedule = "test"
+    name = "debug_performance_drop"
+    seeds = [0]
+    cuda_device = [0]
+    test_function2 = False
+    z_gen_hyper = False
+    use_contrastive_loss = False
+    recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.376907_test_crp_0/0"
+    debug_model_path = "debug/performance_drop/mpe_stag"
+    waiting_lower = 3
+    waiting_upper = 6
+    render_save_path = "render_save_path/mpe_simple_tag"
+    agent = "rnn_ns"
+    teammate_agent = "rnn_ns"
 
 program_info = __file__
 
@@ -171,6 +197,7 @@ def one_train(remark, cuda_idx, seed):
                 --recorder_load_path={recorder_load_path}\
                 --z_gen_hyper={z_gen_hyper}\
                 --agent={agent}\
+                --teammate_agent={teammate_agent}\
                 --run_type={run_type}\
                 --debug_model_path={debug_model_path}\
                 --waiting_lower={waiting_lower}\

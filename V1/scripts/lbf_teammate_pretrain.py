@@ -157,6 +157,26 @@ if True:
     teammate_agent = "rnn_ns"
     xi = 2
 
+if True:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 25
+    key = "Foraging-6x6-4p-3f-coop-v1"
+    learner = 'my_q_learner'
+    use_encoder = False
+    train_schedule = "base"
+    test_schedule = "fixed_dynamic"
+    name = "just_test_gen"
+    seeds = [0]
+    cuda_device = [0]
+    #checkpoint_path = ""
+    once_gen_num = 4
+    teammate_t_max = 10000
+    iterations = 1 # do not need train controllable agents
+    teammate_agent = "rnn_ns"
+    xi = 2
+    update_cluster_center = True
+
 if False:
     config = "my_qmix"
     env_config = "gymma"
@@ -196,6 +216,7 @@ def one_train(remark, cuda_idx, seed):
                 --teammate_t_max={teammate_t_max}\
                 --teammate_agent={teammate_agent}\
                 --xi={xi}\
+                --update_cluster_center={update_cluster_center}\
                 --iterations={iterations} &\
                 sleep 2s"
     else:

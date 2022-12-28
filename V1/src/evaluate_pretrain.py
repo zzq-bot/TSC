@@ -89,7 +89,6 @@ def evaluate_sequential(args, runner):
 
 
 def run_sequential(args, logger):
-
     # Init runner so we can get env info
     runner = r_REGISTRY[args.runner](args=args, logger=logger)
 
