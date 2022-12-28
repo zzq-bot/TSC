@@ -9,8 +9,8 @@ class CRPRecorder:
         self.args = args
         self.xi = args.xi
         self.recorder = {}
-        self.eta = args.eta
-        self.rbf_radius = args.rbf_radius # default 80
+        #self.eta = args.eta
+        #self.rbf_radius = args.rbf_radius # default 80
         self.kernel = args.kernel
         self.l = 0 # count
         self.M = 0 # num of clusters so far
@@ -18,6 +18,7 @@ class CRPRecorder:
         self.prototype = []
         self.record_checkpoint_path = []
         self.record_npc_idx = [] # point out npc idx for each elem in each cluster
+        self.X_encode = [] # record X used for encoder, we could update cluster center with this X
 
     def set_module(self, encoder, decoder):
         self.encoder = encoder
@@ -66,15 +67,29 @@ class CRPRecorder:
             self.count_M.append(1)
             self.M += 1
             self.record_npc_idx.append([npc_idx])
+            self.X_encode.append([(X.detach().cpu(), masks.detach().cpu())])
         else:           # add to old clusters
             self.prototype[m] = (self.prototype[m] * self.count_M[m] + v_l) / (self.count_M[m] + 1)
             self.count_M[m] += 1
-            self.record_npc_idx[m].append([npc_idx])
+            self.record_npc_idx[m].append(npc_idx)
+            self.X_encode[m].append((X.detach().cpu(), masks.detach().cpu()))
 
         save_path = self.build_new_checkpoint(m, unqiue_token) 
         self.l += 1
         return m, save_path
 
+    def update_cluster_center(self):
+        if len(self.prototype)==0:
+            return
+        for i in range(len(self.X_encode)):
+            v = np.zeros_like(self.prototype[0])
+            for X, masks in self.X_encode[i]:
+                X, masks = X.to(self.args.device), masks.to(self.args.device)
+                tmp_v = self.encoder.forward(X, masks).detach().cpu().numpy()
+                v += tmp_v
+            v /= len(self.X_encode[i])
+            self.prototype[i] = v
+    
     def build_new_checkpoint(self, m, unqiue_token):
         save_path = f"./crp_recorder/{unqiue_token}/cluster_{m}/elem_{self.count_M[m]}"
         os.makedirs(save_path, exist_ok=True)

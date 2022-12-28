@@ -21,8 +21,10 @@ if True:
     train_schedule = "debug"
     test_schedule = "debug"
     name = "simple_spread_pretrain"
-    seeds = [0, 1, 2, 3, 4]
-    cuda_device = [0, 0, 0, 0]
+    #seeds = [0, 1, 2, 3, 4]
+    #cuda_device = [0, 0, 0, 0]
+    seeds = [4, 5]
+    cuda_device = [7, 8]
     recorder_load_path = ""
     test_function2 = False  
     iterations = 1

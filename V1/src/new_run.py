@@ -3,6 +3,7 @@ import os
 import pprint
 import threading
 import time
+import random
 from os.path import abspath, dirname
 from types import SimpleNamespace as SN
 
@@ -223,6 +224,11 @@ def run_sequential(args, logger):
     else:
         logger.console_logger.info("Train EncDec from scratch")
 
+    if args.pretrain_teammate_path!="":
+        candidate_pretrain_teammate_path_list = os.listdir(args.pretrain_teammate_path)
+        random.shuffle(candidate_pretrain_teammate_path_list)
+        k = 0
+
     for i in range(args.iterations):
         if i % 2 == 0:
             if args.test_function2:
@@ -250,8 +256,8 @@ def run_sequential(args, logger):
                 
                 # Load pretrained teammate model (by default)
                 if args.pretrain_teammate_path!="":
-                    candidate_pretrain_teammate_path_list = os.listdir(args.pretrain_teammate_path)
-                    chosen_path = np.random.choice(candidate_pretrain_teammate_path_list, 1).item()
+                    chosen_path = candidate_pretrain_teammate_path_list[k]
+                    k = (k + 1) % len(candidate_pretrain_teammate_path_list)
                     logger.console_logger.info("Use Pretrained Teammate Agent Model from {}".format(chosen_path))
                     teammate_learner.load_agent_models(path=os.path.join(args.pretrain_teammate_path, chosen_path))
                 else:
@@ -301,7 +307,9 @@ def run_sequential(args, logger):
                     episode += args.batch_size_run
                 
 
-                # TODO, cluster
+                # TODO, should we update cluster center as traj_encoder has been updated
+                if args.update_cluster_center:
+                    crp_recorder.update_cluster_center()
                 # determine npc_index
                 maximum_npc_num = args.n_agents-args.n_control
                 # assert maximum_npc_num == 2
@@ -341,10 +349,10 @@ def run_sequential(args, logger):
             logger.console_logger.info("Start training controllabel agents")
             
             mac.set_schedule_recorder(crp_recorder)
-            if test_crp_recorder is not None:
+            """if test_crp_recorder is not None:
                 mac.set_schedule_recorder(test_crp_recorder, mode='test')
             else:
-                mac.set_schedule_recorder(crp_recorder, mode='test')
+                mac.set_schedule_recorder(crp_recorder, mode='test')"""
             episode = 0
             while runner.t_env <= args.t_max * (i//2+1):
                 episode_batch = runner.run(test_mode=False)

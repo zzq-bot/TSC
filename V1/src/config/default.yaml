@@ -84,3 +84,4 @@ debug_model_path: ""
 
 render_save_path: "render_save_path"
 reset_teammate_hidden: True
+update_cluster_center: False

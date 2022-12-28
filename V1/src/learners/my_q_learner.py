@@ -117,7 +117,7 @@ class MyQLearner:
                     team_z, _, _, _ = self.team_encoder.forward(th.cat((batch["state"][:, t], lst_ac_onehot), dim=-1))
             #ic(batch["obs"].shape)
                 vi_loss = self.vis.forward(batch["obs"][:, t, :self.args.n_control], batch["actions_onehot"][:, t, :self.args.n_control],
-                    team_z, proxy_z)
+                    team_z, proxy_z, self.mac.encoder_hidden_states)
             else:
                 team_z = None
                 vi_loss = None
@@ -239,7 +239,7 @@ class MyQLearner:
             vi_out = th.stack(vi_losses, dim=1) # (bs, ep_len, n_control,)
             p_ = th.distributions.normal.Normal(mu_out, (0.5 * logvar_out).exp())
             entropy = p_.entropy().clamp_(self.args.min_logvar, self.args.max_logvar).mean()
-            vi_loss = self.args.vi_lambda_1 * vi_out.mean() + self.args.vi_lambda_2 * entropy
+            vi_loss = self.args.vi_lambda_1 * vi_out.mean() - self.args.vi_lambda_2 * entropy
         else:
             # for logging
             dpp_loss = th.Tensor([0]).cuda()

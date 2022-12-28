@@ -74,6 +74,7 @@ class RNNDecoder(nn.Module):
             assert 0
         repeated_mask = masks.expand_as(log_probs)
         ret_log_prob = (log_probs * repeated_mask).sum() / repeated_mask.sum()
+        # logP(y1|x1)P(y2|x2) .... = \sum logP(yi|xi)
         return ret_log_prob
 
     def _get_shapes(self, args):
