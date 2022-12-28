@@ -37,7 +37,7 @@ if False:
     test_recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed2_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.578214_teammate_pretrain_6/0"
 
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
@@ -68,7 +68,7 @@ if True:
     pretrain_enc_path = "pretrain_checkpoint/lbf_6x6_4p3f_coop/pretrain_enc_path"
     test_recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed2_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.578214_teammate_pretrain_6/0"
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
@@ -98,6 +98,39 @@ if True:
     pretrain_teammate_path =  "pretrain_checkpoint/lbf_6x6_4p3f_coop/pretrain_teammate_path"
     pretrain_enc_path = "pretrain_checkpoint/lbf_6x6_4p3f_coop/pretrain_enc_path"
     test_recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed2_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.578214_teammate_pretrain_6/0"
+
+# Below TODO
+if True:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 25
+    key = "Foraging-6x6-4p-3f-coop-v1"
+    name = "run_vanilla_iter_10_ogn_4_ttmax_850000_tmax_1250000_xi_5e-1"
+    learner = 'my_q_learner'
+    use_encoder = False
+    train_schedule = "train"
+    test_schedule = "test"
+    # ogn:once_gen_num; ttmax: teammate_t_max; z_dim_x_y: proxy_z-x, team_z-y
+    seeds = [0, 1, 2]
+    cuda_device = [4, 5, 6]
+    recorder_load_path = ""
+    iterations = 10
+    z_gen_hyper = False
+    agent = "rnn_ns"
+    teammate_agent = "rnn_ns"
+    proxy_encoder = "gru_ns"
+    team_encoder = "gru"
+    use_contrastive_loss = False
+    proxy_z_dim = 32
+    team_z_dim = 64
+    xi =  0.5
+    teammate_t_max = 850000
+    t_max = 1250000
+    once_gen_num = 4
+    pretrain_teammate_path =  "pretrain_checkpoint/lbf_6x6_4p3f_coop/pretrain_teammate_path"
+    pretrain_enc_path = "pretrain_checkpoint/lbf_6x6_4p3f_coop/pretrain_enc_path"
+    test_recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed2_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.578214_teammate_pretrain_6/0"
+
 
 
 

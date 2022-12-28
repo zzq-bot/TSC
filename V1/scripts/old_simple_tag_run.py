@@ -1,132 +1,125 @@
 import os
 import threading
 
-# below TODO
-
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
-    time_limit = 25
+    time_limit = 50
     key = "mpe:SimpleTag-1good-3adv-v0"
     pretrained_wrapper = "PretrainedTag"
     learner = 'my_q_learner'
     use_encoder = True
     train_schedule = "train"
     test_schedule = "test"
-    name = "simple_tag_run_iter_10_ogn_4_ttmax_750000_tmax_1250000_lstm_zdim_32_64_xi_2.5"
+    name = "simple_tag_run_iter_10_ogn_5_mlp_ns_ttmax_750000_tmax_1250000_zdim_32_64_xi_0.5"
     seeds = [0, 1, 2]
     cuda_device = [0, 0, 0]
     recorder_load_path = ""
+    test_function2 = False
+    #recorder_load_path = "recorder_checkpoint/test_env_generate_seed0_mpe_SimpleTag-1good-3adv-v0_2022-11-27_21_12_27.191572_test_crp_6/0"
     iterations = 10
     z_gen_hyper = False
-    agent = "rnn_ns"
-    teammate_agent = "rnn_ns"
-    proxy_encoder = "lstm_ns"
-    team_encoder = "lstm"
+    agent = "mlp_ns"
     use_contrastive_loss = True
     proxy_z_dim = 32
     team_z_dim = 64
-    xi = 2.5
+    xi = .5
     teammate_t_max = 750000
     t_max = 1250000
-    once_gen_num = 4
-    pretrain_teammate_path = "pretrain_checkpoint/simple_tag_3adv/pretrain_teammate_path"
-    pretrain_enc_path = "pretrain_checkpoint/simple_tag_3adv/pretrain_enc_path"
-    test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.376907_test_crp_0/0"
+    once_gen_num = 5
+    pretrain_teammate_path = "pretrain_checkpoint/SimpleTag-1good-3adv/pretrain_teammate_path"
+    pretrain_enc_path = "pretrain_checkpoint/SimpleTag-1good-3adv/pretrain_enc_path"
+    test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-11-29_19_27_31.386069_test_crp_0/0"
 
-
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
-    time_limit = 25
+    time_limit = 50
     key = "mpe:SimpleTag-1good-3adv-v0"
     pretrained_wrapper = "PretrainedTag"
     learner = 'my_q_learner'
     use_encoder = True
     train_schedule = "train"
     test_schedule = "test"
-    name = "simple_tag_run_iter_10_ogn_4_ttmax_750000_tmax_1250000_gru_zdim_32_64_xi_2.5"
+    name = "simple_tag_run_iter_10_ogn_5_mlp_ns_ttmax_750000_tmax_1250000_zdim_4_8_xi_0.5"
     seeds = [0, 1, 2]
-    cuda_device = [0, 0, 0]
+    cuda_device = [1, 1, 1]
     recorder_load_path = ""
+    test_function2 = False
+    #recorder_load_path = "recorder_checkpoint/test_env_generate_seed0_mpe_SimpleTag-1good-3adv-v0_2022-11-27_21_12_27.191572_test_crp_6/0"
     iterations = 10
     z_gen_hyper = False
-    agent = "rnn_ns"
-    teammate_agent = "rnn_ns"
-    proxy_encoder = "gru_ns"
-    team_encoder = "gru"
+    agent = "mlp_ns"
     use_contrastive_loss = True
-    proxy_z_dim = 32
-    team_z_dim = 64
-    xi = 2.5
+    proxy_z_dim = 4
+    team_z_dim = 8
+    xi = .5
     teammate_t_max = 750000
     t_max = 1250000
-    once_gen_num = 4
-    pretrain_teammate_path = "pretrain_checkpoint/simple_tag_3adv/pretrain_teammate_path"
-    pretrain_enc_path = "pretrain_checkpoint/simple_tag_3adv/pretrain_enc_path"
-    test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.376907_test_crp_0/0"
+    once_gen_num = 5
+    pretrain_teammate_path = "pretrain_checkpoint/SimpleTag-1good-3adv/pretrain_teammate_path"
+    pretrain_enc_path = "pretrain_checkpoint/SimpleTag-1good-3adv/pretrain_enc_path"
+    test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-11-29_19_27_31.386069_test_crp_0/0"
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
-    time_limit = 25
-    key = "mpe:SimpleTag-1good-3adv-v0"
-    pretrained_wrapper = "PretrainedTag"
-    learner = 'my_q_learner'
-    use_encoder = True
-    train_schedule = "train"
-    test_schedule = "test"
-    name = "simple_tag_run_wo_cl_iter_10_ogn_4_ttmax_750000_tmax_1250000_lstm_zdim_32_64_xi_2.5"
-    seeds = [0, 1, 2]
-    cuda_device = [0, 0, 0]
-    recorder_load_path = ""
-    iterations = 10
-    z_gen_hyper = False
-    agent = "rnn_ns"
-    teammate_agent = "rnn_ns"
-    proxy_encoder = "lstm_ns"
-    team_encoder = "lstm"
-    use_contrastive_loss = False
-    proxy_z_dim = 32
-    team_z_dim = 64
-    xi = 2.5
-    teammate_t_max = 750000
-    t_max = 1250000
-    once_gen_num = 4
-    pretrain_teammate_path = "pretrain_checkpoint/simple_tag_3adv/pretrain_teammate_path"
-    pretrain_enc_path = "pretrain_checkpoint/simple_tag_3adv/pretrain_enc_path"
-    test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.376907_test_crp_0/0"
-
-if True:
-    config = "my_qmix"
-    env_config = "gymma"
-    time_limit = 25
+    time_limit = 50
     key = "mpe:SimpleTag-1good-3adv-v0"
     pretrained_wrapper = "PretrainedTag"
     learner = 'my_q_learner'
     use_encoder = False
     train_schedule = "train"
     test_schedule = "test"
-    name = "simple_tag_run_vanilla_iter_10_ogn_4_ttmax_750000_tmax_1250000_xi_2.5"
+    name = "simple_tag_vanilla_qmix_iter_10_ogn_5_ttmax_750000_tmax_1250000_xi_0.5"
     seeds = [0, 1, 2]
-    cuda_device = [0, 0, 0]
+    cuda_device = [3, 3, 3]
     recorder_load_path = ""
+    test_function2 = False
     iterations = 10
     z_gen_hyper = False
-    agent = "rnn_ns"
-    teammate_agent = "rnn_ns"
-    proxy_encoder = "lstm_ns"
-    team_encoder = "lstm"
-    use_contrastive_loss = False
-    proxy_z_dim = 32
-    team_z_dim = 64
-    xi = 2.5
+    agent = "mlp_ns"
+    use_contrastive_loss = True
+    proxy_z_dim = 0
+    team_z_dim = 0
+    xi = .5
     teammate_t_max = 750000
     t_max = 1250000
-    once_gen_num = 4
-    pretrain_teammate_path = "pretrain_checkpoint/simple_tag_3adv/pretrain_teammate_path"
-    pretrain_enc_path = "pretrain_checkpoint/simple_tag_3adv/pretrain_enc_path"
-    test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.376907_test_crp_0/0"
+    once_gen_num = 5
+    pretrain_teammate_path = "pretrain_checkpoint/SimpleTag-1good-3adv/pretrain_teammate_path"
+    pretrain_enc_path = "pretrain_checkpoint/SimpleTag-1good-3adv/pretrain_enc_path"
+    test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-11-29_19_27_31.386069_test_crp_0/0"
+
+if False:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 50
+    key = "mpe:SimpleTag-1good-3adv-v0"
+    pretrained_wrapper = "PretrainedTag"
+    learner = 'my_q_learner'
+    use_encoder = True
+    train_schedule = "train"
+    test_schedule = "test"
+    #name = "debug_for_sth_wrong"
+    name = "simple_tag_ablation_wo_cl_iter_10_ogn_5_ttmax_750000_tmax_1250000_zdim_32_64_xi_0.5"
+    seeds = [0, 1, 2]
+    cuda_device = [4, 4, 4]
+    recorder_load_path = ""
+    test_function2 = False
+    iterations = 10
+    z_gen_hyper = False
+    agent = "mlp_ns"
+    use_contrastive_loss = True
+    proxy_z_dim = 32
+    team_z_dim = 64
+    xi = .5
+    teammate_t_max = 750000
+    t_max = 1250000
+    once_gen_num = 5
+    pretrain_teammate_path = "pretrain_checkpoint/SimpleTag-1good-3adv/pretrain_teammate_path"
+    pretrain_enc_path = "pretrain_checkpoint/SimpleTag-1good-3adv/pretrain_enc_path"
+    test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-11-29_19_27_31.386069_test_crp_0/0"
+
 
 
 program_info = __file__
