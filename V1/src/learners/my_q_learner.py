@@ -90,7 +90,7 @@ class MyQLearner:
         #self.mac.init_hidden(batch.batch_size)
         self.mac.init_hidden(batch.batch_size)
         team_encoder_hidden_states = None
-        if "gru" in self.args.team_encoder or "lstm" in self.args.team_encoder:
+        if ("gru" in self.args.team_encoder or "lstm" in self.args.team_encoder) and self.team_encoder is not None:
             tmp = self.team_encoder.init_hidden()
             if isinstance(tmp, tuple):
                 team_encoder_hidden_states = (
@@ -143,7 +143,7 @@ class MyQLearner:
         #self.target_mac.init_hidden(batch.batch_size)
         self.target_mac.init_hidden(batch.batch_size)
         target_team_encoder_hidden_states = None
-        if "gru" in self.args.team_encoder or "lstm" in self.args.team_encoder:
+        if ("gru" in self.args.team_encoder or "lstm" in self.args.team_encoder) and self.team_encoder is not None:
             tmp = self.target_team_encoder.init_hidden()
             if isinstance(tmp, tuple):
                 target_team_encoder_hidden_states = (

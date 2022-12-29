@@ -261,7 +261,7 @@ class MyMAC:
             tmp = self.npc.init_hidden()[:self.n_agents-self.n_control]
             self.npc_hidden_states = tmp.unsqueeze(0).expand(batch_size, self.n_agents-self.n_control, -1) # bav
             # when we use, pass self.npc_hidden_states[:, i] into ...., as it always be 3 dim
-        if "gru" in self.args.proxy_encoder or "lstm" in self.args.proxy_encoder:
+        if ("gru" in self.args.proxy_encoder or "lstm" in self.args.proxy_encoder) and self.proxy_encoder is not None:
             tmp_hidden_states = self.proxy_encoder.init_hidden()
             if isinstance(tmp_hidden_states, tuple):
                 assert "lstm" in self.args.proxy_encoder

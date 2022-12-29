@@ -15,7 +15,7 @@ if True:
     test_schedule = "test"
     name = "simple_tag_run_iter_10_ogn_4_ttmax_750000_tmax_1250000_lstm_zdim_32_64_xi_2.5"
     seeds = [0, 1, 2]
-    cuda_device = [0, 0, 0]
+    cuda_device = [4, 5, 6]
     recorder_load_path = ""
     iterations = 10
     z_gen_hyper = False
@@ -47,7 +47,7 @@ if True:
     test_schedule = "test"
     name = "simple_tag_run_iter_10_ogn_4_ttmax_750000_tmax_1250000_gru_zdim_32_64_xi_2.5"
     seeds = [0, 1, 2]
-    cuda_device = [0, 0, 0]
+    cuda_device = [7, 7, 7]
     recorder_load_path = ""
     iterations = 10
     z_gen_hyper = False
@@ -66,7 +66,7 @@ if True:
     pretrain_enc_path = "pretrain_checkpoint/simple_tag_3adv/pretrain_enc_path"
     test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.376907_test_crp_0/0"
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
@@ -97,7 +97,7 @@ if True:
     pretrain_enc_path = "pretrain_checkpoint/simple_tag_3adv/pretrain_enc_path"
     test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.376907_test_crp_0/0"
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
@@ -145,10 +145,13 @@ def one_train(remark, cuda_idx, seed):
             --name={name}\
             --seed={seed}\
             --remark={remark}\
-            --test_function2={test_function2}\
             --recorder_load_path={recorder_load_path}\
+            --iterations={iterations}\
             --z_gen_hyper={z_gen_hyper}\
             --agent={agent}\
+            --teammate_agent={teammate_agent}\
+            --proxy_encoder={proxy_encoder}\
+            --team_encoder={team_encoder}\
             --use_contrastive_loss={use_contrastive_loss}\
             --proxy_z_dim={proxy_z_dim}\
             --team_z_dim={team_z_dim}\
@@ -156,10 +159,9 @@ def one_train(remark, cuda_idx, seed):
             --teammate_t_max={teammate_t_max}\
             --t_max={t_max}\
             --once_gen_num={once_gen_num}\
-            --pretrain_enc_path={pretrain_enc_path}\
             --pretrain_teammate_path={pretrain_teammate_path}\
-            --test_recorder_load_path={test_recorder_load_path}\
-            --iterations={iterations} &\
+            --pretrain_enc_path={pretrain_enc_path}\
+            --test_recorder_load_path={test_recorder_load_path}&\
             sleep 2s"
     ret = os.system(cmd)
     if ret != 0:
