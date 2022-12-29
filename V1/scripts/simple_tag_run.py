@@ -1,9 +1,8 @@
 import os
 import threading
 
-# below TODO
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
@@ -13,6 +12,7 @@ if True:
     use_encoder = True
     train_schedule = "train"
     test_schedule = "test"
+    test_function2 = False
     name = "simple_tag_run_iter_10_ogn_4_ttmax_750000_tmax_1250000_lstm_zdim_32_64_xi_2.5"
     seeds = [0, 1, 2]
     cuda_device = [5, 6, 7]
@@ -34,7 +34,7 @@ if True:
     pretrain_enc_path = "pretrain_checkpoint/simple_tag_3adv/pretrain_enc_path"
     test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.376907_test_crp_0/0"
 
-
+#TODO
 if False:
     config = "my_qmix"
     env_config = "gymma"
@@ -45,6 +45,7 @@ if False:
     use_encoder = True
     train_schedule = "train"
     test_schedule = "test"
+    test_function2 = False
     name = "simple_tag_run_iter_10_ogn_4_ttmax_750000_tmax_1250000_gru_zdim_32_64_xi_2.5"
     seeds = [0, 1, 2]
     cuda_device = [7, 7, 7]
@@ -66,6 +67,7 @@ if False:
     pretrain_enc_path = "pretrain_checkpoint/simple_tag_3adv/pretrain_enc_path"
     test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.376907_test_crp_0/0"
 
+#TODO
 if False:
     config = "my_qmix"
     env_config = "gymma"
@@ -76,6 +78,7 @@ if False:
     use_encoder = True
     train_schedule = "train"
     test_schedule = "test"
+    test_function2 = False
     name = "simple_tag_run_wo_cl_iter_10_ogn_4_ttmax_750000_tmax_1250000_lstm_zdim_32_64_xi_2.5"
     seeds = [0, 1, 2]
     cuda_device = [0, 0, 0]
@@ -97,6 +100,7 @@ if False:
     pretrain_enc_path = "pretrain_checkpoint/simple_tag_3adv/pretrain_enc_path"
     test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.376907_test_crp_0/0"
 
+#TODO
 if False:
     config = "my_qmix"
     env_config = "gymma"
@@ -107,6 +111,7 @@ if False:
     use_encoder = False
     train_schedule = "train"
     test_schedule = "test"
+    test_function2 = False
     name = "simple_tag_run_vanilla_iter_10_ogn_4_ttmax_750000_tmax_1250000_xi_2.5"
     seeds = [0, 1, 2]
     cuda_device = [0, 0, 0]
@@ -129,6 +134,135 @@ if False:
     test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.376907_test_crp_0/0"
 
 
+if False:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 25
+    key = "mpe:SimpleTag-1good-3adv-v0"
+    pretrained_wrapper = "PretrainedTag"
+    learner = 'my_q_learner'
+    use_encoder = True
+    train_schedule = "train"
+    test_schedule = "test"
+    test_function2 = True
+    name = "simple_tag_run_tmax_6250000_lstm_zdim_32_64"
+    seeds = [0, 1, 2]
+    cuda_device = [3, 3, 3]
+    recorder_load_path = "recorder_checkpoint/test_env_generate_seed0_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.461902_test_crp_0/0"
+    iterations = 2
+    z_gen_hyper = False
+    agent = "rnn_ns"
+    teammate_agent = "rnn_ns"
+    proxy_encoder = "lstm_ns"
+    team_encoder = "lstm"
+    use_contrastive_loss = True
+    proxy_z_dim = 32
+    team_z_dim = 64
+    xi = 2.5
+    teammate_t_max = 0
+    t_max = 6250000
+    once_gen_num = 0
+    pretrain_teammate_path = ""
+    pretrain_enc_path = ""
+    test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.376907_test_crp_0/0"
+
+if False:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 25
+    key = "mpe:SimpleTag-1good-3adv-v0"
+    pretrained_wrapper = "PretrainedTag"
+    learner = 'my_q_learner'
+    use_encoder = True
+    train_schedule = "train"
+    test_schedule = "test"
+    test_function2 = True
+    name = "simple_tag_run_tmax_6250000_gru_zdim_32_64"
+    seeds = [0, 1, 2]
+    cuda_device = [3, 4, 4]
+    recorder_load_path = "recorder_checkpoint/test_env_generate_seed0_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.461902_test_crp_0/0"
+    iterations = 2
+    z_gen_hyper = False
+    agent = "rnn_ns"
+    teammate_agent = "rnn_ns"
+    proxy_encoder = "gru_ns"
+    team_encoder = "gru"
+    use_contrastive_loss = True
+    proxy_z_dim = 32
+    team_z_dim = 64
+    xi = 2.5
+    teammate_t_max = 0
+    t_max = 6250000
+    once_gen_num = 0
+    pretrain_teammate_path = ""
+    pretrain_enc_path = ""
+    test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.376907_test_crp_0/0"
+
+if True:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 25
+    key = "mpe:SimpleTag-1good-3adv-v0"
+    pretrained_wrapper = "PretrainedTag"
+    learner = 'my_q_learner'
+    use_encoder = True
+    train_schedule = "train"
+    test_schedule = "test"
+    test_function2 = True
+    name = "simple_tag_run_wo_cl_tmax_6250000_lstm_zdim_32_64"
+    seeds = [0, 1, 2]
+    cuda_device = [4, 4, 5]
+    recorder_load_path = "recorder_checkpoint/test_env_generate_seed0_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.461902_test_crp_0/0"
+    iterations = 2
+    z_gen_hyper = False
+    agent = "rnn_ns"
+    teammate_agent = "rnn_ns"
+    proxy_encoder = "lstm_ns"
+    team_encoder = "lstm"
+    use_contrastive_loss = False
+    proxy_z_dim = 32
+    team_z_dim = 64
+    xi = 2.5
+    teammate_t_max = 0
+    t_max = 6250000
+    once_gen_num = 0
+    pretrain_teammate_path = ""
+    pretrain_enc_path = ""
+    test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.376907_test_crp_0/0"
+
+if False:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 25
+    key = "mpe:SimpleTag-1good-3adv-v0"
+    pretrained_wrapper = "PretrainedTag"
+    learner = 'my_q_learner'
+    use_encoder = False
+    train_schedule = "train"
+    test_schedule = "test"
+    test_function2 = True
+    name = "simple_tag_run_vanilla_tmax_6250000"
+    seeds = [0, 1, 2]
+    cuda_device = [5, 5, 5]
+    recorder_load_path = "recorder_checkpoint/test_env_generate_seed0_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.461902_test_crp_0/0"
+    iterations = 2
+    z_gen_hyper = False
+    agent = "rnn_ns"
+    teammate_agent = "rnn_ns"
+    proxy_encoder = "lstm_ns"
+    team_encoder = "lstm"
+    use_contrastive_loss = False
+    proxy_z_dim = 32
+    team_z_dim = 64
+    xi = 2.5
+    teammate_t_max = 0
+    t_max = 6250000
+    once_gen_num = 0
+    pretrain_teammate_path = ""
+    pretrain_enc_path = ""
+    test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.376907_test_crp_0/0"
+
+
 program_info = __file__
 
 def one_train(remark, cuda_idx, seed):
@@ -142,6 +276,7 @@ def one_train(remark, cuda_idx, seed):
             --use_encoder={use_encoder}\
             --train_schedule={train_schedule}\
             --test_schedule={test_schedule}\
+            --test_function2={test_function2}\
             --name={name}\
             --seed={seed}\
             --remark={remark}\

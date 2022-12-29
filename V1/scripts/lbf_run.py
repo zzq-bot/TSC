@@ -10,11 +10,12 @@ if False:
     env_config = "gymma"
     time_limit = 25
     key = "Foraging-6x6-4p-3f-coop-v1"
-    name = "run_iter_10_ogn_4_ttmax_850000_tmax_1250000_lstm_zdim_32_64_xi_5e-1"
+    name = "lbf_run_iter_10_ogn_4_ttmax_850000_tmax_1250000_lstm_zdim_32_64_xi_5e-1"
     learner = 'my_q_learner'
     use_encoder = True
     train_schedule = "train"
     test_schedule = "test"
+    test_function2 = False
     # ogn:once_gen_num; ttmax: teammate_t_max; z_dim_x_y: proxy_z-x, team_z-y
     seeds = [0, 1, 2]
     cuda_device = [0, 0, 0]
@@ -42,11 +43,12 @@ if False:
     env_config = "gymma"
     time_limit = 25
     key = "Foraging-6x6-4p-3f-coop-v1"
-    name = "run_iter_10_ogn_4_ttmax_850000_tmax_1250000_gru_zdim_32_64_xi_5e-1"
+    name = "lbf_run_iter_10_ogn_4_ttmax_850000_tmax_1250000_gru_zdim_32_64_xi_5e-1"
     learner = 'my_q_learner'
     use_encoder = True
     train_schedule = "train"
     test_schedule = "test"
+    test_function2 = False
     # ogn:once_gen_num; ttmax: teammate_t_max; z_dim_x_y: proxy_z-x, team_z-y
     seeds = [0, 1, 2]
     cuda_device = [0, 0, 1]
@@ -73,11 +75,12 @@ if False:
     env_config = "gymma"
     time_limit = 25
     key = "Foraging-6x6-4p-3f-coop-v1"
-    name = "run_wo_cl_iter_10_ogn_4_ttmax_850000_tmax_1250000_lstm_zdim_32_64_xi_5e-1"
+    name = "lbf_run_wo_cl_iter_10_ogn_4_ttmax_850000_tmax_1250000_lstm_zdim_32_64_xi_5e-1"
     learner = 'my_q_learner'
     use_encoder = True
     train_schedule = "train"
     test_schedule = "test"
+    test_function2 = False
     # ogn:once_gen_num; ttmax: teammate_t_max; z_dim_x_y: proxy_z-x, team_z-y
     seeds = [0, 1, 2]
     cuda_device = [1, 1, 1]
@@ -99,17 +102,18 @@ if False:
     pretrain_enc_path = "pretrain_checkpoint/lbf_6x6_4p3f_coop/pretrain_enc_path"
     test_recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed2_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.578214_teammate_pretrain_6/0"
 
-# Below TODO
-if True:
+
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
     key = "Foraging-6x6-4p-3f-coop-v1"
-    name = "run_vanilla_iter_10_ogn_4_ttmax_850000_tmax_1250000_xi_5e-1"
+    name = "lbf_run_vanilla_iter_10_ogn_4_ttmax_850000_tmax_1250000_xi_5e-1"
     learner = 'my_q_learner'
     use_encoder = False
     train_schedule = "train"
     test_schedule = "test"
+    test_function2 = False
     # ogn:once_gen_num; ttmax: teammate_t_max; z_dim_x_y: proxy_z-x, team_z-y
     seeds = [0, 1, 2]
     cuda_device = [4, 5, 6]
@@ -131,7 +135,135 @@ if True:
     pretrain_enc_path = "pretrain_checkpoint/lbf_6x6_4p3f_coop/pretrain_enc_path"
     test_recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed2_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.578214_teammate_pretrain_6/0"
 
+if False:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 25
+    key = "Foraging-6x6-4p-3f-coop-v1"
+    name = "lbf_run_tmax_6250000_lstm_zdim_32_64"
+    learner = 'my_q_learner'
+    use_encoder = True
+    train_schedule = "train"
+    test_schedule = "test"
+    test_function2 = True
+    # ogn:once_gen_num; ttmax: teammate_t_max; z_dim_x_y: proxy_z-x, team_z-y
+    seeds = [0, 1, 2]
+    cuda_device = [0, 0, 0]
+    recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed0_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.577800_teammate_pretrain_4/0"
+    iterations = 2
+    z_gen_hyper = False
+    agent = "rnn_ns"
+    teammate_agent = "rnn_ns"
+    proxy_encoder = "lstm_ns"
+    team_encoder = "lstm"
+    use_contrastive_loss = True
+    proxy_z_dim = 32
+    team_z_dim = 64
+    xi =  0.5
+    teammate_t_max = 0
+    t_max = 6250000
+    once_gen_num = 0
+    pretrain_teammate_path =  ""
+    pretrain_enc_path = ""
+    test_recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed2_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.578214_teammate_pretrain_6/0"
 
+
+if False:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 25
+    key = "Foraging-6x6-4p-3f-coop-v1"
+    name = "lbf_run_tmax_6250000_gru_zdim_32_64"
+    learner = 'my_q_learner'
+    use_encoder = True
+    train_schedule = "train"
+    test_schedule = "test"
+    test_function2 = True
+    # ogn:once_gen_num; ttmax: teammate_t_max; z_dim_x_y: proxy_z-x, team_z-y
+    seeds = [0, 1, 2]
+    cuda_device = [0, 1, 1]
+    recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed0_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.577800_teammate_pretrain_4/0"
+    iterations = 2
+    z_gen_hyper = False
+    agent = "rnn_ns"
+    teammate_agent = "rnn_ns"
+    proxy_encoder = "gru_ns"
+    team_encoder = "gru"
+    use_contrastive_loss = True
+    proxy_z_dim = 32
+    team_z_dim = 64
+    xi =  0.5
+    teammate_t_max = 0
+    t_max = 6250000
+    once_gen_num = 0
+    pretrain_teammate_path =  ""
+    pretrain_enc_path = ""
+    test_recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed2_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.578214_teammate_pretrain_6/0"
+
+if False:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 25
+    key = "Foraging-6x6-4p-3f-coop-v1"
+    name = "lbf_run_wo_cl_tmax_6250000_lstm_zdim_32_64"
+    learner = 'my_q_learner'
+    use_encoder = True
+    train_schedule = "train"
+    test_schedule = "test"
+    test_function2 = True
+    # ogn:once_gen_num; ttmax: teammate_t_max; z_dim_x_y: proxy_z-x, team_z-y
+    seeds = [0, 1, 2]
+    cuda_device = [1, 1, 2]
+    recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed0_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.577800_teammate_pretrain_4/0"
+    iterations = 2
+    z_gen_hyper = False
+    agent = "rnn_ns"
+    teammate_agent = "rnn_ns"
+    proxy_encoder = "lstm_ns"
+    team_encoder = "lstm"
+    use_contrastive_loss = False
+    proxy_z_dim = 32
+    team_z_dim = 64
+    xi =  0.5
+    teammate_t_max = 0
+    t_max = 6250000
+    once_gen_num = 0
+    pretrain_teammate_path =  ""
+    pretrain_enc_path = ""
+    test_recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed2_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.578214_teammate_pretrain_6/0"
+
+if False:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 25
+    key = "Foraging-6x6-4p-3f-coop-v1"
+    #"lbf_run_vanilla_iter_10_ogn_4_ttmax_850000_tmax_1250000_xi_5e-1"
+    name = "lbf_run_vanilla_tmax_6250000"
+    learner = 'my_q_learner'
+    use_encoder = False
+    train_schedule = "train"
+    test_schedule = "test"
+    test_function2 = True
+    # ogn:once_gen_num; ttmax: teammate_t_max; z_dim_x_y: proxy_z-x, team_z-y
+    seeds = [0, 1, 2]
+    cuda_device = [2, 2, 2]
+    recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed0_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.577800_teammate_pretrain_4/0"
+    iterations = 2
+    z_gen_hyper = False
+    agent = "rnn_ns"
+    teammate_agent = "rnn_ns"
+    proxy_encoder = "lstm_ns"
+    team_encoder = "lstm"
+    use_contrastive_loss = False
+    proxy_z_dim = 32
+    team_z_dim = 64
+    xi =  0.5
+    teammate_t_max = 0
+    t_max = 6250000
+    once_gen_num = 0
+    pretrain_teammate_path =  ""
+    pretrain_enc_path = ""
+    test_recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed2_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.578214_teammate_pretrain_6/0"
 
 
 program_info = __file__
@@ -148,6 +280,7 @@ def one_train(remark, cuda_idx, seed):
                 --use_encoder={use_encoder}\
                 --train_schedule={train_schedule}\
                 --test_schedule={test_schedule}\
+                --test_function2={test_function2}\
                 --seed={seed}\
                 --remark={remark}\
                 --recorder_load_path={recorder_load_path}\
