@@ -15,7 +15,7 @@ if True:
     test_schedule = "test"
     name = "simple_tag_run_iter_10_ogn_4_ttmax_750000_tmax_1250000_lstm_zdim_32_64_xi_2.5"
     seeds = [0, 1, 2]
-    cuda_device = [4, 5, 6]
+    cuda_device = [5, 6, 7]
     recorder_load_path = ""
     iterations = 10
     z_gen_hyper = False
@@ -35,7 +35,7 @@ if True:
     test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.376907_test_crp_0/0"
 
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
