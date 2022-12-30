@@ -58,7 +58,7 @@ team_encoder: "mlp"
 min_logvar: -10.0
 max_logvar: 0.5
 contrastive_lambda_1: 1.0
-contrastive_lambda_2: .01
+contrastive_lambda_2: .4
 vi_lambda_1: .001
 vi_lambda_2: .0001
 proxy_z_dim: 32
