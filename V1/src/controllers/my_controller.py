@@ -133,6 +133,8 @@ class MyMAC:
             else:
                 cluster_idx, chosen_teammate_checkpoint, chosen_npc_idx = info
                 self.npc_types = cluster_idx
+                del self.npc # delete the old model
+                #print("delete hhhhhhhhh")
                 if "rnn" in self.args.teammate_agent:
                     self.npc = RNNNSAgent(input_shape=self.npc_input_shape, args=self.args).to(self.args.device)
                 else:
