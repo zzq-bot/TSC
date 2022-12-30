@@ -135,7 +135,7 @@ if False:
     pretrain_enc_path = "pretrain_checkpoint/lbf_6x6_4p3f_coop/pretrain_enc_path"
     test_recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed2_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.578214_teammate_pretrain_6/0"
 
-if False:
+if True:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
@@ -148,7 +148,7 @@ if False:
     test_function2 = True
     # ogn:once_gen_num; ttmax: teammate_t_max; z_dim_x_y: proxy_z-x, team_z-y
     seeds = [0, 1, 2]
-    cuda_device = [0, 0, 0]
+    cuda_device = [0, 0, 1]
     recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed0_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.577800_teammate_pretrain_4/0"
     iterations = 2
     z_gen_hyper = False
@@ -168,7 +168,7 @@ if False:
     test_recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed2_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.578214_teammate_pretrain_6/0"
 
 
-if False:
+if True:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
@@ -181,7 +181,7 @@ if False:
     test_function2 = True
     # ogn:once_gen_num; ttmax: teammate_t_max; z_dim_x_y: proxy_z-x, team_z-y
     seeds = [0, 1, 2]
-    cuda_device = [0, 1, 1]
+    cuda_device = [1, 2, 2]
     recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed0_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.577800_teammate_pretrain_4/0"
     iterations = 2
     z_gen_hyper = False
@@ -200,7 +200,7 @@ if False:
     pretrain_enc_path = ""
     test_recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed2_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.578214_teammate_pretrain_6/0"
 
-if False:
+if True:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
@@ -213,7 +213,7 @@ if False:
     test_function2 = True
     # ogn:once_gen_num; ttmax: teammate_t_max; z_dim_x_y: proxy_z-x, team_z-y
     seeds = [0, 1, 2]
-    cuda_device = [1, 1, 2]
+    cuda_device = [3, 3, 4]
     recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed0_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.577800_teammate_pretrain_4/0"
     iterations = 2
     z_gen_hyper = False
@@ -232,7 +232,7 @@ if False:
     pretrain_enc_path = ""
     test_recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed2_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.578214_teammate_pretrain_6/0"
 
-if False:
+if True:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
@@ -246,7 +246,7 @@ if False:
     test_function2 = True
     # ogn:once_gen_num; ttmax: teammate_t_max; z_dim_x_y: proxy_z-x, team_z-y
     seeds = [0, 1, 2]
-    cuda_device = [2, 2, 2]
+    cuda_device = [4, 5, 5]
     recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed0_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.577800_teammate_pretrain_4/0"
     iterations = 2
     z_gen_hyper = False

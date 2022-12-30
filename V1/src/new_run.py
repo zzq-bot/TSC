@@ -231,6 +231,7 @@ def run_sequential(args, logger):
 
     for i in range(args.iterations):
         if i % 2 == 0:
+            teammate_last_test_T = 0
             if args.test_function2:
                 continue
             recorder_save_path = os.path.join(args.recorder_path, f"{i//2}")
@@ -288,20 +289,20 @@ def run_sequential(args, logger):
                     # Execute test runs once in a while
                     n_test_runs = max(1, args.test_nepisode // teammate_runner.batch_size)
 
-                    if (teammate_runner.t_env - last_test_T) / args.test_interval >= 1.0:
+                    if (teammate_runner.t_env - teammate_last_test_T) / args.test_interval >= 1.0:
 
                         logger.console_logger.info(
                             "t_env: {} / {}".format(teammate_runner.t_env, args.teammate_t_max)
                         )
                         logger.console_logger.info(
                             "Estimated time left: {}. Time passed: {}".format(
-                                time_left(last_time, last_test_T, teammate_runner.t_env, args.teammate_t_max),
+                                time_left(last_time, teammate_last_test_T, teammate_runner.t_env, args.teammate_t_max),
                                 time_str(time.time() - start_time),
                             )
                         )
                         last_time = time.time()
 
-                        last_test_T = teammate_runner.t_env
+                        teammate_last_test_T = teammate_runner.t_env
                         for _ in range(n_test_runs):
                             teammate_runner.run(test_mode=True)
                     episode += args.batch_size_run
@@ -372,7 +373,7 @@ def run_sequential(args, logger):
                 # Execute test runs once in a while
                 n_test_runs = max(1, args.test_nepisode // runner.batch_size)
                 if (runner.t_env - last_test_T) / args.test_interval >= 1.0:
-                        
+
                     logger.console_logger.info(
                         "t_env: {} / {}".format(runner.t_env, args.t_max)
                     )
