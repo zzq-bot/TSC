@@ -5,7 +5,7 @@ import threading
 Run the whole process
 """
 
-if False:
+if True:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
@@ -135,7 +135,7 @@ if False:
     pretrain_enc_path = "pretrain_checkpoint/lbf_6x6_4p3f_coop/pretrain_enc_path"
     test_recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed2_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.578214_teammate_pretrain_6/0"
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
@@ -168,7 +168,7 @@ if True:
     test_recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed2_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.578214_teammate_pretrain_6/0"
 
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
@@ -200,7 +200,7 @@ if True:
     pretrain_enc_path = ""
     test_recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed2_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.578214_teammate_pretrain_6/0"
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
@@ -232,7 +232,7 @@ if True:
     pretrain_enc_path = ""
     test_recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed2_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.578214_teammate_pretrain_6/0"
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
