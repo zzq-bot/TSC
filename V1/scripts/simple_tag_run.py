@@ -2,7 +2,7 @@ import os
 import threading
 
 
-if False:
+if True:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
