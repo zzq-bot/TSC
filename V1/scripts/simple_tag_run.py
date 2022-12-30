@@ -147,7 +147,7 @@ if False:
     test_function2 = True
     name = "simple_tag_run_tmax_6250000_lstm_zdim_32_64"
     seeds = [0, 1, 2]
-    cuda_device = [3, 3, 3]
+    cuda_device = [4, 4, 4]
     recorder_load_path = "recorder_checkpoint/test_env_generate_seed0_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.461902_test_crp_0/0"
     iterations = 2
     z_gen_hyper = False
@@ -179,7 +179,7 @@ if False:
     test_function2 = True
     name = "simple_tag_run_tmax_6250000_gru_zdim_32_64"
     seeds = [0, 1, 2]
-    cuda_device = [3, 4, 4]
+    cuda_device = [5, 5, 5]
     recorder_load_path = "recorder_checkpoint/test_env_generate_seed0_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.461902_test_crp_0/0"
     iterations = 2
     z_gen_hyper = False
@@ -198,7 +198,7 @@ if False:
     pretrain_enc_path = ""
     test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.376907_test_crp_0/0"
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
@@ -211,7 +211,7 @@ if True:
     test_function2 = True
     name = "simple_tag_run_wo_cl_tmax_6250000_lstm_zdim_32_64"
     seeds = [0, 1, 2]
-    cuda_device = [4, 4, 5]
+    cuda_device = [6, 6, 6]
     recorder_load_path = "recorder_checkpoint/test_env_generate_seed0_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.461902_test_crp_0/0"
     iterations = 2
     z_gen_hyper = False
@@ -243,7 +243,7 @@ if False:
     test_function2 = True
     name = "simple_tag_run_vanilla_tmax_6250000"
     seeds = [0, 1, 2]
-    cuda_device = [5, 5, 5]
+    cuda_device = [7, 7, 7]
     recorder_load_path = "recorder_checkpoint/test_env_generate_seed0_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.461902_test_crp_0/0"
     iterations = 2
     z_gen_hyper = False
