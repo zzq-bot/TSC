@@ -50,7 +50,7 @@ kernel: "rbf"
 rbf_radius: 80.0
 active_lower: 6
 active_upper: 8
-waiting_lower: 7
+waiting_lower: 5
 waiting_upper: 9
 recorder_type: "type_recorder"
 proxy_encoder: "mlp_ns"

@@ -208,6 +208,10 @@ def run_sequential(args, logger):
     if args.recorder_load_path != "":
         logger.console_logger.info("Load CRP_Recorder from {}".format(args.recorder_load_path))
         crp_recorder.load(load_path=args.recorder_load_path)
+        #crp_recorder.save
+        crp_recorder.re_save(args)
+        recorder_save_path = os.path.join(args.recorder_path, f"{args.start_iter}")
+        crp_recorder.save(recorder_save_path)
 
     test_crp_recorder = None
     if args.test_recorder_load_path != "":
@@ -229,7 +233,7 @@ def run_sequential(args, logger):
         random.shuffle(candidate_pretrain_teammate_path_list)
         k = 0
 
-    for i in range(args.iterations):
+    for i in range(args.start_iter, args.iterations):
         if i % 2 == 0:
             teammate_last_test_T = 0
             if args.test_function2:

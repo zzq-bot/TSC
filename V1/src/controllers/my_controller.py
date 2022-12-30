@@ -159,8 +159,16 @@ class MyMAC:
                     # reset hidden state
                     self.npc_hidden_states = None
                     if "rnn" in self.args.teammate_agent:
-                        tmp = self.npc.init_hidden()[:self.n_agents-self.n_control]
-                        self.npc_hidden_states = tmp.unsqueeze(0).expand(self.tmp_batch_size, self.n_agents-self.n_control, -1) # bav
+                        #tmp = copy.deepcopy(self.npc.init_hidden()[:self.n_agents-self.n_control])
+                        #self.npc_hidden_states = tmp.unsqueeze(0).expand(self.tmp_batch_size, self.n_agents-self.n_control, -1) # bav
+                        self.npc_hidden_states = []
+                        k = 0
+                        for i in self.npc_bool_indices:
+                            if i == 0:
+                                self.npc_hidden_states.append(None)
+                            else:
+                                self.npc_hidden_states.append(self.npc.agents[self.npc_mlp_ns_idx[k]].init_hidden().expand(self.tmp_batch_size, -1))
+                                k += 1
             return add_indices+self.n_control, deleted_indices+self.n_control
 
         return [], []
@@ -203,7 +211,8 @@ class MyMAC:
                     #ic(idx_of_npc_mac, len(self.npc.agents))
                     try:
                         if "rnn" in self.args.teammate_agent:
-                            q_val, self.npc_hidden_states[:, i] = self.npc.agents[idx_of_npc_mac](inputs, self.npc_hidden_states[:, i])
+                            #q_val, self.npc_hidden_states[:, i] = self.npc.agents[idx_of_npc_mac](inputs, self.npc_hidden_states[:, i])
+                            q_val, self.npc_hidden_states[i] = self.npc.agents[idx_of_npc_mac](inputs, self.npc_hidden_states[i])
                         else:
                             q_val = self.npc.agents[idx_of_npc_mac](inputs)
                     except:
@@ -260,8 +269,17 @@ class MyMAC:
         if "rnn" in self.args.agent:
             self.hidden_states = self.agent.init_hidden().unsqueeze(0).expand(batch_size, self.n_control, -1)  # bav
         if "rnn" in self.args.teammate_agent and self.npc is not None:
-            tmp = self.npc.init_hidden()[:self.n_agents-self.n_control]
-            self.npc_hidden_states = tmp.unsqueeze(0).expand(batch_size, self.n_agents-self.n_control, -1) # bav
+            #tmp = copy.deepcopy(self.npc.init_hidden()[:self.n_agents-self.n_control])
+            #self.npc_hidden_states = tmp.unsqueeze(0).expand(batch_size, self.n_agents-self.n_control, -1) # bav
+            #self.npc_hidden_states = self.npc.init_hidden().unsqueeze(0).expand(batch_size, self.n_agents, -1)
+            self.npc_hidden_states = []
+            k = 0
+            for i in self.npc_bool_indices:
+                if i == 0:
+                    self.npc_hidden_states.append(None)
+                else:
+                    self.npc_hidden_states.append(self.npc.agents[self.npc_mlp_ns_idx[k]].init_hidden().expand(batch_size, -1))
+                    k += 1
             # when we use, pass self.npc_hidden_states[:, i] into ...., as it always be 3 dim
         if ("gru" in self.args.proxy_encoder or "lstm" in self.args.proxy_encoder) and self.proxy_encoder is not None:
             tmp_hidden_states = self.proxy_encoder.init_hidden()

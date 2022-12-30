@@ -1,6 +1,7 @@
 import copy
 
 import torch as th
+import numpy as np
 from components.episode_buffer import EpisodeBatch
 from components.standarize_stream import RunningMeanStd
 from icecream import ic
@@ -64,6 +65,7 @@ class MyQLearner:
             self.ret_ms = RunningMeanStd(shape=(self.n_agents,), device=device)
         if self.args.standardise_rewards:
             self.rew_ms = RunningMeanStd(shape=(1,), device=device)
+        #self.empty_log_tensor = th.Tensor([0]).cuda()
 
     def train(self, batch: EpisodeBatch, t_env: int, episode_num: int):
         # Get the relevant quantities
@@ -225,11 +227,14 @@ class MyQLearner:
             batch_ep_len = mask.squeeze(-1).sum(-1).unsqueeze(-1)
             team_z_out_mean = team_z_out.mean(dim=1) * batch_ep_len
             self.mac.recorder.update(keys=keys, values=team_z_out_mean)
-
-            dpp_loss = self.mac.recorder.get_dpp_loss(keys=keys)
-            bias_loss = self.mac.recorder.get_bias_loss(keys=keys, values=team_z_out_mean)
-            contrastive_loss = self.args.contrastive_lambda_2 * (self.args.contrastive_lambda_1 * dpp_loss + bias_loss) # weighted factor
-
+            if self.args.use_contrastive_loss:
+                dpp_loss = self.mac.recorder.get_dpp_loss(keys=keys)
+                bias_loss = self.mac.recorder.get_bias_loss(keys=keys, values=team_z_out_mean)
+                contrastive_loss = self.args.contrastive_lambda_2 * (self.args.contrastive_lambda_1 * dpp_loss + bias_loss) # weighted factor
+            else:
+                dpp_loss = np.array([0])
+                bias_loss = np.array([0])
+                contrastive_loss = np.array([0])
             ######################################################################
             # 3、VI loss
             ######################################################################
@@ -242,11 +247,11 @@ class MyQLearner:
             vi_loss = self.args.vi_lambda_1 * vi_out.mean() - self.args.vi_lambda_2 * entropy
         else:
             # for logging
-            dpp_loss = th.Tensor([0]).cuda()
-            bias_loss = th.Tensor([0]).cuda()
-            contrastive_loss = th.Tensor([0]).cuda()
-            vi_loss = th.Tensor([0]).cuda()
-            entropy = th.Tensor([0]).cuda()
+            dpp_loss = np.array([0])
+            bias_loss = np.array([0])
+            contrastive_loss = np.array([0])
+            vi_loss = np.array([0])
+            entropy = np.array([0])
 
         # Optimise
         self.optimiser.zero_grad()

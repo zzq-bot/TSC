@@ -173,7 +173,7 @@ if True:
     once_gen_num = 4
     teammate_t_max = 10000
     iterations = 1 # do not need train controllable agents
-    teammate_agent = "rnn_ns"
+    teammate_agent = "mlp_ns"
     xi = 2
     update_cluster_center = True
 

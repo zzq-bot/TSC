@@ -1,4 +1,5 @@
 import os
+import shutil
 
 import numpy as np
 import torch as th
@@ -116,3 +117,25 @@ class CRPRecorder:
         self.record_npc_idx = np.load(os.path.join(load_path, "record_npc_idx.npy"), allow_pickle=True).tolist()
         self.M = len(self.count_M)
         self.l = np.sum(self.count_M)
+    
+    def re_save(self, args):
+        #在load之后，要把record_checkpoint_path给换了，然后重新save
+        #先把所在的crp_recorder/original_unique_token/ cp过去
+        tmp = self.record_checkpoint_path[0][0].split('/')
+        if tmp[0] == ".":
+            tmp = tmp[1:]
+        assert tmp[0] == "crp_recorder", print(tmp)
+        src_teammate_checkpoint_path = "/".join(tmp[:2])
+        tgt_teammate_checkpoint_path = os.path.join("crp_recorder", args.unique_token)
+        if os.path.exists(tgt_teammate_checkpoint_path):
+            shutil.rmtree(tgt_teammate_checkpoint_path)
+        #os.makedirs(tgt_teammate_checkpoint_path, exist_ok=True)
+        shutil.copytree(src_teammate_checkpoint_path, tgt_teammate_checkpoint_path)
+        for m in range(len(self.record_checkpoint_path)):
+            for k in range(len(self.record_checkpoint_path[m])):
+                tmp = self.record_checkpoint_path[m][k].split("/")
+                if tmp[0] == ".":
+                    tmp[2] = args.unique_token
+                else:
+                    tmp[1] = args.unique_token
+                self.record_checkpoint_path[m][k] = "/".join(tmp)
