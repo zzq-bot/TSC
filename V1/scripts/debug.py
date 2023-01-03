@@ -4,7 +4,7 @@ import threading
 """
 Debug
 """
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
@@ -134,7 +134,7 @@ if True:
     learner = 'my_q_learner'
     use_encoder = False
     train_schedule = "train"
-    test_schedule = "test"
+    test_schedule = "train"
     name = "debug_performance_drop"
     seeds = [0]
     cuda_device = [0]
