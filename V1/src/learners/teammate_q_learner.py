@@ -143,18 +143,19 @@ class TeammateQLearner:
         # assert 0
         X = th.cat([states[:, :-1], actions_onehot.reshape(batch.batch_size, batch.max_seq_length-1, -1)], dim=-1)
         Y = th.cat([rewards, states[:, 1:]], dim=-1)
-      
-        encoded_z = self.encoder.forward(X, mask)
-        v_l = encoded_z.mean(dim=0, keepdim=True)
-        diversity_reg = 0
-        cur_prototype = self.recorder.prototype
-        if len(cur_prototype) > 0:
-            # turn -> torch.Tensor
-            cur_prototype = th.FloatTensor(np.array(cur_prototype)).to(self.args.device)
-            # diversity_reg = - ((cur_prototype-v_l) ** 2).sum() / cur_prototype.size(0)
-            diversity_reg = - th.min(((cur_prototype - v_l) ** 2).sum(dim=-1))
 
-            diversity_reg *= self.args.teammate_traj_diversity_coef
+        diversity_reg = 0
+        if self.args.teammate_diversity_reg:
+            encoded_z = self.encoder.forward(X, mask)
+            v_l = encoded_z.mean(dim=0, keepdim=True)
+            cur_prototype = self.recorder.prototype
+            if len(cur_prototype) > 0:
+                # turn -> torch.Tensor
+                cur_prototype = th.FloatTensor(np.array(cur_prototype)).to(self.args.device)
+                # diversity_reg = - ((cur_prototype-v_l) ** 2).sum() / cur_prototype.size(0)
+                diversity_reg = - th.min(((cur_prototype - v_l) ** 2).sum(dim=-1))
+
+                diversity_reg *= self.args.teammate_traj_diversity_coef
         # Optimise
         self.optimiser.zero_grad()
         (td_loss + diversity_reg).backward()

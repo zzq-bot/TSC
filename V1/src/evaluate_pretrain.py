@@ -140,17 +140,18 @@ def run_sequential(args, logger):
     if args.use_cuda:
         learner.cuda()
         
-    
-    teammate_buffer = ReplayBuffer(
-        scheme,
-        groups,
-        args.buffer_size,
-        env_info["episode_limit"] + 1,
-        preprocess=preprocess,
-        device="cpu" if args.buffer_cpu_only else args.device,
-    )
-    for model_dir in sorted(os.listdir(args.debug_model_path)):
-        
+    crp_recorder = CRPRecorder(args)
+    for k, model_dir in enumerate(sorted(os.listdir(args.debug_model_path))):
+        teammate_buffer = ReplayBuffer(
+            scheme,
+            groups,
+            #args.buffer_size,
+            10,
+            env_info["episode_limit"] + 1,
+            preprocess=preprocess,
+            device="cpu" if args.buffer_cpu_only else args.device,
+        )
+
         teammate_mac = mac_REGISTRY[args.teammate_mac](teammate_buffer.scheme, groups, args)
         #print(teammate_mac.agents)
         teammate_mac.load_models(os.path.join(args.debug_model_path, model_dir))
@@ -159,12 +160,19 @@ def run_sequential(args, logger):
         teammate_runner.setup(scheme=scheme, groups=groups, preprocess=preprocess, mac=teammate_mac)
 
         teammate_return_list = []
-        for i in tqdm(range(50)):
-            _, episode_return = teammate_runner.run(test_mode=True, get_return=True)
+        for i in tqdm(range(10)):
+            episode_batch, episode_return = teammate_runner.run(test_mode=True, get_return=True)
+            teammate_buffer.insert_episode_batch(episode_batch)
             teammate_return_list.append(episode_return)
         print("Original info, mean of teammate return:", np.mean(teammate_return_list), 
             "std of teammmate return", np.std(teammate_return_list))
-    
+        # save teammate X, Y, masks
+        X, Y, masks = crp_recorder.build_cluster_input(teammate_buffer)
+        save_dir = os.path.join(args.tensor_save_path, str(k))
+        os.makedirs(save_dir, exist_ok=True)
+        th.save(X, os.path.join(save_dir, "X.pt"))
+        th.save(Y, os.path.join(save_dir, "Y.pt"))
+        th.save(masks, os.path.join(save_dir, "masks.pt"))
 
 
 

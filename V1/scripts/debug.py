@@ -99,7 +99,7 @@ if False:
     waiting_upper = 4
     render_save_path = "render_save_path/lbf6643"
 
-if False:
+if True:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
@@ -124,7 +124,7 @@ if False:
     waiting_upper = 6
     render_save_path = "render_save_path/mpe_simple_tag"
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
