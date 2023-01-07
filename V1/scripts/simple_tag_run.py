@@ -344,9 +344,9 @@ if True:
     test_function2 = False
     name = "debug_simple_tag_run_iter_40_ogn_1_ttmax_750000_tmax_312500_gru_zdim_4_6_xi_0.5"
     seeds = [0, 1]
-    cuda_device = [0, 1]
+    cuda_device = [0, 0]
     recorder_load_path = ""
-    iterations = 10
+    iterations = 10*4
     z_gen_hyper = False
     agent = "rnn_ns"
     teammate_agent = "rnn_ns"
