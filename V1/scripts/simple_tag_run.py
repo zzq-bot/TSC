@@ -331,7 +331,7 @@ if False:
     teammate_diversity_reg = False
 
 
-if False:
+if True:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
@@ -342,7 +342,7 @@ if False:
     train_schedule = "train"
     test_schedule = "test"
     test_function2 = False
-    name = "debug_simple_tag_run_iter_10_ogn_1_ttmax_750000_tmax_312500_gru_zdim_4_6_xi_0.5"
+    name = "debug_simple_tag_run_iter_40_ogn_1_ttmax_750000_tmax_312500_gru_zdim_4_6_xi_0.5"
     seeds = [0, 1]
     cuda_device = [0, 1]
     recorder_load_path = ""
@@ -365,7 +365,7 @@ if False:
     teammate_diversity_reg = False
 
     
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
@@ -399,7 +399,7 @@ if True:
     teammate_diversity_reg = False
 
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
@@ -410,11 +410,11 @@ if True:
     train_schedule = "train"
     test_schedule = "test"
     test_function2 = False
-    name = "debug_simple_tag_run_iter_10_ogn_1_ttmax_250000_tmax_312500_gru_zdim_4_6_xi_0.5"
+    name = "debug_simple_tag_run_iter_40_ogn_1_ttmax_250000_tmax_312500_gru_zdim_4_6_xi_0.5"
     seeds = [0, 1]
     cuda_device = [6, 7]
     recorder_load_path = ""
-    iterations = 10
+    iterations = 10*4
     z_gen_hyper = False
     agent = "rnn_ns"
     teammate_agent = "rnn_ns"
