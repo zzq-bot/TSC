@@ -331,7 +331,7 @@ if False:
     teammate_diversity_reg = False
 
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
@@ -421,6 +421,73 @@ if False:
     proxy_encoder = "gru_ns"
     team_encoder = "gru"
     use_contrastive_loss = True
+    proxy_z_dim = 4
+    team_z_dim = 6
+    xi = 0.5
+    teammate_t_max = 250000
+    t_max = 312500 #1250000
+    once_gen_num = 1
+    pretrain_teammate_path = "pretrain_checkpoint/simple_tag_3adv/pretrain_teammate_path"
+    pretrain_enc_path = ""
+    test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.376907_test_crp_0/0"
+    teammate_diversity_reg = False
+
+
+if False:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 25
+    key = "mpe:SimpleTag-1good-3adv-v0"
+    pretrained_wrapper = "PretrainedTag"
+    learner = 'my_q_learner'
+    use_encoder = True
+    train_schedule = "train"
+    test_schedule = "test"
+    test_function2 = False
+    name = "debug_simple_tag_run_wo_cl_iter_40_ogn_1_ttmax_250000_tmax_312500_gru_zdim_4_6_xi_0.5"
+    seeds = [0, 1]
+    cuda_device = [0, 0]
+    recorder_load_path = ""
+    iterations = 10*4
+    z_gen_hyper = False
+    agent = "rnn_ns"
+    teammate_agent = "rnn_ns"
+    proxy_encoder = "gru_ns"
+    team_encoder = "gru"
+    use_contrastive_loss = False
+    proxy_z_dim = 4
+    team_z_dim = 6
+    xi = 0.5
+    teammate_t_max = 250000
+    t_max = 312500 #1250000
+    once_gen_num = 1
+    pretrain_teammate_path = "pretrain_checkpoint/simple_tag_3adv/pretrain_teammate_path"
+    pretrain_enc_path = ""
+    test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.376907_test_crp_0/0"
+    teammate_diversity_reg = False
+
+if True:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 25
+    key = "mpe:SimpleTag-1good-3adv-v0"
+    pretrained_wrapper = "PretrainedTag"
+    learner = 'my_q_learner'
+    use_encoder = True
+    train_schedule = "train"
+    test_schedule = "test"
+    test_function2 = False
+    name = "debug_simple_tag_run_vanilla_iter_40_ogn_1_ttmax_250000_tmax_312500_xi_0.5"
+    seeds = [0, 1]
+    cuda_device = [2, 3]
+    recorder_load_path = ""
+    iterations = 10*4
+    z_gen_hyper = False
+    agent = "rnn_ns"
+    teammate_agent = "rnn_ns"
+    proxy_encoder = "gru_ns"
+    team_encoder = "gru"
+    use_contrastive_loss = False
     proxy_z_dim = 4
     team_z_dim = 6
     xi = 0.5
