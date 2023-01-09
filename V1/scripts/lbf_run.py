@@ -5,36 +5,37 @@ import threading
 Run the whole process
 """
 
-if False:
+if True:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
     key = "Foraging-6x6-4p-3f-coop-v1"
-    name = "lbf_run_iter_10_ogn_4_ttmax_850000_tmax_1250000_lstm_zdim_32_64_xi_5e-1"
+    name = "lbf_run_iter_40_ogn_1_ttmax_650000_tmax_312500_gru_zdim_4_6_xi_5e-1"
     learner = 'my_q_learner'
     use_encoder = True
     train_schedule = "train"
     test_schedule = "test"
     test_function2 = False
     # ogn:once_gen_num; ttmax: teammate_t_max; z_dim_x_y: proxy_z-x, team_z-y
-    seeds = [0, 1, 2]
-    cuda_device = [0, 0, 0]
+    seeds = [0, 1, 3]
+    cuda_device = [1, 1, 1]
     recorder_load_path = ""
-    iterations = 10
+    iterations = 40
     z_gen_hyper = False
     agent = "rnn_ns"
     teammate_agent = "rnn_ns"
-    proxy_encoder = "lstm_ns"
-    team_encoder = "lstm"
+    proxy_encoder = "gru_ns"
+    team_encoder = "gru"
     use_contrastive_loss = True
-    proxy_z_dim = 32
-    team_z_dim = 64
+    proxy_z_dim = 4
+    team_z_dim = 6
     xi =  0.5
-    teammate_t_max = 850000
-    t_max = 1250000
-    once_gen_num = 4
+    teammate_t_max = 650000
+    t_max = 312500
+    once_gen_num = 1
     pretrain_teammate_path =  "pretrain_checkpoint/lbf_6x6_4p3f_coop/pretrain_teammate_path"
-    pretrain_enc_path = "pretrain_checkpoint/lbf_6x6_4p3f_coop/pretrain_enc_path"
+    #pretrain_enc_path = "pretrain_checkpoint/lbf_6x6_4p3f_coop/pretrain_enc_path"
+    pretrain_enc_path = ""
     test_recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed2_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.578214_teammate_pretrain_6/0"
 
 
@@ -201,7 +202,7 @@ if False:
     pretrain_enc_path = ""
     test_recorder_load_path = "recorder_checkpoint/lbf_6643c_teammate_pretrain_seed2_Foraging-6x6-4p-3f-coop-v1_2022-12-26_08_31_02.578214_teammate_pretrain_6/0"
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
