@@ -215,9 +215,15 @@ def run_sequential(args, logger):
 
     test_crp_recorder = None
     if args.test_recorder_load_path != "":
+        test_progressive = False
         test_crp_recorder = CRPRecorder(args)
-        logger.console_logger.info("Load Test CRP_Recorder from {}".format(args.test_recorder_load_path))
-        test_crp_recorder.load(load_path=args.test_recorder_load_path)
+        check_dir = os.path.join(args.test_recorder_load_path, os.listdir(args.test_recorder_load_path)[0])
+        if os.path.isdir(check_dir):
+            logger.console_logger.info("Load Progressive Test CRP_Recorder from {}".format(args.test_recorder_load_path))
+            test_progressive = True
+        else:
+            logger.console_logger.info("Load Test CRP_Recorder from {}".format(args.test_recorder_load_path))
+            test_crp_recorder.load(load_path=args.test_recorder_load_path)
         
     if args.pretrain_enc_path!="":
         logger.console_logger.info("Load EncDec from {}".format(args.pretrain_enc_path))
@@ -394,6 +400,10 @@ def run_sequential(args, logger):
                         for _ in range(n_test_runs):
                             runner.run(test_mode=True)
                     else:
+                        if test_progressive:
+                            #TODO, re-load crp_recorder
+                            test_recorder_load_path = os.path.join(args.test_recorder_load_path, str(i//2))
+                            test_crp_recorder.load(load_path=test_recorder_load_path)
                         mac.set_schedule_recorder(test_crp_recorder, mode='test')
                         for _ in range(n_test_runs):
                             runner.run(test_mode=True)
