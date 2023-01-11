@@ -78,7 +78,7 @@ if False:
     test_function2 = False
     name = "simple_spread_run_iter_40_ogn_1_ttmax_250000_tmax_312500_gru_zdim_4_6_xi_0.5"
     seeds = [0, 1, 2]
-    cuda_device = [0, 0, 0]
+    cuda_device = [7, 7, 7]
     recorder_load_path = ""
     iterations = 10*4
     z_gen_hyper = False
@@ -98,7 +98,7 @@ if False:
     test_recorder_load_path = "recorder_checkpoint/simple_spread_pretrain_seed2_mpe_SimpleSpread-4-v0_2022-12-26_12_00_28.337750_test_crp_0/0"
     teammate_diversity_reg = False
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
@@ -142,9 +142,41 @@ if True:
     test_function2 = False
     name = "simple_spread_run_vanilla_iter_40_ogn_1_ttmax_450000_tmax_312500_xi_0.5"
     seeds = [0, 1, 2]
-    cuda_device = [7, 7, 7]
+    cuda_device = [6, 6, 6]
     recorder_load_path = ""
     iterations = 10*4
+    z_gen_hyper = False
+    agent = "rnn_ns"
+    teammate_agent = "rnn_ns"
+    proxy_encoder = "gru_ns"
+    team_encoder = "gru"
+    use_contrastive_loss = True
+    proxy_z_dim = 4
+    team_z_dim = 6
+    xi = 0.5
+    teammate_t_max = 450000
+    t_max = 312500 #1250000
+    once_gen_num = 1
+    pretrain_teammate_path = "pretrain_checkpoint/simple_spread_4agent/pretrain_teammate_path"
+    pretrain_enc_path = ""
+    test_recorder_load_path = "recorder_checkpoint/simple_spread_pretrain_seed2_mpe_SimpleSpread-4-v0_2022-12-26_12_00_28.337750_test_crp_0/0"
+    teammate_diversity_reg = False
+
+if False:
+    config = "my_qmix"
+    env_config = "gymma"
+    time_limit = 25
+    key = "mpe:SimpleSpread-4-v0"
+    learner = 'my_q_learner'
+    use_encoder = False
+    train_schedule = "train"
+    test_schedule = "test"
+    test_function2 = True
+    name = "nnnnn"
+    seeds = [0, 1, 2]
+    cuda_device = [0]
+    recorder_load_path = "recorder_checkpoint/simple_spread_pretrain_seed0_mpe_SimpleSpread-4-v0_2022-12-26_12_00_28.338319_test_crp_0/0"
+    iterations = 2
     z_gen_hyper = False
     agent = "rnn_ns"
     teammate_agent = "rnn_ns"

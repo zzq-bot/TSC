@@ -89,3 +89,6 @@ reset_teammate_hidden: True
 update_cluster_center: False
 start_iter: 0
 teammate_diversity_reg: True
+
+use_vi: True 
+use_proxy_contrastive_loss: False

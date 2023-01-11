@@ -39,7 +39,10 @@ class MyMAC:
         self.test_dynamic_schedule = dynamic_schedule_REGISTRY[args.test_schedule](args)
         
         self.recorder = recorder_REGISTRY[args.recorder_type](args)
-    
+        self.agents_recorder = [recorder_REGISTRY[args.recorder_type](args, z_dim=self.args.proxy_z_dim) \
+            for _ in range(self.n_control)]
+
+
     def set_schedule_recorder(self, recorder, mode="train"):
         if mode == 'train':
             self.train_dynamic_schedule.set_recorder(recorder)
@@ -113,6 +116,7 @@ class MyMAC:
         else:
             schedule = self.test_dynamic_schedule
         is_change, npc_bool_indices, npc_types, info = schedule.step()
+
         if is_change:
             #ic(test_mode)
             #ic(self.npc_bool_indices)

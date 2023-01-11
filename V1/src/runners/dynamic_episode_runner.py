@@ -73,17 +73,20 @@ class DynamicEpisodeRunner:
             #ic(self.t)
             if isinstance(self.mac.npc_types, list):
                 key = self.mac.recorder.add(sorted(self.mac.npc_types))
+                for i in range(self.n_control):
+                    self.mac.agents_recorder[i].add(sorted(self.mac.npc_types))
             else:
                 key = self.mac.recorder.add(self.mac.npc_types)
+                for i in range(self.n_control):
+                    self.mac.agents_recorder[i].add(self.mac.npc_types)
+
             pre_transition_data = {
                 "state": [self.env.get_state()],
                 "avail_actions": [self.env.get_avail_actions()],
                 "obs": [self.env.get_obs()],
                 "key": [(key, )]
             }
-            #ic(key)
-            #ic(self.mac.npc)
-            #ic(self.env._env.is_heuristic_obs_None)
+          
             self.batch.update(pre_transition_data, ts=self.t)
             # Pass the entire batch of experiences up till now to the agents
             # Receive the actions for each agent at this timestep in a batch of size 1
@@ -113,8 +116,8 @@ class DynamicEpisodeRunner:
             #if len(deleted_indices)>0:
             for id in deleted_indices:
                 self.env.remove_agent(id)
-            if len(add_indices) > 0 or len(deleted_indices) > 0:
-                self.env._env.update_obs_after_schedule()
+            """if len(add_indices) > 0 or len(deleted_indices) > 0:
+                self.env._env.update_obs_after_schedule()"""
         
         if self.is_save_replay and ("Foraging" in self.args.env_args["key"] or "mpe" in self.args.env_args["key"]):
             frame = self.env.render(mode='rgb_array')

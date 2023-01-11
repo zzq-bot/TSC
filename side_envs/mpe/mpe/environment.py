@@ -90,7 +90,7 @@ class MultiAgentEnv(gym.Env):
         agent = self.world.agents[id]
         agent.active = True
         # reset color
-        agent.color = np.array([0.35, 0.85, 0.35]) if not agent.adversary else np.array([0.85, 0.35, 0.35])
+        agent.color = np.array([0.35, 0.35, 0.85])#np.array([0.35, 0.85, 0.35]) if not agent.adversary else np.array([0.85, 0.35, 0.35])
         # reset random states
         agent.state.p_pos = self.world.np_random.uniform(-1, +1, self.world.dim_p)
         agent.state.p_vel = np.zeros(self.world.dim_p)

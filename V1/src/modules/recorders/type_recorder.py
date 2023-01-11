@@ -4,7 +4,7 @@ import torch.nn.functional as F
 
 
 class TypeRecorder:
-    def __init__(self, args) -> None:
+    def __init__(self, args, z_dim=None) -> None:
         self.str2index = {}
         self.tail_index = 0
         self.recorder = {} # index2hiddenvar
@@ -12,7 +12,10 @@ class TypeRecorder:
         self.eta = args.eta
         self.rbf_radius = args.rbf_radius # default 80
         self.kernel = args.kernel
-        self.init_val = th.zeros(self.args.team_z_dim).to(self.args.device)
+        if z_dim is None:
+            z_dim = self.args.team_z_dim
+        self.z_dim = z_dim
+        self.init_val = th.zeros(self.z_dim).to(self.args.device)
     
     @staticmethod
     def encode(npc_types):
@@ -29,7 +32,7 @@ class TypeRecorder:
         str_key = self.encode(npc_types)
         if str_key not in self.str2index:
             self.str2index[str_key] = self.tail_index
-            self.recorder[self.tail_index] = th.zeros(self.args.team_z_dim).to(self.args.device)
+            self.recorder[self.tail_index] = th.zeros(self.z_dim).to(self.args.device)
             self.tail_index +- 1
         return self.str2index[str_key]
     

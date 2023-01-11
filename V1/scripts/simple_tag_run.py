@@ -232,7 +232,7 @@ if False:
     pretrain_enc_path = ""
     test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.376907_test_crp_0/0"
 
-if False:
+if True:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25
@@ -245,7 +245,7 @@ if False:
     test_function2 = True
     name = "simple_tag_run_vanilla_tmax_6250000"
     seeds = [0, 1, 2]
-    cuda_device = [7, 7, 7]
+    cuda_device = [0]
     recorder_load_path = "recorder_checkpoint/test_env_generate_seed0_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.461902_test_crp_0/0"
     iterations = 2
     z_gen_hyper = False
@@ -263,7 +263,8 @@ if False:
     pretrain_teammate_path = ""
     pretrain_enc_path = ""
     test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.376907_test_crp_0/0"
-
+    teammate_diversity_reg = False
+    
 if False:
     config = "my_qmix"
     env_config = "gymma"
@@ -466,7 +467,7 @@ if False:
     test_recorder_load_path = "recorder_checkpoint/test_env_generate_seed2_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.376907_test_crp_0/0"
     teammate_diversity_reg = False
 
-if True:
+if False:
     config = "my_qmix"
     env_config = "gymma"
     time_limit = 25

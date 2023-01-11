@@ -83,12 +83,13 @@ class MyQLearner:
 
         # Calculate estimated Q-Values
         mac_out = []
-        team_z_out, mu_out, logvar_out, vi_losses = None, None, None, None
+        team_z_out, mu_out, logvar_out, vi_losses, proxy_z_out = None, None, None, None, None
         # TODO initialize team_encoder_hidden
         if self.args.use_encoder:
             team_z_out = []
             mu_out, logvar_out = [], []
             vi_losses = []
+            proxy_z_out = []
         #self.mac.init_hidden(batch.batch_size)
         self.mac.init_hidden(batch.batch_size)
         team_encoder_hidden_states = None
@@ -129,13 +130,23 @@ class MyQLearner:
                 logvar_out.append(logvar)
                 team_z_out.append(team_z)
                 vi_losses.append(vi_loss)
+                proxy_z_out.append(proxy_z) # (bs, n_control, proxy_z_dim)
+
         mac_out = th.stack(mac_out, dim=1)  # Concat over time
         # Pick the Q-Values for the actions taken by each agent
         chosen_action_qvals = th.gather(mac_out[:, :-1], dim=3, index=actions[:, :, :self.args.n_control]).squeeze(3)  # Remove the last dim
         if self.args.use_encoder:
             team_z_out = th.stack(team_z_out[:-1], dim=1)
-            mask_z = mask.expand_as(team_z_out)
-            team_z_out = team_z_out * mask_z # mask (batch_size, ep_len, z_dim)
+            proxy_z_out = th.stack(proxy_z_out[:-1], dim=1) # (bs, ep_len-1, n_control, z_dim)
+            proxy_z_out_list = [proxy_z_out[:, :, i] for i in range(self.args.n_control)]
+            mask_team_z = mask.expand_as(team_z_out)
+            team_z_out = team_z_out * mask_team_z # mask (batch_size, ep_len, z_dim)
+
+            mask_proxy_z = mask.expand_as(proxy_z_out_list[0])
+            for i in range(self.args.n_control):
+                proxy_z_out_list[i] = proxy_z_out_list[i] * mask_proxy_z
+            
+
 
         # Calculate the Q-Values necessary for the target
         target_mac_out = []
@@ -227,29 +238,52 @@ class MyQLearner:
             batch_ep_len = mask.squeeze(-1).sum(-1).unsqueeze(-1)
             team_z_out_mean = team_z_out.mean(dim=1) * batch_ep_len
             self.mac.recorder.update(keys=keys, values=team_z_out_mean)
+            for i in range(len(proxy_z_out_list)):
+                proxy_z_out_list[i] = proxy_z_out_list[i].mean(dim=1) * batch_ep_len
+                self.mac.agents_recorder[i].update(keys=keys, values=proxy_z_out_list[i])
+
             if self.args.use_contrastive_loss:
                 dpp_loss = self.mac.recorder.get_dpp_loss(keys=keys)
                 bias_loss = self.mac.recorder.get_bias_loss(keys=keys, values=team_z_out_mean)
                 contrastive_loss = self.args.contrastive_lambda_2 * (self.args.contrastive_lambda_1 * dpp_loss + bias_loss) # weighted factor
+                agents_dpp_loss = 0
+                agents_bias_loss = 0
+                agents_contrastive_loss = 0
+                if self.args.use_proxy_contrastive_loss:
+                    for i in range(len(self.args.n_control)):
+                        agents_dpp_loss += self.mac.agents_recorder[i].get_dpp_loss(keys=keys)
+                        agents_bias_loss += self.mac.agents_recorder[i].get_bias_loss(keys=keys, values=proxy_z_out_list[i])
+                    agents_dpp_loss /= self.args.n_control
+                    agents_bias_loss /= self.args.n_control
+                    agents_contrastive_loss = self.args.contrastive_lambda_2 * (self.args.contrastive_lambda_1 * agents_dpp_loss + agents_bias_loss)
             else:
                 dpp_loss = np.array([0])
                 bias_loss = np.array([0])
                 contrastive_loss = np.array([0])
+                agents_dpp_loss = np.array([0])
+                agents_bias_loss = np.array([0])
+                agents_contrastive_loss = np.array([0])
             ######################################################################
             # 3、VI loss
             ######################################################################
-
-            mu_out = th.stack(mu_out, dim=1).reshape(-1, self.args.proxy_z_dim)
-            logvar_out = th.stack(logvar_out, dim=1).reshape(-1, self.args.proxy_z_dim) # (bs, ep_len, n_control, proxy_z_dim) 
-            vi_out = th.stack(vi_losses, dim=1) # (bs, ep_len, n_control,)
-            p_ = th.distributions.normal.Normal(mu_out, (0.5 * logvar_out).exp())
-            entropy = p_.entropy().clamp_(self.args.min_logvar, self.args.max_logvar).mean()
-            vi_loss = self.args.vi_lambda_1 * vi_out.mean() - self.args.vi_lambda_2 * entropy
+            if self.args.use_vi:
+                mu_out = th.stack(mu_out, dim=1).reshape(-1, self.args.proxy_z_dim)
+                logvar_out = th.stack(logvar_out, dim=1).reshape(-1, self.args.proxy_z_dim) # (bs, ep_len, n_control, proxy_z_dim) 
+                vi_out = th.stack(vi_losses, dim=1) # (bs, ep_len, n_control,)
+                p_ = th.distributions.normal.Normal(mu_out, (0.5 * logvar_out).exp())
+                entropy = p_.entropy().clamp_(self.args.min_logvar, self.args.max_logvar).mean()
+                vi_loss = self.args.vi_lambda_1 * vi_out.mean() - self.args.vi_lambda_2 * entropy
+            else:
+                vi_loss = np.array([0])
+                entropy = np.array([0])
         else:
             # for logging
             dpp_loss = np.array([0])
             bias_loss = np.array([0])
             contrastive_loss = np.array([0])
+            agents_dpp_loss = np.array([0])
+            agents_bias_loss = np.array([0])
+            agents_contrastive_loss = np.array([0])
             vi_loss = np.array([0])
             entropy = np.array([0])
 
@@ -257,7 +291,10 @@ class MyQLearner:
         self.optimiser.zero_grad()
         if self.args.use_encoder:
             if self.args.use_contrastive_loss:
-                (td_loss + contrastive_loss + vi_loss).backward()
+                if self.args.use_proxy_contrastive_loss:
+                    (td_loss + contrastive_loss + agents_contrastive_loss + vi_loss).backward()
+                else:
+                    (td_loss + contrastive_loss + vi_loss).backward()
             else:
                 (td_loss + vi_loss).backward()
         else:
@@ -277,6 +314,9 @@ class MyQLearner:
             self.logger.log_stat('dpp_loss', dpp_loss.item(), t_env)
             self.logger.log_stat('bias_loss', bias_loss.item(), t_env)
             self.logger.log_stat('contrastive_loss', contrastive_loss.item(), t_env)
+            self.logger.log_stat('agents_dpp_loss', agents_dpp_loss.item(), t_env)
+            self.logger.log_stat('agents_bias_loss', agents_bias_loss.item(), t_env)
+            self.logger.log_stat('agents_contrastive_loss', agents_contrastive_loss.item(), t_env)
             self.logger.log_stat('vi_loss', vi_loss.item(), t_env)
             self.logger.log_stat('proxy_encoder_entropy', entropy.item(), t_env)
             self.logger.log_stat("grad_norm", grad_norm.item(), t_env)
