@@ -141,8 +141,8 @@ if True:
     test_schedule = "test"
     test_function2 = False
     name = "simple_spread_run_vanilla_iter_40_ogn_1_ttmax_450000_tmax_312500_xi_0.5"
-    seeds = [0, 1, 2]
-    cuda_device = [6, 6, 6]
+    seeds = [0, 2, 3, 4, 5]
+    cuda_device = [1, 1, 2, 2, 3]
     recorder_load_path = ""
     iterations = 10*4
     z_gen_hyper = False
