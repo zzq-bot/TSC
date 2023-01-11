@@ -243,7 +243,8 @@ if True:
     train_schedule = "train"
     test_schedule = "test"
     test_function2 = True
-    name = "simple_tag_run_vanilla_tmax_6250000"
+    #name = "simple_tag_run_vanilla_tmax_6250000"
+    name = "nnnnnnnn"
     seeds = [0, 1, 2]
     cuda_device = [0]
     recorder_load_path = "recorder_checkpoint/test_env_generate_seed0_mpe_SimpleTag-1good-3adv-v0_2022-12-26_19_58_40.461902_test_crp_0/0"
@@ -258,7 +259,7 @@ if True:
     team_z_dim = 64
     xi = 2.5
     teammate_t_max = 0
-    t_max = 6250000
+    t_max = 10000
     once_gen_num = 0
     pretrain_teammate_path = ""
     pretrain_enc_path = ""

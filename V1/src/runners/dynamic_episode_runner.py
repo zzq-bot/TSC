@@ -73,11 +73,11 @@ class DynamicEpisodeRunner:
             #ic(self.t)
             if isinstance(self.mac.npc_types, list):
                 key = self.mac.recorder.add(sorted(self.mac.npc_types))
-                for i in range(self.n_control):
+                for i in range(self.args.n_control):
                     self.mac.agents_recorder[i].add(sorted(self.mac.npc_types))
             else:
                 key = self.mac.recorder.add(self.mac.npc_types)
-                for i in range(self.n_control):
+                for i in range(self.args.n_control):
                     self.mac.agents_recorder[i].add(self.mac.npc_types)
 
             pre_transition_data = {

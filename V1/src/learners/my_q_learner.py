@@ -325,7 +325,7 @@ class MyQLearner:
             self.logger.log_stat("q_taken_mean", (chosen_action_qvals * mask).sum().item()/(mask_elems * self.args.n_agents), t_env)
             self.logger.log_stat("target_mean", (targets * mask).sum().item()/(mask_elems * self.args.n_agents), t_env)
             self.log_stats_t = t_env
-       
+        #assert 0
 
     def _update_targets_hard(self):
         self.target_mac.load_state(self.mac)
