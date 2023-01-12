@@ -92,3 +92,4 @@ teammate_diversity_reg: True
 
 use_vi: True 
 use_proxy_contrastive_loss: False
+npc_num_changeable: True
